@@ -5,6 +5,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "aos/dist/aos.css";
+import "antd/dist/reset.css";
+import "../styles/global.css"
 
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
@@ -75,7 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Script
+      {/* <Script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-2QKMV17VX0"
       />
@@ -91,7 +93,7 @@ export default function App({ Component, pageProps }: AppProps) {
           gtag('config', 'G-2QKMV17VX0');
           `,
         }}
-      />
+      /> */}
 
       <QueryClientProvider client={queryClient}>
         <GridThemeProvider gridTheme={gridTheme}>

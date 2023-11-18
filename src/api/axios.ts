@@ -1,8 +1,11 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, CreateAxiosDefaults } from "axios";
 
 // define common config for Axios
-const instanceAxios = {
+const instanceAxios: CreateAxiosDefaults = {
   baseURL: process.env.NEXT_PUBLIC_API,
+  headers: {
+    "Content-Type": "application/json",
+  },
 };
 
 const axiosConfig = axios.create(instanceAxios);
@@ -15,4 +18,31 @@ const request = ({ method, url, data, ...rest }: AxiosRequestConfig) =>
     ...rest,
   });
 
-export { request };
+// Add a response interceptor
+axiosConfig.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    if (error.response.data.statusCode === 401) {
+      localStorage.removeItem("token");
+      window.location.replace("/");
+    }
+    return Promise.reject(error);
+  }
+);
+const requestToken = ({ method, url, data, ...rest }: AxiosRequestConfig) => {
+  let token = localStorage.getItem("token");
+
+  return axiosConfig({
+    method: method,
+    url: url,
+    data: data,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    ...rest,
+  });
+};
+
+export { request, requestToken };

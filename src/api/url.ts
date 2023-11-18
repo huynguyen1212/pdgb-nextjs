@@ -1,4 +1,5 @@
 const API_URL = {
+  LOGIN: "/login",
   NEWS: {
     GET: "news",
     GETID: (id: any) => `news/${id}`,
