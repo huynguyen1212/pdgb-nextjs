@@ -1,4 +1,4 @@
 export const menu = [
-  { url: "/services", name: "Dịch vụ cung cấp" },
-  { url: "/about-us", name: "Thành viên" },
+  { url: "/clubs", name: "Quản lý Clubs" },
+  { url: "/matchs", name: "Chiến thôi" },
 ];
