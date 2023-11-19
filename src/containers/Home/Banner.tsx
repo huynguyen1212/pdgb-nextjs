@@ -10,7 +10,7 @@ export default function Banner() {
           <div className="title">
             <div className="title-inner">
               <div className="cafe">
-                <h1 className="cafe-inner">PDGB</h1>
+                <h1 className="cafe-inner">BATTELS</h1>
               </div>
               <div className="mozart">
                 <h2 className="mozart-inner">Chiến đấu đến hơi thở cuối cùng !!!</h2>

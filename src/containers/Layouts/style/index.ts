@@ -132,24 +132,59 @@ export const StylesHeader = styled.div`
         }
       }
 
-      .open_menu {
-        color: #fff;
-        cursor: pointer;
-        font-weight: 500;
-        font-style: normal;
-        padding-right: 8px;
-        transition: all 0.2s ease-in-out;
-        display: flex;
+      .wrap_control {
+        display: grid;
+        justify-content: flex-end;
         align-items: center;
+        grid-template-columns: 1fr 1fr 1fr 2fr;
+        gap: 20px;
 
-        span {
-          margin-right: 10px;
+        .control_item {
+          color: #fff;
+          cursor: pointer;
+          font-weight: 500;
+          font-style: normal;
+          transition: all 0.2s;
+
+          &:hover {
+            color: #ffc107 !important;
+          }
         }
 
-        &:hover {
-          color: #ffc107 !important;
-          svg path {
-            stroke: #ffc107 !important;
+        .wrap_button_login {
+          .button_login {
+            padding: 5px 15px;
+            background-color: #fff;
+            color: #223ea1;
+            border-radius: 2px;
+            transition: all 0.2s;
+
+            &:hover {
+              background-color: #223ea1;
+              color: #ffc107 !important;
+            }
+          }
+        }
+
+        .open_menu {
+          color: #fff;
+          cursor: pointer;
+          font-weight: 500;
+          font-style: normal;
+          padding-right: 8px;
+          transition: all 0.2s ease-in-out;
+          display: flex;
+          align-items: center;
+
+          span {
+            margin-right: 10px;
+          }
+
+          &:hover {
+            color: #ffc107 !important;
+            svg path {
+              stroke: #ffc107 !important;
+            }
           }
         }
       }
@@ -322,38 +357,6 @@ export const StylesHeader = styled.div`
                 }
               }
             }
-
-            .wrap_media {
-              .title {
-                font-size: 20px;
-                font-style: normal;
-                line-height: 24px;
-
-                font-weight: 600;
-                color: #ffffff;
-                cursor: pointer;
-                margin: 10px 0 10px;
-              }
-
-              .content_media {
-                .media {
-                  display: flex;
-                  align-items: center;
-
-                  .media_item {
-                    .media_icon {
-                      color: #ffffff;
-                      margin-right: 10px;
-                      font-size: 20px;
-
-                      &:hover {
-                        color: #ffc107;
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -376,6 +379,7 @@ export const StylesHeader = styled.div`
       }
     }
   }
+
   @media screen and (max-width: 575px) {
     .wrap_menu .menu .main_menu {
       padding: 0 10px;
@@ -478,6 +482,7 @@ export const StylesFooter = styled.div`
       margin-bottom: 30px;
     }
   }
+
   @media screen and (max-width: 575px) {
     .col_item_1 {
       .logo {

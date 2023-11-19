@@ -6,7 +6,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "aos/dist/aos.css";
 import "antd/dist/reset.css";
-import "../styles/global.css"
+import "../styles/global.css";
 
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
@@ -20,6 +20,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 
 import localFont from "next/font/local";
 import Script from "next/script";
+import ProvidersWrapper from "src/containers/Layouts/ProvidersWrapper";
 
 const myFont = localFont({ src: "../../public/fonts/google/regular.ttf" });
 
@@ -95,22 +96,24 @@ export default function App({ Component, pageProps }: AppProps) {
         }}
       /> */}
 
-      <QueryClientProvider client={queryClient}>
-        <GridThemeProvider gridTheme={gridTheme}>
-          <ThemeProvider theme={theme}>
-            <main className={myFont.className}>
-              <Layouts>
-                <Component {...pageProps} />
-              </Layouts>
-            </main>
+      <ProvidersWrapper>
+        <QueryClientProvider client={queryClient}>
+          <GridThemeProvider gridTheme={gridTheme}>
+            <ThemeProvider theme={theme}>
+              <main className={myFont.className}>
+                <Layouts>
+                  <Component {...pageProps} />
+                </Layouts>
+              </main>
 
-            <GlobalStyle />
-            <BaseCSS />
-          </ThemeProvider>
-        </GridThemeProvider>
+              <GlobalStyle />
+              <BaseCSS />
+            </ThemeProvider>
+          </GridThemeProvider>
 
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ProvidersWrapper>
     </>
   );
 }

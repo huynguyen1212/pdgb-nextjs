@@ -114,7 +114,7 @@ function Layout({ children }: Props) {
                   onClick={handleContactUs}
                 >
                   <textPath xlinkHref="#circlePath">
-                    PDGB ------------------ Chiến ---------------------------
+                    Battels ------------------ Chiến thôi anh em ơi ------------------
                   </textPath>
                 </text>
               </g>

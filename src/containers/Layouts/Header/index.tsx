@@ -3,16 +3,18 @@ import React, {
   SetStateAction,
   memo,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { Col, Container, Row } from "styled-bootstrap-grid";
 import { StylesHeader } from "../style";
 import Link from "next/link";
-import { BsFacebook } from "react-icons/bs";
-import { SiTelegram } from "react-icons/si";
 import MenuIcon from "./MenuIcon";
 import { menu } from "../data";
 import { useRouter } from "next/router";
+import LogoText from "src/components/Icons/LogoText";
+import LogoTextWhite from "src/components/Icons/LogoTextWhite";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 interface Props {
   showMenu: boolean;
@@ -44,29 +46,76 @@ function Header({ showMenu, setShowMenu }: Props) {
     };
   }, [router.pathname]);
 
+  // handle login
+  const { data: session } = useSession();
+
   return (
     <StylesHeader>
       <div className="wrap_main_header">
         <Container>
           <div className="header">
             <div className="logo">
-              <Link href="/">Logo</Link>
+              <Link href="/">
+                {!showMenu ? (
+                  change ? (
+                    <LogoText className="logo_main" />
+                  ) : (
+                    <LogoTextWhite className="logo_main" />
+                  )
+                ) : (
+                  <></>
+                )}
+              </Link>
             </div>
 
-            <div
-              className="open_menu"
-              style={{ color: `${!change || showMenu ? "white" : "#223EA1"}` }}
-              onClick={() => {
-                setShowMenu((prev) => !prev);
-              }}
-            >
-              <span>{showMenu ? "Close" : "Menu"}</span>{" "}
-              <MenuIcon
-                readOnly={true}
-                checked={showMenu}
-                size={24}
-                color={`${!change || showMenu ? "white" : "#223EA1"}`}
-              />
+            <div className="wrap_control">
+              <div
+                className="control_item"
+                style={{
+                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                }}
+              >
+                <Link href="/club">Quản lý Club</Link>
+              </div>
+
+              <div
+                className="control_item"
+                style={{
+                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                }}
+              >
+                <Link href="/battels">Chiến thôi</Link>
+              </div>
+
+              <div
+                className="open_menu"
+                style={{
+                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                }}
+                onClick={() => {
+                  setShowMenu((prev) => !prev);
+                }}
+              >
+                <span>{showMenu ? "Close" : "Menu"}</span>{" "}
+                <MenuIcon
+                  readOnly={true}
+                  checked={showMenu}
+                  size={24}
+                  color={`${!change || showMenu ? "white" : "#223EA1"}`}
+                />
+              </div>
+
+              <div className="wrap_button_login">
+                {session ? (
+                  <button className="button_login" onClick={() => signOut()}>
+                    <span>Logout khỏi Google</span>
+                  </button>
+                ) : (
+                  <button className="button_login" onClick={() => signIn()}>
+                    <span>Login với Google</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </Container>
@@ -107,36 +156,15 @@ function Header({ showMenu, setShowMenu }: Props) {
                     <div className="menu_item_in">
                       <div className="contact">
                         <div className="logo">
-                          <Link href="/">Logo</Link>
+                          <Link href="/">
+                            <LogoTextWhite className="logo_main" />
+                          </Link>
                         </div>
 
                         <p>
                           Mobile: <a href="tel:0293029103">0293029103</a>
                         </p>
                         <p>Email: </p>
-                      </div>
-
-                      <div className="wrap_media">
-                        <div className="title">Mạng xã hội</div>
-
-                        <div className="content_media">
-                          <div className="media">
-                            <Link
-                              target="_blank"
-                              href="#"
-                            >
-                              <div className="media_item">
-                                <BsFacebook className="media_icon" />
-                              </div>
-                            </Link>
-
-                            <Link href="#">
-                              <div className="media_item">
-                                <SiTelegram className="media_icon" />
-                              </div>
-                            </Link>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
