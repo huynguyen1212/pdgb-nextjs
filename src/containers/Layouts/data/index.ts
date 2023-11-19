@@ -1,4 +1,4 @@
 export const menu = [
-  { url: "/clubs", name: "Quản lý Clubs" },
+  { url: "/club", name: "Quản lý Club" },
   { url: "/matchs", name: "Chiến thôi" },
 ];

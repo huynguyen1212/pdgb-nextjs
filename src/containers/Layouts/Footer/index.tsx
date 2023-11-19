@@ -26,87 +26,26 @@ export default function Footer() {
 
           <Col xl={3} lg={3} md={3} sm={4} xs={12} col={12}>
             <div className="col_item">
-              <div className="title">About</div>
+              <div className="title">Function</div>
 
               <div className="content">
                 <div className="content_item">
                   <span
                     onClick={() => {
-                      router.push("/services");
+                      router.push("/club");
                     }}
                   >
-                    Dịch vụ
+                    Quản lý Club
                   </span>
                 </div>
                 <div className="content_item">
                   <span
                     onClick={() => {
-                      router.push("/projects");
+                      router.push("/matchs");
                     }}
                   >
-                    Dự án
+                    Chiến thôi
                   </span>
-                </div>
-              </div>
-            </div>
-          </Col>
-
-          <Col xl={3} lg={3} md={3} sm={4} xs={12} col={12}>
-            <div className="col_item">
-              <div className="title">Infomation</div>
-
-              <div className="content">
-                <div className="content_item">
-                  <span
-                    onClick={() => {
-                      router.push("/about-us");
-                    }}
-                  >
-                    Chúng tôi là ai?
-                  </span>
-                </div>
-                <div className="content_item">
-                  <span
-                    onClick={() => {
-                      router.push("/about-us");
-                    }}
-                  >
-                    Sứ mệnh
-                  </span>
-                </div>
-                <div className="content_item">
-                  <span
-                    onClick={() => {
-                      router.push("/about-us");
-                    }}
-                  >
-                    Thành viên
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Col>
-
-          <Col xl={2} lg={2} md={2} sm={4} xs={12} col={12}>
-            <div className="col_item">
-              <div className="title">Mạng xã hội</div>
-
-              <div className="content">
-                <div className="media">
-                  <Link
-                    target="_blank"
-                    href="#"
-                  >
-                    <div className="media_item">
-                      <BsFacebook className="media_icon" />
-                    </div>
-                  </Link>
-
-                  <Link href="#">
-                    <div className="media_item">
-                      <SiTelegram className="media_icon" />
-                    </div>
-                  </Link>
                 </div>
               </div>
             </div>
