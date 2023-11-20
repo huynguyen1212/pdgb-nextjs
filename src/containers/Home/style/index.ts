@@ -117,7 +117,7 @@ export const SBanner = styled.div`
         grid-row: 1;
         grid-column: 2;
         margin-left: -2rem;
-        opacity: 0.7;
+        opacity: 0.8;
         height: 100%;
         animation: image-in 1s cubic-bezier(0.5, 0, 0.1, 1) 2s backwards;
 

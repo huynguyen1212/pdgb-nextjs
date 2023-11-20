@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 const SBattels = styled.div`
-  .battels_banner {
-    padding-top: 15vh;
-    padding-bottom: 60px;
+  padding-top: 15vh;
+  padding-bottom: 60px;
 
+  .battels_banner {
     .wrap_title {
       position: relative;
       z-index: 2;
@@ -39,6 +39,10 @@ const SBattels = styled.div`
         }
       }
     }
+  }
+
+  .wrap_calender {
+    padding: 0 20px;
   }
 `;
 

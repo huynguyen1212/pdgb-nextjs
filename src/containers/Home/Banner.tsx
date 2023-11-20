@@ -1,6 +1,6 @@
 import { SBanner } from "./style";
 import Image from "next/image";
-import banner from "src/assets/image/logo_banner/banner_3.gif";
+import banner from "src/assets/image/logo_banner/banner_new.gif";
 
 export default function Banner() {
   return (
