@@ -1,12 +1,32 @@
 import { Container } from "styled-bootstrap-grid";
+import { Tabs } from "antd";
+import type { TabsProps } from "antd";
+
 import SBattels from "./style";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import timeGridPlugin from "@fullcalendar/timegrid";
+
+import Schedules from "./Schedules";
+import CreateRoom from "./CreateRoom";
+import ChallengeList from "./ChallengeList";
 
 export default function Battels() {
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Tạo phòng",
+      children: <CreateRoom />,
+    },
+    {
+      key: "2",
+      label: "Lời khiêu chiến",
+      children: <ChallengeList />,
+    },
+    {
+      key: "3",
+      label: "Lịch thi đấu",
+      children: <Schedules />,
+    },
+  ];
+
   return (
     <SBattels>
       <Container>
@@ -28,28 +48,11 @@ export default function Battels() {
         </div>
       </Container>
 
-      <div className="wrap_calender">
-        <FullCalendar
-          plugins={[
-            resourceTimelinePlugin,
-            dayGridPlugin,
-            interactionPlugin,
-            timeGridPlugin,
-          ]}
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "timeGridDay,timeGridWeek,dayGridMonth",
-          }}
-          initialView="timeGridDay"
-          nowIndicator={true}
-          editable={true}
-          selectable={true}
-          selectMirror={true}
-          resources={[]}
-          initialEvents={[
-            { title: "Nice event", start: new Date(), resourceId: "a" },
-          ]}
+      <div className="wrap_battels_main">
+        <Tabs
+          defaultActiveKey="1"
+          items={items}
+          indicatorSize={(origin) => origin - 16}
         />
       </div>
     </SBattels>

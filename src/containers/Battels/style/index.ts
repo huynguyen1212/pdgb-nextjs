@@ -41,9 +41,20 @@ const SBattels = styled.div`
     }
   }
 
-  .wrap_calender {
-    padding: 0 20px;
+  .wrap_battels_main {
+    padding: 0 80px;
+
+    .ant-tabs-nav {
+      width: 50%;
+      margin-bottom: 30px;
+    }
   }
 `;
 
 export default SBattels;
+
+export const SCreateRoom = styled.div``;
+
+export const SChallengeList = styled.div``;
+
+export const SSchedules = styled.div``;
