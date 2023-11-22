@@ -200,9 +200,63 @@ export const SBanner = styled.div`
 `;
 
 export const SFormRequestCreateClub = styled.div`
-  padding: 50px 0;
+  padding: 50px;
+  background: linear-gradient(
+    45deg,
+    rgba(66, 183, 245, 0.8) 0%,
+    rgba(66, 245, 189, 0.4) 100%
+  );
+
+  .form_request_create_club {
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    width: 500px;
+    margin: auto;
+    @media screen and (max-width: 1119px) {
+      width: 100%;
+    }
+  }
 
   .title_form {
     margin-bottom: 40px;
+    text-align: center;
+    font-size: 30px;
+    color: #566375;
+  }
+
+  .btn-create {
+    background: rgb(34, 62, 161);
+    border-radius: 25px;
+    padding: 24px;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: transform;
+    margin: 30px auto;
+    &:hover {
+      transform: translate(2px, 2px);
+      border: 1px solid rgb(34, 62, 161) !important;
+      background: white !important;
+      color: rgb(34, 62, 161) !important;
+    }
+  }
+
+  .btn-upload {
+    background-color: #f4f4f4;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    
   }
 `;
+
+
