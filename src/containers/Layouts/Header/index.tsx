@@ -3,7 +3,6 @@ import React, {
   SetStateAction,
   memo,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { Col, Container, Row } from "styled-bootstrap-grid";
@@ -47,7 +46,8 @@ function Header({ showMenu, setShowMenu }: Props) {
   }, [router.pathname]);
 
   // handle login
-  const { data: session } = useSession();
+  const { data: section } = useSession();
+  console.log("section: ", section);
 
   return (
     <StylesHeader>
@@ -106,7 +106,7 @@ function Header({ showMenu, setShowMenu }: Props) {
               </div>
 
               <div className="wrap_button_login">
-                {session ? (
+                {section ? (
                   <button className="button_login" onClick={() => signOut()}>
                     <span>Logout khỏi Google</span>
                   </button>
