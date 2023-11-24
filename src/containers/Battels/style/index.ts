@@ -45,7 +45,6 @@ const SBattels = styled.div`
     padding: 0 80px;
 
     .ant-tabs-nav {
-      width: 50%;
       margin-bottom: 30px;
     }
   }
@@ -53,7 +52,42 @@ const SBattels = styled.div`
 
 export default SBattels;
 
-export const SCreateRoom = styled.div``;
+export const SCreateRoom = styled.div`
+  .title_item {
+    font-size: 20px;
+    font-weight: 600;
+    color: #223ea1;
+    margin-bottom: 40px;
+  }
+
+  .input_form {
+    height: 40px;
+    width: 100%;
+    min-height: 40px;
+
+    .ant-select-selector {
+      height: 40px;
+    }
+    .ant-input-number-input-wrap {
+      height: 40px;
+      padding: 10px;
+    }
+  }
+
+  .input_form_textarea {
+    min-height: 100px;
+  }
+
+  .button_input {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 3fr 1fr;
+
+    .button_all_in {
+      height: 100%;
+    }
+  }
+`;
 
 export const SChallengeList = styled.div``;
 
