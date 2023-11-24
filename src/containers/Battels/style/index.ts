@@ -87,6 +87,15 @@ export const SCreateRoom = styled.div`
       height: 100%;
     }
   }
+
+  .wrap_button_submit {
+    display: flex;
+    justify-content: flex-end;
+
+    .button_submit {
+      height: 40px;
+    }
+  }
 `;
 
 export const SChallengeList = styled.div``;

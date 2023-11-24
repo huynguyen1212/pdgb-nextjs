@@ -47,10 +47,15 @@ export default function CreateRoom() {
     console.log(allvalues);
   };
 
+  const onFinish = (values: any) => {
+    console.log("Success:", values);
+  };
+
   return (
     <SCreateRoom>
       <Form
         form={antForm}
+        onFinish={onFinish}
         onValuesChange={(value, allvalues) => handleChangeValue(allvalues)}
         className="form-create"
       >
@@ -239,6 +244,16 @@ export default function CreateRoom() {
                   />
                 </Form.Item>
               </div>
+
+              <Form.Item className="wrap_button_submit">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  className="button_submit"
+                >
+                  Gửi lời mời
+                </Button>
+              </Form.Item>
             </Col>
           </Row>
         </div>
