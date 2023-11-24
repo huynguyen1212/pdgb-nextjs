@@ -98,6 +98,166 @@ export const SCreateRoom = styled.div`
   }
 `;
 
-export const SChallengeList = styled.div``;
+export const SChallengeList = styled.div`
+  .filter {
+    display: flex;
+    gap: 34px;
+    align-items: center;
+    margin-bottom: 30px;
+
+    .arrow_button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      span {
+        cursor: pointer;
+      }
+    }
+
+    button {
+      padding: 8px 24px;
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: #223ea1;
+      transition: 0.3s all;
+
+      &:hover {
+        color: white;
+        background-color: #223ea1;
+      }
+    }
+
+    .date_picker {
+      min-height: 38px;
+      min-width: 200px;
+
+      input {
+        height: 100%;
+      }
+    }
+  }
+
+  .list_pk {
+    .title_item {
+      font-size: 20px;
+      font-weight: 600;
+      color: #223ea1;
+      margin-bottom: 40px;
+    }
+
+    .list_main {
+      .list_item {
+        margin-bottom: 60px;
+        padding-bottom: 50px;
+        border-bottom: 1px solid #2f344752;
+
+        display: grid;
+        grid-template-columns: 1fr 5fr 1fr;
+
+        .time_image {
+          .time {
+            text-align: center;
+            color: #0a2664;
+
+            .month {
+              font-size: 14px;
+              line-height: 17px;
+              font-weight: 600;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              margin-bottom: 0;
+            }
+
+            .date {
+              font-size: 28px;
+              line-height: 35px;
+              font-weight: 600;
+            }
+          }
+
+          .image {
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+        .content {
+          .content_date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+
+            span {
+              font-size: 14px;
+              line-height: 19px;
+              font-weight: 400;
+              color: #94979f;
+            }
+          }
+
+          .content_name_team {
+            color: #0a2664;
+            font-size: 14px;
+            margin-bottom: 5px;
+
+            span {
+              text-transform: uppercase;
+              font-size: 22px;
+              font-weight: 600;
+            }
+          }
+
+          .content_name_category {
+            color: #0a2664;
+            font-size: 14px;
+            margin-bottom: 15px;
+
+            span {
+              text-transform: uppercase;
+              font-size: 22px;
+            }
+          }
+
+          .content_des {
+            font-size: 17px;
+            line-height: 27px;
+            font-weight: 400;
+            color: #757984;
+            margin-bottom: 15px;
+          }
+
+          .content_coin {
+            font-size: 14px;
+            line-height: 1.4em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #0a2664;
+          }
+        }
+
+        .wrap_buttons {
+          display: flex;
+          align-items: start;
+          justify-content: center;
+          width: 100%;
+
+          .buttons {
+            width: min-content;
+
+            button:first-child {
+              margin-bottom: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 
 export const SSchedules = styled.div``;
