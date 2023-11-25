@@ -162,6 +162,7 @@ export const SChallengeList = styled.div`
           .time {
             text-align: center;
             color: #0a2664;
+            margin-bottom: 50px;
 
             .month {
               font-size: 14px;
@@ -260,4 +261,103 @@ export const SChallengeList = styled.div`
   }
 `;
 
-export const SSchedules = styled.div``;
+export const SModalAccept = styled.div`
+  padding: 20px 0 0;
+  .content_date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+
+    span {
+      font-size: 14px;
+      line-height: 19px;
+      font-weight: 400;
+      color: #94979f;
+    }
+  }
+
+  .content_name_team {
+    color: #0a2664;
+    font-size: 14px;
+    margin-bottom: 5px;
+
+    span {
+      text-transform: uppercase;
+      font-size: 22px;
+      font-weight: 600;
+    }
+  }
+
+  .content_name_category {
+    color: #0a2664;
+    font-size: 14px;
+    margin-bottom: 15px;
+
+    span {
+      text-transform: uppercase;
+      font-size: 22px;
+    }
+  }
+
+  .content_des {
+    font-size: 17px;
+    line-height: 27px;
+    font-weight: 400;
+    color: #757984;
+    margin-bottom: 15px;
+  }
+
+  .content_coin {
+    font-size: 14px;
+    line-height: 1.4em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #0a2664;
+
+    margin-bottom: 30px;
+  }
+
+  .labe-form {
+    margin-bottom: 5px;
+    color: #2e2e2e;
+    font-weight: 700;
+    font-size: 16px;
+    display: inline-block;
+
+    span {
+      color: red;
+    }
+  }
+`;
+
+export const SSchedules = styled.div`
+  .filter {
+    margin-bottom: 40px;
+
+    .labe-form {
+      margin-bottom: 5px;
+      color: #2e2e2e;
+      font-weight: 700;
+      font-size: 16px;
+      display: inline-block;
+
+      margin-right: 20px;
+    }
+
+    .input_form {
+      height: 40px;
+      width: 200px;
+      min-height: 40px;
+
+      .ant-select-selector {
+        height: 40px;
+      }
+      .ant-input-number-input-wrap {
+        height: 40px;
+        padding: 10px;
+      }
+    }
+  }
+`;
