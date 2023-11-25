@@ -69,7 +69,7 @@ function Header({ showMenu, setShowMenu }: Props) {
 
   // handle login
   const { data: section } = useSession();
-  // console.log("section: ", section);
+  console.log("section: ", section);
 
   return (
     <StylesHeader>

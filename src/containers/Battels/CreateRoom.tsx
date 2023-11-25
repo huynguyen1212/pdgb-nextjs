@@ -62,7 +62,7 @@ export default function CreateRoom() {
         <div className="px-[20px] py-[12px]">
           <Row gutter={50}>
             <Col span={12}>
-              <h3 className="title_item">Chọn đội gửi lời khiêu chiến</h3>
+              <h3 className="title_item">Thông tin lời khiêu chiến</h3>
               <Row gutter={16}>
                 <Col span={24}>
                   <div className="mb-[30px]">
@@ -117,12 +117,23 @@ export default function CreateRoom() {
                   </div>
                 </Col>
 
+                <Col span={24}>
+                  <div className="mb-[30px]">
+                    <label className="labe-form">
+                      Chọn ngày thi đấu <span>*</span>
+                    </label>
+                    <Form.Item name="date">
+                      <DatePicker className="input_form" />
+                    </Form.Item>
+                  </div>
+                </Col>
+
                 <Col span={12}>
                   <div className="mb-[30px]">
                     <label className="labe-form">
-                      Chọn thời gian thi đấu <span>*</span>
+                      Chọn giờ bắt đầu thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="time">
+                    <Form.Item name="time_start">
                       <TimePicker use12Hours className="input_form" />
                     </Form.Item>
                   </div>
@@ -131,10 +142,10 @@ export default function CreateRoom() {
                 <Col span={12}>
                   <div className="mb-[30px]">
                     <label className="labe-form">
-                      Chọn ngày thi đấu <span>*</span>
+                      Chọn giờ kết thúc thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="date">
-                      <DatePicker className="input_form" />
+                    <Form.Item name="time_end">
+                      <TimePicker use12Hours className="input_form" />
                     </Form.Item>
                   </div>
                 </Col>

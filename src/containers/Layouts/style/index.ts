@@ -170,6 +170,7 @@ export const StylesHeader = styled.div`
               right: 0px;
               z-index: 1001;
               min-width: 240px;
+              display: none;
             }
 
             .icon_bell {
@@ -279,6 +280,10 @@ export const StylesHeader = styled.div`
 
             &:hover {
               .list_noti {
+                display: block;
+              }
+
+              &::before {
                 display: block;
               }
             }
