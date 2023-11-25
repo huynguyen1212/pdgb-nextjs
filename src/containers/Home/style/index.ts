@@ -208,6 +208,7 @@ export const SFormRequestCreateClub = styled.div`
   );
 
   .form_request_create_club {
+    position: relative;
     padding: 30px;
     background: white;
     border-radius: 15px;
@@ -248,15 +249,16 @@ export const SFormRequestCreateClub = styled.div`
       background: white !important;
       color: rgb(34, 62, 161) !important;
     }
+    &:disabled {
+      background: rgb(34, 62, 161);
+      border-radius: 25px;
+      color: white;
+      outline: none;
+      opacity: 0.7;
+    }
   }
 
-  .btn-upload {
-    background-color: #f4f4f4;
-    width: 100px;
-    height: 100px;
-    border-radius: 5px;
-    
+  .loader {
+    margin-left: 5px;
   }
 `;
-
-
