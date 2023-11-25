@@ -43,6 +43,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Geologica', sans-serif;
     height: auto;
+    background: #F4F4F4;
   }
 
   #root {

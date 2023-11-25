@@ -6,6 +6,7 @@ const API_URL = {
     GET_SLUG: (slug: any) => `news/slug/${slug}`,
     GET_NEAR: (id: any) => `news/near-by/${id}`,
   },
+  CREATE_CLUB: "/"
 };
 
 export default API_URL;
