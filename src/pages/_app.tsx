@@ -21,6 +21,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import localFont from "next/font/local";
 import Script from "next/script";
 import ProvidersWrapper from "src/containers/Layouts/ProvidersWrapper";
+import Head from "next/head";
 
 const myFont = localFont({ src: "../../public/fonts/google/regular.ttf" });
 
@@ -100,6 +101,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <QueryClientProvider client={queryClient}>
           <GridThemeProvider gridTheme={gridTheme}>
             <ThemeProvider theme={theme}>
+              <Head>
+                <title>BATTELS</title>
+                <meta name="description" content="Chiến cùng BATTELS" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+              </Head>
               <main className={myFont.className}>
                 <Layouts>
                   <Component {...pageProps} />

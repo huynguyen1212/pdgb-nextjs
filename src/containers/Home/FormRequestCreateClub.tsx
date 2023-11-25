@@ -4,31 +4,44 @@ import {
   Form,
   Input,
   message,
-  Modal,
+  InputNumber,
   Select,
+  SelectProps,
 } from "antd";
 import { Container } from "styled-bootstrap-grid";
 import { SFormRequestCreateClub } from "./style";
 import { request } from "src/api/axios";
 import API_URL from "src/api/url";
 import { useMutation, useQuery } from "react-query";
+import Loading from "src/components/Loading";
 
-type FieldType = {
-  name?: string;
-  type?: string[];
-  avatar?: string;
+const { TextArea } = Input;
+
+type FormRequest = {
+  club_name: string;
+  number_of_members: number;
+  sports_discipline_ids: number[];
+  description?: string;
+};
+
+type ListSportType = {
+  id: number;
+  name: string;
+  number_of_participants: number;
+  number_of_reserves: number;
 };
 
 export default function FormRequestCreateClub() {
+  const [form] = Form.useForm();
   useQuery({
-    queryKey: ["getNewsNear"],
+    queryKey: ["getListSports"],
     queryFn: () =>
       request({
         method: "GET",
-        url: API_URL.NEWS.GET,
+        url: API_URL.LIST_SPORT,
       }),
     onSuccess(data) {
-      console.log(data);
+      setListSports(data.data.data);
     },
   });
 
@@ -39,82 +52,36 @@ export default function FormRequestCreateClub() {
       message.error(error?.response?.data?.message || "Thất bại");
     },
     onSuccess(data, variables, context) {
-      message.success("Tạo club thành công");
+      message.success("Tạo club thành công!");
     },
   });
 
-  const onFinish = (values: any) => {
-    console.log("Success:", values);
-    mutateAsync(values);
+  const onSubmitRequestForm = (values: any) => {
+    const formData = {
+      ...values,
+      manager_id: 1,
+    };
+    mutateAsync(formData);
+    form.resetFields();
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
 
-  const [image, setImage] = useState("");
-  const [currentPage, setCurrentPage] = useState("choose-img");
-  const [imgAfterCrop, setImgAfterCrop] = useState("");
+  const [listSports, setListSports] = useState<ListSportType[]>([]);
+  const [options, setOptions] = useState<SelectProps["options"]>([]);
 
-  const inputRef: any = useRef();
-
-  const handleOnChange = (event: any) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-      reader.onload = function (e) {
-        onImageSelected(reader.result);
-      };
-    }
-  };
-
-  const onChooseImg = () => {
-    if (inputRef && inputRef.current) {
-      inputRef.current.click();
-    }
-  };
-
-  // Invoked when new image file is selected
-  const onImageSelected = (selectedImg: any) => {
-    setImage(selectedImg);
-    setCurrentPage("crop-img");
-  };
-
-  // Generating Cropped Image When Done Button Clicked
-  const onCropDone = (imgCroppedArea: any) => {
-    const canvasEle = document.createElement("canvas");
-    canvasEle.width = imgCroppedArea.width;
-    canvasEle.height = imgCroppedArea.height;
-
-    const context: any = canvasEle.getContext("2d");
-
-    let imageObj1 = new Image();
-    imageObj1.src = image;
-    imageObj1.onload = function () {
-      context.drawImage(
-        imageObj1,
-        imgCroppedArea.x,
-        imgCroppedArea.y,
-        imgCroppedArea.width,
-        imgCroppedArea.height,
-        0,
-        0,
-        imgCroppedArea.width,
-        imgCroppedArea.height
-      );
-
-      const dataURL = canvasEle.toDataURL("image/jpeg");
-
-      setImgAfterCrop(dataURL);
-      setCurrentPage("img-cropped");
-    };
-  };
-
-  // Handle Cancel Button Click
-  const onCropCancel = () => {
-    setCurrentPage("choose-img");
-    setImage("");
-  };
+  useEffect(() => {
+    const optionsSelect: SelectProps["options"] = [];
+    listSports.map((sport) => {
+      optionsSelect.push({
+        label: sport.name,
+        value: sport.id,
+      });
+    });
+    setOptions(optionsSelect);
+  }, [listSports]);
 
   return (
     <SFormRequestCreateClub>
@@ -125,65 +92,17 @@ export default function FormRequestCreateClub() {
           </h3>
 
           <Form
+            form={form}
             layout="vertical"
             name="basic"
-            onFinish={onFinish}
+            onFinish={onSubmitRequestForm}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            {/* <div className="mb-[16px]">
-              {currentPage === "choose-img" ? (
-                <div>
-                  <Form.Item<FieldType> label="Avatar" name="avatar">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      ref={inputRef}
-                      onChange={handleOnChange}
-                      style={{ display: "none" }}
-                    />
-                    <button className="btn-upload" onClick={onChooseImg}>
-                      <PlusOutlined />
-                    </button>
-                  </Form.Item>
-                </div>
-              ) : currentPage === "crop-img" ? (
-                <ImageCropper
-                  image={image}
-                  onCropDone={onCropDone}
-                  onCropCancel={onCropCancel}
-                />
-              ) : (
-                <div>
-                  <div>
-                    <img src={imgAfterCrop} className="cropped-img" />
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setCurrentPage("crop-img");
-                    }}
-                    className="btn"
-                  >
-                    Crop
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setCurrentPage("choose-img");
-                      setImage("");
-                    }}
-                    className="btn"
-                  >
-                    New Image
-                  </button>
-                </div>
-              )}
-            </div> */}
             <div className="mb-[16px]">
-              <Form.Item<FieldType>
+              <Form.Item<FormRequest>
                 label="Club"
-                name="name"
+                name="club_name"
                 rules={[
                   {
                     required: true,
@@ -198,7 +117,7 @@ export default function FormRequestCreateClub() {
             <div className="mb-[16px]">
               <Form.Item
                 label="Sport"
-                name="type"
+                name="sports_discipline_ids"
                 rules={[
                   {
                     required: true,
@@ -206,19 +125,58 @@ export default function FormRequestCreateClub() {
                   },
                 ]}
               >
-                <Select size="large" placeholder="Select a sport name">
-                  <Select.Option value="1">Cầu lông</Select.Option>
-                  <Select.Option value="2">Bóng đá</Select.Option>
-                  <Select.Option value="3">Bi lắc</Select.Option>
-                  <Select.Option value="4">Bi-a</Select.Option>
-                  <Select.Option value="5">Bóng bàn</Select.Option>
-                </Select>
+                <Select
+                  placeholder="Select sport"
+                  mode="multiple"
+                  allowClear
+                  options={options}
+                />
+              </Form.Item>
+            </div>
+
+            <div className="mb-[16px]">
+              <Form.Item
+                label="Number of members"
+                name="number_of_members"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your number of members!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  style={{ width: "100%", padding: '0 10px' }}
+                  size="large"
+                  min={1}
+                  max={100000}
+                  defaultValue={15}
+                />
+              </Form.Item>
+            </div>
+
+            <div className="mb-[16px]">
+              <Form.Item label="Description" name="description">
+                <TextArea
+                  placeholder="Description your club"
+                  autoSize={{ minRows: 4, maxRows: 6 }}
+                />
               </Form.Item>
             </div>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="btn-create">
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="btn-create"
+                disabled={isLoading}
+              >
                 Create club
+                {isLoading && (
+                  <div className="loader">
+                    <Loading />
+                  </div>
+                )}
               </Button>
             </Form.Item>
           </Form>
