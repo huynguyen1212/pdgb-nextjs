@@ -8,12 +8,14 @@ import React, {
 import { Col, Container, Row } from "styled-bootstrap-grid";
 import { StylesHeader } from "../style";
 import Link from "next/link";
+import { FaRegBell } from "react-icons/fa";
 import MenuIcon from "./MenuIcon";
 import { menu } from "../data";
 import { useRouter } from "next/router";
 import LogoText from "src/components/Icons/LogoText";
 import LogoTextWhite from "src/components/Icons/LogoTextWhite";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useDetectWindowSize } from "src/hooks/useDetectWindowSize";
 
 interface Props {
   showMenu: boolean;
@@ -21,6 +23,8 @@ interface Props {
 }
 
 function Header({ showMenu, setShowMenu }: Props) {
+  const windowSize = useDetectWindowSize();
+  const isMobile = windowSize < 768;
   const [change, setChange] = useState(false);
   const router = useRouter();
 
@@ -68,41 +72,114 @@ function Header({ showMenu, setShowMenu }: Props) {
               </Link>
             </div>
 
-            <div className="wrap_control">
-              <div
-                className="control_item"
-                style={{
-                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                }}
-              >
-                <Link href="/club">Quản lý Club</Link>
-              </div>
+            <div
+              className="wrap_control"
+              style={{
+                gridTemplateColumns: `${
+                  isMobile ? "4fr 1fr 8fr" : "2fr 2fr 1fr 4fr"
+                }`,
+              }}
+            >
+              {!isMobile ? (
+                <>
+                  <div
+                    className="control_item"
+                    style={{
+                      color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                    }}
+                  >
+                    <Link href="/club">Quản lý Club</Link>
+                  </div>
 
-              <div
-                className="control_item"
-                style={{
-                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                }}
-              >
-                <Link href="/battels">Chiến thôi</Link>
-              </div>
+                  <div
+                    className="control_item"
+                    style={{
+                      color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                    }}
+                  >
+                    <Link href="/battels">Chiến thôi</Link>
+                  </div>
+                </>
+              ) : (
+                <div
+                  className="open_menu"
+                  style={{
+                    color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                  }}
+                  onClick={() => {
+                    setShowMenu((prev) => !prev);
+                  }}
+                >
+                  <span>{showMenu ? "Close" : "Menu"}</span>{" "}
+                  <MenuIcon
+                    readOnly={true}
+                    checked={showMenu}
+                    size={24}
+                    color={`${!change || showMenu ? "white" : "#223EA1"}`}
+                  />
+                </div>
+              )}
 
-              <div
-                className="open_menu"
-                style={{
-                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                }}
-                onClick={() => {
-                  setShowMenu((prev) => !prev);
-                }}
-              >
-                <span>{showMenu ? "Close" : "Menu"}</span>{" "}
-                <MenuIcon
-                  readOnly={true}
-                  checked={showMenu}
-                  size={24}
-                  color={`${!change || showMenu ? "white" : "#223EA1"}`}
-                />
+              <div className="notification">
+                <div className="bell">
+                  <FaRegBell size={20} color="#223EA1" className="icon_bell" />
+
+                  <span className="new_noti">10</span>
+
+                  <div className="list_noti">
+                    <p className="title">Thông báo</p>
+
+                    <div className="list_noti_main">
+                      <div className="list_noti_item list_noti_item_read">
+                        <p className="title_noti">Thông báo khiêu chiến</p>
+
+                        <p className="sender_noti">
+                          Từ: <span>Club A</span>
+                        </p>
+
+                        <p className="content_noti">Club A rủ chơi bilac</p>
+
+                        <p className="time_noti">Hôm qua</p>
+                      </div>
+
+                      <div className="list_noti_item list_noti_item_unread">
+                        <p className="title_noti">Thông báo hệ thống</p>
+
+                        <p className="sender_noti">
+                          Từ: <span>Hệ thống</span>
+                        </p>
+
+                        <p className="content_noti">Tạo club thành công</p>
+
+                        <p className="time_noti">2 giờ trước</p>
+                      </div>
+
+                      <div className="list_noti_item list_noti_item_read">
+                        <p className="title_noti">Thông báo khiêu chiến</p>
+
+                        <p className="sender_noti">
+                          Từ: <span>Club A</span>
+                        </p>
+
+                        <p className="content_noti">Club A rủ chơi bilac</p>
+
+                        <p className="time_noti">Hôm qua</p>
+                      </div>
+
+                      <div className="list_noti_item list_noti_item_unread">
+                        <p className="title_noti">Thông báo hệ thống</p>
+
+                        <p className="sender_noti">
+                          Từ: <span>Hệ thống</span>
+                        </p>
+
+                        <p className="content_noti">Tạo club thành công</p>
+
+                        <p className="time_noti">2 giờ trước</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div className="wrap_button_login">

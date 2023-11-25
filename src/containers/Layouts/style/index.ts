@@ -136,8 +136,7 @@ export const StylesHeader = styled.div`
         display: grid;
         justify-content: flex-end;
         align-items: center;
-        grid-template-columns: 1fr 1fr 1fr 2fr;
-        gap: 20px;
+        gap: 15px;
 
         .control_item {
           color: #fff;
@@ -148,6 +147,137 @@ export const StylesHeader = styled.div`
 
           &:hover {
             color: #ffc107 !important;
+          }
+        }
+
+        .notification {
+          position: relative;
+
+          .bell {
+            position: relative;
+            width: min-content;
+
+            &::before {
+              position: absolute;
+              content: "";
+              background: transparent;
+              height: 14px;
+              bottom: -14px;
+              right: 0px;
+              z-index: 1001;
+              min-width: 240px;
+            }
+
+            .icon_bell {
+              cursor: pointer;
+            }
+
+            .new_noti {
+              position: absolute;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              color: #fff;
+              font-size: 10px;
+              background-color: red;
+              top: -9px;
+              right: -7px;
+              text-align: center;
+            }
+
+            .list_noti {
+              position: absolute;
+              display: none;
+              min-width: 300px;
+              max-height: calc(100vh - 200px);
+              padding: 20px 15px;
+              border: 1px solid #1651a11f;
+              border-radius: 4px;
+              right: -15px;
+              top: 30px;
+              z-index: 1000;
+              background: white;
+              overflow: auto;
+
+              &::before {
+                position: absolute;
+                content: "";
+                clip-path: polygon(50% 32%, 0% 100%, 100% 100%);
+                background: #1651a1;
+                width: 11px;
+                height: 14px;
+                top: -14px;
+                right: 18px;
+                z-index: 1001;
+              }
+
+              .title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1c3aa9;
+                margin-bottom: 15px;
+              }
+
+              .list_noti_main {
+                .list_noti_item {
+                  margin-bottom: 15px;
+                  padding: 0 0 15px;
+                  border-bottom: 1px solid #1651a11f;
+
+                  .title_noti {
+                    font-size: 15px;
+                    font-weight: 700;
+                    color: #223ea1;
+                  }
+
+                  .sender_noti {
+                    font-size: 13px;
+                    font-weight: 600;
+                    span {
+                      color: #223ea1;
+                      font-size: 15px;
+                    }
+                  }
+
+                  .content_noti {
+                    font-size: 14px;
+                    color: #334155;
+                  }
+
+                  .time_noti {
+                    font-size: 12px;
+                    color: #1e293b;
+                  }
+
+                  &:last-child {
+                    padding: 0;
+                    border: unset;
+                    margin-bottom: unset;
+                  }
+                }
+
+                .list_noti_item_unread {
+                  position: relative;
+                  &::before {
+                    position: absolute;
+                    content: "";
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    right: 2px;
+                    background: #1c48e7;
+                  }
+                }
+              }
+            }
+
+            &:hover {
+              .list_noti {
+                display: block;
+              }
+            }
           }
         }
 
