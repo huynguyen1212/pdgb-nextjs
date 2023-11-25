@@ -116,11 +116,15 @@ export const StylesHeader = styled.div`
     .header {
       ${mixinsFlexSpaceBetween};
       position: fixed;
-      top: 60px;
-      left: 80px;
-      right: 80px;
+      padding: 20px 75px;
+      width: 100%;
       z-index: 100;
       flex-direction: row;
+      transition: all 0.3s;
+
+      &.header_lp_black {
+        background: #ececec;
+      }
 
       .logo {
         height: 30px;
@@ -496,8 +500,7 @@ export const StylesHeader = styled.div`
   @media screen and (max-width: 991px) {
     .wrap_main_header {
       .header {
-        left: 30px;
-        right: 30px;
+        padding: 20px;
       }
     }
   }

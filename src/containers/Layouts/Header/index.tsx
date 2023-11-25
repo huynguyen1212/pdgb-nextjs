@@ -49,6 +49,24 @@ function Header({ showMenu, setShowMenu }: Props) {
     };
   }, [router.pathname]);
 
+  //handle menu when scroll down
+  const [addClass, setAddClass] = useState(false);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleMenuScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleMenuScroll);
+    };
+  }, []);
+
+  const handleMenuScroll = () => {
+    if (window !== undefined) {
+      let windowHeight = window.scrollY;
+      windowHeight > 100 ? setAddClass(true) : setAddClass(false);
+    }
+  };
+
   // handle login
   const { data: section } = useSession();
   // console.log("section: ", section);
@@ -56,8 +74,7 @@ function Header({ showMenu, setShowMenu }: Props) {
   return (
     <StylesHeader>
       <div className="wrap_main_header">
-        <Container>
-          <div className="header">
+          <div className={`header ${addClass && change ? "header_lp_black" : ""}`}>
             <div className="logo">
               <Link href="/">
                 {!showMenu ? (
@@ -122,7 +139,11 @@ function Header({ showMenu, setShowMenu }: Props) {
 
               <div className="notification">
                 <div className="bell">
-                  <FaRegBell size={20} color="#223EA1" className="icon_bell" />
+                  <FaRegBell
+                    size={20}
+                    color={`${!change || showMenu ? "white" : "#223EA1"}`}
+                    className="icon_bell"
+                  />
 
                   <span className="new_noti">10</span>
 
@@ -195,6 +216,7 @@ function Header({ showMenu, setShowMenu }: Props) {
               </div>
             </div>
           </div>
+        <Container>
         </Container>
       </div>
 
