@@ -105,7 +105,7 @@ function Header({ showMenu, setShowMenu }: Props) {
                       color: `${!change || showMenu ? "white" : "#223EA1"}`,
                     }}
                   >
-                    <Link href="/club">Club</Link>
+                    <Link href="/club">Quản lý Club</Link>
                   </div>
 
                   <div
