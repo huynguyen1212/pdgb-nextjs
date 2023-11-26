@@ -1,16 +1,3 @@
-// import NextAuth from "next-auth";
-// import GoogleProvider from "next-auth/providers/google";
-
-// // Initialize NextAuth
-
-// export default NextAuth({
-//   providers: [
-//     GoogleProvider({
-//       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-//     }),
-//   ],
-// });
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
@@ -27,6 +14,10 @@ export default NextAuth({
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 7 * 60 * 60 * 24, // 7 day
+  },
   secret: process.env.SECRET,
   callbacks: {
     jwt: ({ token, account }) => {

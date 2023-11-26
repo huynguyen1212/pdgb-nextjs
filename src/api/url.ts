@@ -6,8 +6,8 @@ const API_URL = {
     GET_SLUG: (slug: any) => `news/slug/${slug}`,
     GET_NEAR: (id: any) => `news/near-by/${id}`,
   },
-  CREATE_CLUB: "/api/user/request/create",
-  LIST_SPORT: "/api/user/sport-discipline/list"
+  CREATE_CLUB: "/user/request/create",
+  LIST_SPORT: "/user/sport-discipline/list"
 };
 
 export default API_URL;

@@ -3,9 +3,12 @@ import { StylesFooter } from "../style";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import LogoTextWhite from "src/components/Icons/LogoTextWhite";
+import { useSession } from "next-auth/react";
 
 export default function Footer() {
   const router = useRouter();
+  const { data: section }: any = useSession();
+
   return (
     <StylesFooter>
       <Container>
@@ -25,32 +28,34 @@ export default function Footer() {
             </div>
           </Col>
 
-          <Col xl={3} lg={3} md={3} sm={4} xs={12} col={12}>
-            <div className="col_item">
-              <div className="title">Function</div>
+          {section && (
+            <Col xl={3} lg={3} md={3} sm={4} xs={12} col={12}>
+              <div className="col_item">
+                <div className="title">Function</div>
 
-              <div className="content">
-                <div className="content_item">
-                  <span
-                    onClick={() => {
-                      router.push("/club");
-                    }}
-                  >
-                    Quản lý Club
-                  </span>
-                </div>
-                <div className="content_item">
-                  <span
-                    onClick={() => {
-                      router.push("/battels");
-                    }}
-                  >
-                    Chiến thôi
-                  </span>
+                <div className="content">
+                  <div className="content_item">
+                    <span
+                      onClick={() => {
+                        router.push("/club");
+                      }}
+                    >
+                      Quản lý Club
+                    </span>
+                  </div>
+                  <div className="content_item">
+                    <span
+                      onClick={() => {
+                        router.push("/battels");
+                      }}
+                    >
+                      Chiến thôi
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Col>
+            </Col>
+          )}
         </Row>
       </Container>
     </StylesFooter>

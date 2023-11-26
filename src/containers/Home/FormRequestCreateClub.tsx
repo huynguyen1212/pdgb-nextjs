@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Form,
@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { Container } from "styled-bootstrap-grid";
 import { SFormRequestCreateClub } from "./style";
-import { request } from "src/api/axios";
+import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 import { useMutation, useQuery } from "react-query";
 import Loading from "src/components/Loading";
@@ -36,7 +36,7 @@ export default function FormRequestCreateClub() {
   useQuery({
     queryKey: ["getListSports"],
     queryFn: () =>
-      request({
+      requestToken({
         method: "GET",
         url: API_URL.LIST_SPORT,
       }),
@@ -47,7 +47,7 @@ export default function FormRequestCreateClub() {
 
   const { isLoading, mutateAsync } = useMutation({
     mutationFn: (data) =>
-      request({ method: "POST", url: API_URL.CREATE_CLUB, data: data }),
+      requestToken({ method: "POST", url: API_URL.CREATE_CLUB, data: data }),
     onError(error: any, variables, context) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
@@ -146,7 +146,7 @@ export default function FormRequestCreateClub() {
                 ]}
               >
                 <InputNumber
-                  style={{ width: "100%", padding: '0 10px' }}
+                  style={{ width: "100%", padding: "0 10px" }}
                   size="large"
                   min={1}
                   max={100000}

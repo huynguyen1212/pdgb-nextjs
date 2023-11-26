@@ -84,7 +84,7 @@ export const SCreateRoom = styled.div`
     grid-template-columns: 3fr 1fr;
 
     .button_all_in {
-      height: 100%;
+      height: 40px;
     }
   }
 
@@ -99,56 +99,62 @@ export const SCreateRoom = styled.div`
 `;
 
 export const SChallengeList = styled.div`
-  .filter {
+  .title_item {
+    font-size: 20px;
+    font-weight: 600;
+    color: #223ea1;
+    margin-bottom: 40px;
+  }
+
+  .filter_button {
     display: flex;
-    gap: 34px;
     align-items: center;
-    margin-bottom: 30px;
+    justify-content: space-between;
+    margin-bottom: 40px;
 
-    .arrow_button {
+    .filter {
       display: flex;
+      gap: 34px;
       align-items: center;
-      gap: 10px;
 
-      span {
-        cursor: pointer;
+      .arrow_button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        span {
+          cursor: pointer;
+        }
       }
-    }
 
-    button {
-      padding: 8px 24px;
-      font-size: 14px;
-      line-height: 20px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 1.4px;
-      color: #223ea1;
-      transition: 0.3s all;
+      button {
+        padding: 8px 24px;
+        font-size: 14px;
+        line-height: 20px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1.4px;
+        color: #223ea1;
+        transition: 0.3s all;
 
-      &:hover {
-        color: white;
-        background-color: #223ea1;
+        &:hover {
+          color: white;
+          background-color: #223ea1;
+        }
       }
-    }
 
-    .date_picker {
-      min-height: 38px;
-      min-width: 200px;
+      .date_picker {
+        min-height: 38px;
+        min-width: 200px;
 
-      input {
-        height: 100%;
+        input {
+          height: 100%;
+        }
       }
     }
   }
 
   .list_pk {
-    .title_item {
-      font-size: 20px;
-      font-weight: 600;
-      color: #223ea1;
-      margin-bottom: 40px;
-    }
-
     .list_main {
       .list_item {
         margin-bottom: 60px;
@@ -245,7 +251,7 @@ export const SChallengeList = styled.div`
         .wrap_buttons {
           display: flex;
           align-items: start;
-          justify-content: center;
+          justify-content: flex-end;
           width: 100%;
 
           .buttons {
@@ -328,6 +334,20 @@ export const SModalAccept = styled.div`
 
     span {
       color: red;
+    }
+  }
+`;
+
+export const SModalConfirmMatch = styled.div`
+  padding: 20px 0;
+
+  .question {
+    text-align: center;
+    font-size: 20px;
+
+    span {
+      color: #223ea1;
+      font-weight: bold;
     }
   }
 `;

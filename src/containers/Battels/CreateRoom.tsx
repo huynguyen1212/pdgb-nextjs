@@ -69,11 +69,19 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn bộ môn thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="category">
+                    <Form.Item
+                      name="category"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
                       <Select
                         className="input_form"
                         showSearch
-                        placeholder="Select a person"
+                        placeholder="Môn thi đấu"
                         optionFilterProp="children"
                         onChange={onChange}
                         onSearch={onSearch}
@@ -102,14 +110,21 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn thành viên trong đội <span>*</span>
                     </label>
-                    <Form.Item name="members">
+                    <Form.Item
+                      name="members"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
                       <Select
                         className="input_form"
                         mode="multiple"
                         allowClear
                         style={{ width: "100%" }}
-                        placeholder="Please select"
-                        defaultValue={["a10", "c12"]}
+                        placeholder="Thành viên trong đội"
                         onChange={handleChange}
                         options={options}
                       />
@@ -122,8 +137,19 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn ngày thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="date">
-                      <DatePicker className="input_form" />
+                    <Form.Item
+                      name="date"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
+                      <DatePicker
+                        className="input_form"
+                        placeholder="Ngày thi đấu"
+                      />
                     </Form.Item>
                   </div>
                 </Col>
@@ -133,8 +159,20 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn giờ bắt đầu thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="time_start">
-                      <TimePicker use12Hours className="input_form" />
+                    <Form.Item
+                      name="time_start"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
+                      <TimePicker
+                        use12Hours
+                        className="input_form"
+                        placeholder="Giờ bắt đầu"
+                      />
                     </Form.Item>
                   </div>
                 </Col>
@@ -144,8 +182,20 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn giờ kết thúc thi đấu <span>*</span>
                     </label>
-                    <Form.Item name="time_end">
-                      <TimePicker use12Hours className="input_form" />
+                    <Form.Item
+                      name="time_end"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
+                      <TimePicker
+                        use12Hours
+                        className="input_form"
+                        placeholder="Giờ kết thúc"
+                      />
                     </Form.Item>
                   </div>
                 </Col>
@@ -155,7 +205,15 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn địa điểm <span>*</span>
                     </label>
-                    <Form.Item name="local">
+                    <Form.Item
+                      name="local"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
                       <TextArea
                         className="input_form input_form_textarea"
                         placeholder="Chọn địa điểm"
@@ -169,11 +227,19 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Chọn trạng thái trận đấu <span>*</span>
                     </label>
-                    <Form.Item name="status">
+                    <Form.Item
+                      name="status"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập giá trị !!",
+                        },
+                      ]}
+                    >
                       <Select
                         className="input_form"
                         showSearch
-                        placeholder="Select a person"
+                        placeholder="Trạng thái"
                         optionFilterProp="children"
                         onChange={onChange}
                         onSearch={onSearch}
@@ -200,8 +266,19 @@ export default function CreateRoom() {
                     </label>
 
                     <div className="button_input">
-                      <Form.Item name="amount_coin">
-                        <InputNumber className="input_form" />
+                      <Form.Item
+                        name="amount_coin"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
+                      >
+                        <InputNumber
+                          className="input_form"
+                          placeholder="Số coin"
+                        />
                       </Form.Item>
 
                       <Button
@@ -242,14 +319,21 @@ export default function CreateRoom() {
                 <label className="labe-form">
                   Chọn Clubs <span>*</span>
                 </label>
-                <Form.Item name="clubs">
+                <Form.Item
+                  name="clubs"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập giá trị !!",
+                    },
+                  ]}
+                >
                   <Select
                     className="input_form"
                     mode="multiple"
                     allowClear
                     style={{ width: "100%" }}
-                    placeholder="Please select"
-                    defaultValue={["a10", "c12"]}
+                    placeholder="Clubs"
                     onChange={handleChange}
                     options={options}
                   />

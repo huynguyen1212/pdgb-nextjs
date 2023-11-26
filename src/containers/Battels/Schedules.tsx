@@ -1,12 +1,68 @@
-import { SSchedules } from "./style";
+import { useState } from "react";
+import { Modal, Select } from "antd";
 import FullCalendar from "@fullcalendar/react";
+import allLocales from "@fullcalendar/core/locales-all";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { Select } from "antd";
+
+import { SSchedules } from "./style";
+import styled from "styled-components";
 
 export default function Schedules() {
+  const [events, setEvents] = useState([
+    {
+      title: "Nice event 1",
+      start: new Date().setHours(new Date().getHours() + 1),
+      resourceId: "1",
+      id: "1",
+    },
+    {
+      title: "Nice event 2",
+      start: new Date().setHours(new Date().getHours() + 2),
+      resourceId: "2",
+      id: "2",
+    },
+    {
+      title: "Nice event 3",
+      start: new Date().setHours(new Date().getHours() + 3),
+      resourceId: "3",
+      id: "3",
+    },
+    {
+      title: "Nice event 1",
+      start: new Date().setHours(new Date().getHours() + 4),
+      resourceId: "4",
+      id: "4",
+    },
+    {
+      title: "Nice event 2",
+      start: new Date().setHours(new Date().getHours() + 5),
+      resourceId: "5",
+      id: "5",
+    },
+    {
+      title: "Nice event 3",
+      start: new Date().setHours(new Date().getHours() + 6),
+      resourceId: "6",
+      id: "6",
+    },
+  ]);
+
+  // modal event
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = (arg: any) => {
+    setIsModalOpen(true);
+    console.log("arg: ", arg.event.id);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  // filter
   const onChange = (value: string) => {
     console.log(`selected ${value}`);
   };
@@ -14,6 +70,7 @@ export default function Schedules() {
   const onSearch = (value: string) => {
     console.log("search:", value);
   };
+
   // Filter `option.label` match the user type `input`
   const filterOption = (
     input: string,
@@ -54,6 +111,8 @@ export default function Schedules() {
 
       <div className="wrap_calender">
         <FullCalendar
+          locales={allLocales}
+          locale="vi"
           plugins={[
             resourceTimelinePlugin,
             dayGridPlugin,
@@ -71,11 +130,24 @@ export default function Schedules() {
           selectable={true}
           selectMirror={true}
           resources={[]}
-          initialEvents={[
-            { title: "Nice event", start: new Date(), resourceId: "a" },
-          ]}
+          events={events}
+          eventClick={(arg) => {
+            showModal(arg);
+          }}
         />
       </div>
+
+      {/* modal accept */}
+      <Modal
+        title="Chi tiết Battel"
+        centered
+        open={isModalOpen}
+        onCancel={handleCancel}
+      >
+        <SModalEvent>Hi</SModalEvent>
+      </Modal>
     </SSchedules>
   );
 }
+
+const SModalEvent = styled.div``;

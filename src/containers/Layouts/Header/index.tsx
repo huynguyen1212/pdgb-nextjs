@@ -69,10 +69,11 @@ function Header({ showMenu, setShowMenu }: Props) {
 
   // handle login
   const { data: section }: any = useSession();
-
   useEffect(() => {
     if (section && section.token.access_token) {
       localStorage.setItem("token", section.token.access_token);
+    } else if (section === null) {
+      localStorage.removeItem("token");
     }
   }, [section]);
 
@@ -100,119 +101,126 @@ function Header({ showMenu, setShowMenu }: Props) {
             className="wrap_control"
             style={{
               gridTemplateColumns: `${
-                isMobile ? "4fr 1fr 8fr" : "2fr 2fr 1fr 4fr"
+                !section ? "1fr" : isMobile ? "4fr 1fr 8fr" : "2fr 2fr 1fr 4fr"
               }`,
             }}
           >
-            {!isMobile ? (
+            {section && (
               <>
-                <div
-                  className="control_item"
-                  style={{
-                    color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                  }}
-                >
-                  <Link href="/club">Quản lý Club</Link>
-                </div>
-
-                <div
-                  className="control_item"
-                  style={{
-                    color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                  }}
-                >
-                  <Link href="/battels">Chiến thôi</Link>
-                </div>
-              </>
-            ) : (
-              <div
-                className="open_menu"
-                style={{
-                  color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                }}
-                onClick={() => {
-                  setShowMenu((prev) => !prev);
-                }}
-              >
-                <span>{showMenu ? "Close" : "Menu"}</span>{" "}
-                <MenuIcon
-                  readOnly={true}
-                  checked={showMenu}
-                  size={24}
-                  color={`${!change || showMenu ? "white" : "#223EA1"}`}
-                />
-              </div>
-            )}
-
-            <div className="notification">
-              <div className="bell">
-                <FaRegBell
-                  size={20}
-                  color={`${!change || showMenu ? "white" : "#223EA1"}`}
-                  className="icon_bell"
-                />
-
-                <span className="new_noti">10</span>
-
-                <div className="list_noti">
-                  <p className="title">Thông báo</p>
-
-                  <div className="list_noti_main">
-                    <div className="list_noti_item list_noti_item_read">
-                      <p className="title_noti">Thông báo khiêu chiến</p>
-
-                      <p className="sender_noti">
-                        Từ: <span>Club A</span>
-                      </p>
-
-                      <p className="content_noti">Club A rủ chơi bilac</p>
-
-                      <p className="time_noti">Hôm qua</p>
+                {!isMobile ? (
+                  <>
+                    <div
+                      className="control_item"
+                      style={{
+                        color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                      }}
+                    >
+                      <Link href="/club">Quản lý Club</Link>
                     </div>
 
-                    <div className="list_noti_item list_noti_item_unread">
-                      <p className="title_noti">Thông báo hệ thống</p>
-
-                      <p className="sender_noti">
-                        Từ: <span>Hệ thống</span>
-                      </p>
-
-                      <p className="content_noti">Tạo club thành công</p>
-
-                      <p className="time_noti">2 giờ trước</p>
+                    <div
+                      className="control_item"
+                      style={{
+                        color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                      }}
+                    >
+                      <Link href="/battels">Chiến thôi</Link>
                     </div>
+                  </>
+                ) : (
+                  <div
+                    className="open_menu"
+                    style={{
+                      color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                    }}
+                    onClick={() => {
+                      setShowMenu((prev) => !prev);
+                    }}
+                  >
+                    <span>{showMenu ? "Close" : "Menu"}</span>{" "}
+                    <MenuIcon
+                      readOnly={true}
+                      checked={showMenu}
+                      size={24}
+                      color={`${!change || showMenu ? "white" : "#223EA1"}`}
+                    />
+                  </div>
+                )}
 
-                    <div className="list_noti_item list_noti_item_read">
-                      <p className="title_noti">Thông báo khiêu chiến</p>
+                <div className="notification">
+                  <div className="bell">
+                    <FaRegBell
+                      size={20}
+                      color={`${!change || showMenu ? "white" : "#223EA1"}`}
+                      className="icon_bell"
+                    />
 
-                      <p className="sender_noti">
-                        Từ: <span>Club A</span>
-                      </p>
+                    <span className="new_noti">10</span>
 
-                      <p className="content_noti">Club A rủ chơi bilac</p>
+                    <div className="list_noti">
+                      <p className="title">Thông báo</p>
 
-                      <p className="time_noti">Hôm qua</p>
-                    </div>
+                      <div className="list_noti_main">
+                        <div className="list_noti_item list_noti_item_read">
+                          <p className="title_noti">Thông báo khiêu chiến</p>
 
-                    <div className="list_noti_item list_noti_item_unread">
-                      <p className="title_noti">Thông báo hệ thống</p>
+                          <p className="sender_noti">
+                            Từ: <span>Club A</span>
+                          </p>
 
-                      <p className="sender_noti">
-                        Từ: <span>Hệ thống</span>
-                      </p>
+                          <p className="content_noti">Club A rủ chơi bilac</p>
 
-                      <p className="content_noti">Tạo club thành công</p>
+                          <p className="time_noti">Hôm qua</p>
+                        </div>
 
-                      <p className="time_noti">2 giờ trước</p>
+                        <div className="list_noti_item list_noti_item_unread">
+                          <p className="title_noti">Thông báo hệ thống</p>
+
+                          <p className="sender_noti">
+                            Từ: <span>Hệ thống</span>
+                          </p>
+
+                          <p className="content_noti">Tạo club thành công</p>
+
+                          <p className="time_noti">2 giờ trước</p>
+                        </div>
+
+                        <div className="list_noti_item list_noti_item_read">
+                          <p className="title_noti">Thông báo khiêu chiến</p>
+
+                          <p className="sender_noti">
+                            Từ: <span>Club A</span>
+                          </p>
+
+                          <p className="content_noti">Club A rủ chơi bilac</p>
+
+                          <p className="time_noti">Hôm qua</p>
+                        </div>
+
+                        <div className="list_noti_item list_noti_item_unread">
+                          <p className="title_noti">Thông báo hệ thống</p>
+
+                          <p className="sender_noti">
+                            Từ: <span>Hệ thống</span>
+                          </p>
+
+                          <p className="content_noti">Tạo club thành công</p>
+
+                          <p className="time_noti">2 giờ trước</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              </>
+            )}
 
             <div className="wrap_button_login">
               {section ? (
-                <button className="button_login" onClick={() => signOut()}>
+                <button
+                  className="button_login"
+                  onClick={() => signOut({ callbackUrl: "/" })}
+                >
                   <span>Logout khỏi Google</span>
                 </button>
               ) : (

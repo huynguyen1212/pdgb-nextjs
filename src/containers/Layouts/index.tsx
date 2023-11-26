@@ -42,7 +42,7 @@ function Layout({ children }: Props) {
   const isMobile575 = windowSize < 576;
 
   const handleContactUs = () => {
-    router.push("/contact-us");
+    router.push("/");
   };
 
   const [cursorPositionLeft, setCursorPositionLeft] =
@@ -73,8 +73,14 @@ function Layout({ children }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (!localStorage.getItem("token") && router.pathname !== "/") {
+      router.push("/");
+    }
+  }, [router]);
+
   return (
-    <ErrorBound>
+    // <ErrorBound>
       <WrapLayout onMouseMove={onMouseMove}>
         <Header {...{ showMenu, setShowMenu }} />
         <div className="container">{children}</div>
@@ -114,7 +120,8 @@ function Layout({ children }: Props) {
                   onClick={handleContactUs}
                 >
                   <textPath xlinkHref="#circlePath">
-                    Battels ------------------ Chiến thôi anh em ơi ------------------
+                    Battels ------------------ Chiến thôi anh em ơi
+                    ------------------
                   </textPath>
                 </text>
               </g>
@@ -182,7 +189,7 @@ function Layout({ children }: Props) {
           </div>
         </div>
       </WrapLayout>
-    </ErrorBound>
+    // </ErrorBound>
   );
 }
 export default memo(Layout);
