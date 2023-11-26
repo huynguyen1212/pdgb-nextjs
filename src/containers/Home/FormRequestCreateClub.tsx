@@ -52,16 +52,16 @@ export default function FormRequestCreateClub() {
       message.error(error?.response?.data?.message || "Thất bại");
     },
     onSuccess(data, variables, context) {
-      message.success("Tạo club thành công!");
+      message.success("Đã gửi request tạo club!", 1.5);
+      message.info(
+        "Các request join club trước đó sẽ bị huỷ khi bạn tạo club!",
+        4
+      );
     },
   });
 
   const onSubmitRequestForm = (values: any) => {
-    const formData = {
-      ...values,
-      manager_id: 1,
-    };
-    mutateAsync(formData);
+    mutateAsync(values);
     form.resetFields();
   };
 
@@ -87,9 +87,7 @@ export default function FormRequestCreateClub() {
     <SFormRequestCreateClub>
       <Container>
         <div className="form_request_create_club">
-          <h3 className="page-content-title title_form">
-            Form request create club
-          </h3>
+          <h3 className="page-content-title title_form">Tạo club</h3>
 
           <Form
             form={form}
@@ -101,32 +99,32 @@ export default function FormRequestCreateClub() {
           >
             <div className="mb-[16px]">
               <Form.Item<FormRequest>
-                label="Club"
+                label="Tên club"
                 name="club_name"
                 rules={[
                   {
                     required: true,
-                    message: "Please input your club name!",
+                    message: "Hãy nhập tên club!",
                   },
                 ]}
               >
-                <Input size="large" placeholder="Input your club name" />
+                <Input size="large" placeholder="Nhập tên club" />
               </Form.Item>
             </div>
 
             <div className="mb-[16px]">
               <Form.Item
-                label="Sport"
+                label="Bộ môn"
                 name="sports_discipline_ids"
                 rules={[
                   {
                     required: true,
-                    message: "Please input your sport name!",
+                    message: "Hãy chọn các bộ môn thi đấu trong club",
                   },
                 ]}
               >
                 <Select
-                  placeholder="Select sport"
+                  placeholder="Chọn bộ môn"
                   mode="multiple"
                   allowClear
                   options={options}
@@ -136,29 +134,29 @@ export default function FormRequestCreateClub() {
 
             <div className="mb-[16px]">
               <Form.Item
-                label="Number of members"
+                label="Số lượng thành viên"
                 name="number_of_members"
                 rules={[
                   {
                     required: true,
-                    message: "Please input your number of members!",
+                    message: "Hãy nhập số lượng thành viên trong club",
                   },
                 ]}
               >
                 <InputNumber
+                  placeholder="Nhập số lượng thành viên"
                   style={{ width: "100%", padding: "0 10px" }}
                   size="large"
                   min={1}
-                  max={100000}
-                  defaultValue={15}
+                  max={100}
                 />
               </Form.Item>
             </div>
 
             <div className="mb-[16px]">
-              <Form.Item label="Description" name="description">
+              <Form.Item label="Giới thiệu" name="description">
                 <TextArea
-                  placeholder="Description your club"
+                  placeholder="Giới thiệu club"
                   autoSize={{ minRows: 4, maxRows: 6 }}
                 />
               </Form.Item>
@@ -171,7 +169,7 @@ export default function FormRequestCreateClub() {
                 className="btn-create"
                 disabled={isLoading}
               >
-                Create club
+                Tạo club
                 {isLoading && (
                   <div className="loader">
                     <Loading />

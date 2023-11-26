@@ -28,16 +28,6 @@ const SClub = styled.div`
       background: linear-gradient(13deg, #563CBE 3.30%, rgba(45, 101, 200, 0.30) 60%, #0889D1 106.08%);
     }
   }
-  .title_clubs {
-    margin: 40px 0;
-    text-align: center;
-    font-size: 30px;
-    color: #566375;
-    font-family: "Noto Sans", sans-serif;
-  }
-  .item-club {
-    margin-bottom: 40px;
-  }
 `;
 
 export default SClub;

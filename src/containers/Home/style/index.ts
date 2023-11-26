@@ -201,14 +201,28 @@ export const SBanner = styled.div`
 
 export const SFormRequestCreateClub = styled.div`
   padding: 50px;
-  background: linear-gradient(
-    45deg,
-    rgba(66, 183, 245, 0.8) 0%,
-    rgba(66, 245, 189, 0.4) 100%
-  );
+  background-image: url("https://res.edu.vn/wp-content/uploads/2022/01/unit-5-sport.jpg");
+  /* background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg"); */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    /* background-color: rgba(246, 219, 150, 0.6); */
+  }
 
   .form_request_create_club {
     position: relative;
+    z-index: 3;
     padding: 30px;
     background: white;
     border-radius: 15px;
@@ -260,5 +274,45 @@ export const SFormRequestCreateClub = styled.div`
 
   .loader {
     margin-left: 5px;
+  }
+`;
+
+export const SListClubs = styled.div`
+  padding: 50px;
+  /* background-image: url("https://res.edu.vn/wp-content/uploads/2022/01/unit-5-sport.jpg"); */
+  /* background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg"); */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  z-index: 1;
+  background-color: white;
+
+  /* &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    background-color: rgba(246, 219, 150, 0.6);
+  } */
+
+  .list-clubs {
+    position: relative;
+    z-index: 3;
+  }
+
+  .title_clubs {
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 30px;
+    color: rgb(34, 62, 161);
+    font-family: "Noto Sans", sans-serif;
+  }
+
+  .item-club {
+    margin-bottom: 40px;
   }
 `;
