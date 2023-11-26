@@ -8,7 +8,6 @@ export const StylesCard = styled.div`
     width: 100%;
     padding: 25px;
     background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg");
-    /* background-image: url('https://www.shutterstock.com/shutterstock/photos/1917840683/display_1500/stock-vector-sports-equipment-background-sport-concept-with-balls-and-gaming-items-balls-for-football-1917840683.jpg'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -22,10 +21,32 @@ export const StylesCard = styled.div`
       right: 0;
       display: block;
       z-index: 2;
-      background-color: rgba(246, 219, 150, 0.5);
+      background-color: rgba(246, 219, 150, 0.6);
       width: 100%;
       height: 100%;
       border-radius: 20px;
+    }
+
+    &.card__badminton {
+        background-image: url("https://hvshop.vn/wp-content/uploads/2021/10/qua-cau-long-hvshop.jpeg");
+    }
+
+    &.card__football {
+        background-image: url("https://cdn.tuoitre.vn/ttct//2020/12/13/16078750289060-lich-thi-dau-bong-da-hom-nay-0211.jpg");
+    }
+
+    &.card__table-tennis {
+        background-image: url("https://thethaothienlong.vn/wp-content/uploads/2022/08/cac-loai-bong-ban-1.jpg");
+    }
+
+    &.card__foosball {
+        background-image: url("https://u6wdnj9wggobj.vcdn.cloud/media/catalog/product/cache/95cb36d3254e0a20b33361b06e7c0ce9/magento/UNITED_SPORT/A6026/A6026_8.jpg");
+
+    }
+
+    &.card__billiard {
+        background-image: url("https://sanxuatbia.com/wp-content/uploads/2020/04/2.jpg");
+
     }
   }
 
@@ -37,6 +58,7 @@ export const StylesCard = styled.div`
     z-index: 3;
     width: 100%;
     height: 100%;
+    
   }
 
   .card__wrapper {
@@ -76,7 +98,7 @@ export const StylesCard = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    background: rgb(34, 62, 161);
+    background: rgb(34, 62, 161);;
   }
 
   .card__acounts {
@@ -90,14 +112,10 @@ export const StylesCard = styled.div`
   }
 
   .card__menu {
-    background: white;
-    border-radius: 5px;
-    padding: 12px 24px;
-    font-size: 16px;
-    text-transform: uppercase;
-    color: rgb(34, 62, 161);
-    width: 80px;
+    width: 40px;
     height: 40px;
+    background: #f6db96;
+    border-radius: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,21 +126,21 @@ export const StylesCard = styled.div`
     margin-top: 50px;
     font-weight: 900;
     font-size: 25px;
-    color: rgb(34, 62, 161);
+    color: rgb(34, 62, 161);;
   }
 
   .card__subtitle {
     margin-top: 15px;
     font-weight: 400;
     font-size: 15px;
-    color: rgb(34, 62, 161);
+    color: rgb(34, 62, 161);;
   }
 
   .card__indicator {
     margin-top: 50px;
     font-weight: 500;
     font-size: 14px;
-    color: rgb(34, 62, 161);
+    color: rgb(34, 62, 161);;
   }
 
   .card__progress progress {
@@ -140,26 +158,4 @@ export const StylesCard = styled.div`
     background-color: white;
     border-radius: 100px;
   }
-
-  .card__status {
-    color: rgb(34, 62, 161);
-  }
-
-  .status {
-    font-style: italic;
-    font-weight: 500;
-    &.active {
-      color: #70ff60;
-    }
-    &.off {
-      color: #e33636;
-    }
-  }
-
-  .card:hover {
-    color: rgb(88 199 250 / 100%);
-    transition: color 1s;
-  }
 `;
-
-export const SModalJoinClub = styled.div``;

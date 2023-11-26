@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Checkbox, Form, Input, message, Modal } from "antd";
 import { Container } from "styled-bootstrap-grid";
-import { request } from "src/api/axios";
+import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 import { useMutation, useQuery } from "react-query";
 
@@ -38,7 +38,7 @@ export default function Test() {
   useQuery({
     queryKey: ["getNewsNear"],
     queryFn: () =>
-      request({
+    requestToken({
         method: "GET",
         url: API_URL.NEWS.GET,
       }),
@@ -50,7 +50,7 @@ export default function Test() {
   // use Mutation
   const { isLoading, mutateAsync } = useMutation({
     mutationFn: (data) =>
-      request({ method: "POST", url: API_URL.LOGIN, data: data }),
+    requestToken({ method: "POST", url: API_URL.LOGIN, data: data }),
     onError(error: any, variables, context) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
