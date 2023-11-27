@@ -27,17 +27,15 @@ export default function Home() {
     },
   });
 
-  console.log(check, "Check");
-
   return (
     <SHome>
       <Banner />
 
       {section && !check && (
         <>
-          <FormRequestCreateClub />
-
           <ListClubs />
+
+          <FormRequestCreateClub />
         </>
       )}
     </SHome>

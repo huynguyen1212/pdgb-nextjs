@@ -82,10 +82,6 @@ const SClub = styled.div`
     }
   }
 
-  .item-sport {
-    margin: 15px 0;
-  }
-
   .club-tab {
     margin: 30px 0;
   }
@@ -99,9 +95,10 @@ const SClub = styled.div`
     align-items: flex-start;
     gap: 16px;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: #e2e8f059;
     backdrop-filter: blur(25px);
     margin-bottom: 50px;
+    border: 1px solid #d9d9d9a3;
 
     .heading {
       font-size: 16px;
@@ -126,3 +123,11 @@ export const SMembers = styled.div`
     margin: 15px 0;
   }
 `;
+
+export const SSport = styled.div`
+  .item-sport {
+    margin: 15px 0;
+  }
+`;
+
+export const SRequest = styled.div``;

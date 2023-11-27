@@ -2,9 +2,6 @@ import styled from "styled-components";
 
 export const StylesCard = styled.div`
   .card {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-      Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
-      sans-serif;
     width: 100%;
     padding: 25px;
     background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg");
@@ -13,6 +10,7 @@ export const StylesCard = styled.div`
     background-repeat: no-repeat;
     border-radius: 20px;
     position: relative;
+
     &::after {
       content: "";
       position: absolute;
@@ -28,25 +26,23 @@ export const StylesCard = styled.div`
     }
 
     &.card__badminton {
-        background-image: url("https://hvshop.vn/wp-content/uploads/2021/10/qua-cau-long-hvshop.jpeg");
+      background-image: url("https://hvshop.vn/wp-content/uploads/2021/10/qua-cau-long-hvshop.jpeg");
     }
 
     &.card__football {
-        background-image: url("https://cdn.tuoitre.vn/ttct//2020/12/13/16078750289060-lich-thi-dau-bong-da-hom-nay-0211.jpg");
+      background-image: url("https://cdn.tuoitre.vn/ttct//2020/12/13/16078750289060-lich-thi-dau-bong-da-hom-nay-0211.jpg");
     }
 
     &.card__table-tennis {
-        background-image: url("https://thethaothienlong.vn/wp-content/uploads/2022/08/cac-loai-bong-ban-1.jpg");
+      background-image: url("https://thethaothienlong.vn/wp-content/uploads/2022/08/cac-loai-bong-ban-1.jpg");
     }
 
     &.card__foosball {
-        background-image: url("https://u6wdnj9wggobj.vcdn.cloud/media/catalog/product/cache/95cb36d3254e0a20b33361b06e7c0ce9/magento/UNITED_SPORT/A6026/A6026_8.jpg");
-
+      background-image: url("https://u6wdnj9wggobj.vcdn.cloud/media/catalog/product/cache/95cb36d3254e0a20b33361b06e7c0ce9/magento/UNITED_SPORT/A6026/A6026_8.jpg");
     }
 
     &.card__billiard {
-        background-image: url("https://sanxuatbia.com/wp-content/uploads/2020/04/2.jpg");
-
+      background-image: url("https://sanxuatbia.com/wp-content/uploads/2020/04/2.jpg");
     }
   }
 
@@ -58,7 +54,6 @@ export const StylesCard = styled.div`
     z-index: 3;
     width: 100%;
     height: 100%;
-    
   }
 
   .card__wrapper {
@@ -98,7 +93,7 @@ export const StylesCard = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 100%;
-    background: rgb(34, 62, 161);;
+    background: rgb(34, 62, 161);
   }
 
   .card__acounts {
@@ -126,21 +121,21 @@ export const StylesCard = styled.div`
     margin-top: 50px;
     font-weight: 900;
     font-size: 25px;
-    color: rgb(34, 62, 161);;
+    color: rgb(34, 62, 161);
   }
 
   .card__subtitle {
     margin-top: 15px;
     font-weight: 400;
     font-size: 15px;
-    color: rgb(34, 62, 161);;
+    color: rgb(34, 62, 161);
   }
 
   .card__indicator {
     margin-top: 50px;
     font-weight: 500;
     font-size: 14px;
-    color: rgb(34, 62, 161);;
+    color: rgb(34, 62, 161);
   }
 
   .card__progress progress {

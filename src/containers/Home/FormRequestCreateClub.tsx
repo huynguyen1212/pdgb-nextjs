@@ -87,7 +87,9 @@ export default function FormRequestCreateClub() {
     <SFormRequestCreateClub>
       <Container>
         <div className="form_request_create_club">
-          <h3 className="page-content-title title_form">Tạo club</h3>
+          <h3 className="page-content-title title_form">
+            Gửi yêu cầu tạo club
+          </h3>
 
           <Form
             form={form}
@@ -98,8 +100,10 @@ export default function FormRequestCreateClub() {
             autoComplete="off"
           >
             <div className="mb-[16px]">
+              <label className="labe-form">
+                Tên club <span>*</span>
+              </label>
               <Form.Item<FormRequest>
-                label="Tên club"
                 name="club_name"
                 rules={[
                   {
@@ -113,8 +117,10 @@ export default function FormRequestCreateClub() {
             </div>
 
             <div className="mb-[16px]">
+              <label className="labe-form">
+                Bộ môn <span>*</span>
+              </label>
               <Form.Item
-                label="Bộ môn"
                 name="sports_discipline_ids"
                 rules={[
                   {
@@ -133,8 +139,10 @@ export default function FormRequestCreateClub() {
             </div>
 
             <div className="mb-[16px]">
+              <label className="labe-form">
+                Số lượng thành viên <span>*</span>
+              </label>
               <Form.Item
-                label="Số lượng thành viên"
                 name="number_of_members"
                 rules={[
                   {
@@ -154,7 +162,18 @@ export default function FormRequestCreateClub() {
             </div>
 
             <div className="mb-[16px]">
-              <Form.Item label="Giới thiệu" name="description">
+              <label className="labe-form">
+                Slogan <span>*</span>
+              </label>
+              <Form.Item
+                name="description"
+                rules={[
+                  {
+                    required: true,
+                    message: "Hãy nhập Slogan",
+                  },
+                ]}
+              >
                 <TextArea
                   placeholder="Giới thiệu club"
                   autoSize={{ minRows: 4, maxRows: 6 }}
@@ -169,7 +188,7 @@ export default function FormRequestCreateClub() {
                 className="btn-create"
                 disabled={isLoading}
               >
-                Tạo club
+                Gửi
                 {isLoading && (
                   <div className="loader">
                     <Loading />

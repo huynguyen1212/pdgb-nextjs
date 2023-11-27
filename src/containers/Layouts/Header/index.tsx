@@ -123,17 +123,15 @@ function Header({ showMenu, setShowMenu }: Props) {
             className="wrap_control"
             style={{
               gridTemplateColumns: `${
-                !(token && section)
+                !(token && section && check)
                   ? "1fr"
-                  : !check
-                  ? "2fr 1fr 4fr"
                   : isMobile
                   ? "4fr 1fr 8fr"
                   : "2fr 2fr 1fr 4fr"
               }`,
             }}
           >
-            {!(section && token) ? (
+            {!(section && token && check) ? (
               <></>
             ) : (
               <>
@@ -145,19 +143,17 @@ function Header({ showMenu, setShowMenu }: Props) {
                         color: `${!change || showMenu ? "white" : "#223EA1"}`,
                       }}
                     >
-                      <Link href="/club">My Club</Link>
+                      <Link href="/club">Club của tôi</Link>
                     </div>
 
-                    {check && (
-                      <div
-                        className="control_item"
-                        style={{
-                          color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                        }}
-                      >
-                        <Link href="/battels">Chiến thôi</Link>
-                      </div>
-                    )}
+                    <div
+                      className="control_item"
+                      style={{
+                        color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                      }}
+                    >
+                      <Link href="/battels">Chiến thôi</Link>
+                    </div>
                   </>
                 ) : (
                   <div

@@ -12,7 +12,7 @@ export default function Battels() {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Tạo phòng",
+      label: "Tạo Match",
       children: <CreateRoom />,
     },
     {
@@ -46,15 +46,15 @@ export default function Battels() {
             </p>
           </div>
         </div>
-      </Container>
 
-      <div className="wrap_battels_main">
-        <Tabs
-          defaultActiveKey="1"
-          items={items}
-          indicatorSize={(origin) => origin - 16}
-        />
-      </div>
+        <div className="">
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            indicatorSize={(origin) => origin - 16}
+          />
+        </div>
+      </Container>
     </SBattels>
   );
 }

@@ -32,9 +32,11 @@ export default function CardTeam({
           <div className="card__wrapper">
             <div className="card___wrapper-acounts">
               <div className="card__score">+{members}</div>
+
               <div className="card__acounts">
                 <IconFirstMember />
               </div>
+
               <div className="card__acounts">
                 <IconSecondMember />
               </div>
@@ -55,12 +57,18 @@ export default function CardTeam({
               </svg>
             </div> */}
           </div>
+
           <div className="card__title">{name}</div>
-          {description && <div className="card__subtitle">Description: {description}</div>}
+
+          {description && (
+            <div className="card__subtitle">Description: {description}</div>
+          )}
+
           <div className="card__indicator">
             <span className="card__indicator-amount">{members}</span>/
             {number_of_members} Members
           </div>
+
           <div className="card__progress">
             <progress
               max={100}

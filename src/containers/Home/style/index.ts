@@ -202,7 +202,6 @@ export const SBanner = styled.div`
 export const SFormRequestCreateClub = styled.div`
   padding: 50px;
   background-image: url("https://res.edu.vn/wp-content/uploads/2022/01/unit-5-sport.jpg");
-  /* background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -235,30 +234,28 @@ export const SFormRequestCreateClub = styled.div`
   }
 
   .title_form {
-    margin-bottom: 40px;
     text-align: center;
-    font-size: 30px;
-    color: #566375;
+    font-size: 25px;
+    font-weight: 600;
+    color: #223ea1;
+    margin-bottom: 40px;
   }
 
   .btn-create {
-    background: rgb(34, 62, 161);
-    border-radius: 25px;
-    padding: 24px;
-    font-size: 16px;
+    background: #223ea1;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 14px;
     text-transform: uppercase;
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    transition-duration: 0.5s;
-    transition-timing-function: ease;
-    transition-delay: 0s;
-    transition-property: transform;
+    transition: 0.3s all;
     margin: 30px auto;
+
     &:hover {
-      transform: translate(2px, 2px);
       border: 1px solid rgb(34, 62, 161) !important;
       background: white !important;
       color: rgb(34, 62, 161) !important;
@@ -279,40 +276,18 @@ export const SFormRequestCreateClub = styled.div`
 
 export const SListClubs = styled.div`
   padding: 50px;
-  /* background-image: url("https://res.edu.vn/wp-content/uploads/2022/01/unit-5-sport.jpg"); */
-  /* background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg"); */
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-  z-index: 1;
-  background-color: white;
-
-  /* &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 2;
-    background-color: rgba(246, 219, 150, 0.6);
-  } */
 
   .list-clubs {
-    position: relative;
-    z-index: 3;
-  }
+    .title_clubs {
+      margin-bottom: 40px;
+      text-align: center;
+      font-size: 30px;
+      color: rgb(34, 62, 161);
+      font-family: "Noto Sans", sans-serif;
+    }
 
-  .title_clubs {
-    margin-bottom: 40px;
-    text-align: center;
-    font-size: 30px;
-    color: rgb(34, 62, 161);
-    font-family: "Noto Sans", sans-serif;
-  }
-
-  .item-club {
-    margin-bottom: 40px;
+    .item-club {
+      margin-bottom: 40px;
+    }
   }
 `;

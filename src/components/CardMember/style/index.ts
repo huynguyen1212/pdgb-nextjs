@@ -7,14 +7,14 @@ export const StylesCard = styled.div`
     background: rgb(34, 62, 161);
     border-radius: 15px;
     box-shadow: 1px 5px 60px 0px #100a886b;
-  }
 
-  .card .card-border-top {
-    width: 60%;
-    height: 3%;
-    background: white;
-    margin: auto;
-    border-radius: 0px 0px 15px 15px;
+    .card-border-top {
+      width: 60%;
+      height: 3%;
+      background: white;
+      margin: auto;
+      border-radius: 0px 0px 15px 15px;
+    }
   }
 
   .card span {

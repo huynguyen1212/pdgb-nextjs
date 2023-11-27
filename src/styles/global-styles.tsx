@@ -712,6 +712,13 @@ export const GlobalStyle = createGlobalStyle`
   .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
       color:#1890ff;
   }
+
+  .ant-tabs-nav {
+    &::before {
+        border-bottom: 1px solid #d9d9d9c4 !important;
+    }
+  }
+
   .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
       display: none;
   }

@@ -1,7 +1,5 @@
-import { Col, Container, Row } from "styled-bootstrap-grid";
-import banner from "src/assets/image/logo_banner/bg-club.png";
+import { Container } from "styled-bootstrap-grid";
 import SClub from "./style";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { requestToken } from "src/api/axios";
@@ -9,6 +7,7 @@ import API_URL from "src/api/url";
 import { Tabs, TabsProps } from "antd";
 import Member from "./Member";
 import Sport from "./Sport";
+import Request from "./Request";
 
 export default function Club() {
   const [infoClub, setInfoClub] = useState<any>({});
@@ -20,11 +19,16 @@ export default function Club() {
   const items: TabsProps["items"] = [
     {
       key: "1",
+      label: "Danh sách request",
+      children: <Request />,
+    },
+    {
+      key: "2",
       label: "Danh sách thành viên",
       children: <Member data={listMembers} />,
     },
     {
-      key: "2",
+      key: "3",
       label: "Danh sách bộ môn",
       children: (
         <Sport
@@ -32,11 +36,6 @@ export default function Club() {
           data={listSports}
         />
       ),
-    },
-    {
-      key: "3",
-      label: "Danh sách request",
-      children: <Member data={listRequests} />,
     },
   ];
 
@@ -93,29 +92,28 @@ export default function Club() {
         <div className="club-info">
           <div className="item-info">
             <p className="heading">
-              Club name:{"   "}
+              Tên Club:
               <span className="info">{infoClub?.name}</span>
             </p>
           </div>
+
           <div className="item-info">
             <p className="heading">
-              Admin:{"   "}
-              <span className="info">
-                {infoClub?.members?.map((item: any) =>
-                  item?.id === infoClub?.manager_id ? item?.name : ""
-                )}
-              </span>
+              Admin:
+              <span className="info">{infoClub?.manager?.name}</span>
             </p>
           </div>
+
           <div className="item-info">
             <p className="heading">
-              Members:{"   "}
+              Thành viên:
               <span className="info">{infoClub?.members?.length}</span>
             </p>
           </div>
+
           <div className="item-info">
             <p className="heading">
-              Sports:{"   "}
+              Bộ môn:
               <span className="info">
                 {infoClub?.sports_disciplines &&
                   infoClub.sports_disciplines
@@ -125,16 +123,16 @@ export default function Club() {
             </p>
           </div>
         </div>
-      </Container>
 
-      <div className="wrap_battels_main">
-        <Tabs
-          defaultActiveKey="1"
-          items={items}
-          indicatorSize={(origin) => origin - 16}
-          className="club-tab"
-        />
-      </div>
+        <div className="">
+          <Tabs
+            defaultActiveKey="1"
+            items={items}
+            indicatorSize={(origin) => origin - 16}
+            className="club-tab"
+          />
+        </div>
+      </Container>
     </SClub>
   );
 }
