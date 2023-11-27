@@ -27,8 +27,10 @@ interface Props {
 function Header({ showMenu, setShowMenu }: Props) {
   const windowSize = useDetectWindowSize();
   const isMobile = windowSize < 768;
-  const [change, setChange] = useState(false);
   const router = useRouter();
+
+  const [change, setChange] = useState(false);
+  const [token, setToken] = useState<any>();
 
   const handleScroll = () => {
     if (window.scrollY > window.innerHeight) {
@@ -79,6 +81,12 @@ function Header({ showMenu, setShowMenu }: Props) {
     }
   }, [section]);
 
+  useEffect(() => {
+    setToken(
+      localStorage.getItem("token") ? localStorage.getItem("token") : undefined
+    );
+  }, [section]);
+
   // api
   const { data: check } = useQuery(
     ["CHECK_IS_IN_CLUB", section && section.token.access_token],
@@ -115,7 +123,7 @@ function Header({ showMenu, setShowMenu }: Props) {
             className="wrap_control"
             style={{
               gridTemplateColumns: `${
-                !section
+                !(token && section)
                   ? "1fr"
                   : !check
                   ? "2fr 1fr 4fr"
@@ -125,7 +133,9 @@ function Header({ showMenu, setShowMenu }: Props) {
               }`,
             }}
           >
-            {section && (
+            {!(section && token) ? (
+              <></>
+            ) : (
               <>
                 {!isMobile ? (
                   <>
@@ -238,7 +248,7 @@ function Header({ showMenu, setShowMenu }: Props) {
             )}
 
             <div className="wrap_button_login">
-              {section ? (
+              {section && token ? (
                 <button
                   className="button_login"
                   onClick={() => signOut({ callbackUrl: "/" })}
