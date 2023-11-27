@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
 export const StylesCard = styled.div`
+  height: 100%;
   .card {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
       sans-serif;
     width: 100%;
+    height: 100%;
     padding: 25px;
     background-image: url("https://wearecardinals.com/wp-content/uploads/2020/04/u1Re9qgMfM8d6kumlW85PS6s55jQh5fbdmppgQsP.jpeg");
-    /* background-image: url('https://www.shutterstock.com/shutterstock/photos/1917840683/display_1500/stock-vector-sports-equipment-background-sport-concept-with-balls-and-gaming-items-balls-for-football-1917840683.jpg'); */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -33,7 +34,8 @@ export const StylesCard = styled.div`
     position: relative;
     top: 0;
     left: 0;
-    display: block;
+    display: flex;
+    flex-direction: column;
     z-index: 3;
     width: 100%;
     height: 100%;
@@ -119,7 +121,7 @@ export const StylesCard = styled.div`
   }
 
   .card__indicator {
-    margin-top: 50px;
+    margin-top: auto;
     font-weight: 500;
     font-size: 14px;
     color: rgb(34, 62, 161);

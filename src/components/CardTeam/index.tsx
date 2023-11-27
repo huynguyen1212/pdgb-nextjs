@@ -10,18 +10,20 @@ export interface Props {
   avatar?: string;
   name: string;
   id: number;
-  member: number;
+  members: number;
   description?: string;
   type?: number;
+  number_of_members?: number;
 }
 
 export default function CardTeam({
   avatar,
   name,
   id,
-  member,
+  members,
   description = "",
   type = 0,
+  number_of_members = 0,
 }: Props) {
   return (
     <StylesCard>
@@ -29,7 +31,7 @@ export default function CardTeam({
         <div className="card__inner">
           <div className="card__wrapper">
             <div className="card___wrapper-acounts">
-              <div className="card__score">+{member}</div>
+              <div className="card__score">+{members}</div>
               <div className="card__acounts">
                 <IconFirstMember />
               </div>
@@ -37,7 +39,7 @@ export default function CardTeam({
                 <IconSecondMember />
               </div>
             </div>
-            <div className="card__menu">
+            {/* <div className="card__menu">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width={4}
@@ -51,16 +53,19 @@ export default function CardTeam({
                   <path d="m2 20c1.10457 0 2-.8954 2-2s-.89543-2-2-2-2 .8954-2 2 .89543 2 2 2z" />
                 </g>
               </svg>
-            </div>
+            </div> */}
           </div>
           <div className="card__title">{name}</div>
-          <div className="card__subtitle">{description}</div>
+          {description && <div className="card__subtitle">Description: {description}</div>}
           <div className="card__indicator">
-            <span className="card__indicator-amount">135</span> Works /{" "}
-            <span className="card__indicator-percentage">45%</span>
+            <span className="card__indicator-amount">{members}</span>/
+            {number_of_members} Members
           </div>
           <div className="card__progress">
-            <progress max={100} value={40} />
+            <progress
+              max={100}
+              value={Math.round(Number((members / number_of_members) * 100))}
+            />
           </div>
         </div>
       </div>

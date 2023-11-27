@@ -8,12 +8,14 @@ import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 import { Tabs, TabsProps } from "antd";
 import Member from "./Member";
-import Team from "./Team";
+import Sport from "./Sport";
 
 export default function Club() {
   const [infoClub, setInfoClub] = useState<any>({});
   const [listMembers, setListMember] = useState<any>([]);
   const [listTeams, setListTeam] = useState<any>([]);
+  const [listSports, setListSport] = useState<any>([]);
+  const [listRequests, setListRequests] = useState<any>([]);
 
   const items: TabsProps["items"] = [
     {
@@ -23,8 +25,18 @@ export default function Club() {
     },
     {
       key: "2",
-      label: "Danh sách team",
-      children: <Team data={listTeams} />,
+      label: "Danh sách bộ môn",
+      children: (
+        <Sport
+          number_of_members={infoClub?.number_of_members}
+          data={listSports}
+        />
+      ),
+    },
+    {
+      key: "3",
+      label: "Danh sách request",
+      children: <Member data={listRequests} />,
     },
   ];
 
@@ -33,21 +45,31 @@ export default function Club() {
     queryFn: () =>
       requestToken({
         method: "GET",
-        url: API_URL.CLUB_DETAIL,
+        url: API_URL.CLUBS.DETAIL,
       }),
     onSuccess(data) {
       setInfoClub(data.data.data[0]);
     },
   });
 
+  useQuery({
+    queryKey: ["getListRequests"],
+    queryFn: () =>
+      requestToken({
+        method: "GET",
+        url: API_URL.CLUBS.LIST_REQUESTS,
+      }),
+    onSuccess(data) {
+      setListRequests(data.data.data);
+    },
+  });
+
   useEffect(() => {
     if (!infoClub) return;
     setListMember(infoClub.members);
-    setListTeam(infoClub.teams)
+    setListTeam(infoClub.teams);
+    setListSport(infoClub.sports_disciplines);
   }, [infoClub]);
-
-  console.log("detail ", infoClub);
-  console.log("listTeams: ", listTeams)
 
   return (
     <SClub>
@@ -55,10 +77,34 @@ export default function Club() {
         <Image src={banner} fill alt="banner" />
       </div>
       <Container>
+        <div className="club-info">
+          <div className="item-info">
+            <div className="heading">Club name:</div>
+            <div className="info">{infoClub?.name}</div>
+          </div>
+          <div className="item-info">
+            <div className="heading">Admin:</div>
+            <div className="info">{infoClub?.manager_id}</div>
+          </div>
+          <div className="item-info">
+            <div className="heading">Members:</div>
+            <div className="info">{infoClub?.members?.length}</div>
+          </div>
+          <div className="item-info">
+            <div className="heading">Sports:</div>
+            <div className="info">
+              {infoClub?.sports_disciplines &&
+                infoClub.sports_disciplines
+                  .map((sport: any) => sport.name)
+                  .join(", ")}
+            </div>
+          </div>
+        </div>
         <Tabs
           defaultActiveKey="1"
           items={items}
           indicatorSize={(origin) => origin - 16}
+          className="club-tab"
         />
       </Container>
     </SClub>

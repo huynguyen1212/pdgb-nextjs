@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { SModalJoinClub, StylesCard } from "./style";
-import { request } from "src/api/axios";
+import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 import { useMutation } from "react-query";
 import { Button, Form, Modal, Select, SelectProps, message } from "antd";
 import Loading from "src/components/Loading";
 import IconFirstMember from "../Icons/IconFirstMember";
 import IconSecondMember from "../Icons/IconSecondMember";
-import { SPORT_TYPE } from "src/constants/sport";
 
 export interface Props {
   name: string;
@@ -31,8 +30,10 @@ export default function CardClub({
   sports_disciplines = [],
 }: Props) {
   const [form] = Form.useForm();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isOpenModalCancel, setIsOpenModalCancel] = useState<boolean>(false);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
+  const [isRequested, setIsRequested] = useState<boolean>(false);
 
   useEffect(() => {
     const optionsSelect: SelectProps["options"] = [];
@@ -45,19 +46,33 @@ export default function CardClub({
     setOptions(optionsSelect);
   }, [sports_disciplines]);
 
-  const { isLoading, mutateAsync } = useMutation({
+  const { isLoading: isLoadingJoin, mutateAsync } = useMutation({
     mutationFn: (data) =>
-      request({ method: "POST", url: API_URL.JOIN_CLUB, data: data }),
+      requestToken({ method: "POST", url: API_URL.JOIN_CLUB, data: data }),
     onError(error: any, variables, context) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
     onSuccess(data, variables, context) {
-      handleCloseModal();
+      handleCloseModalJoin();
       message.success("Đã gửi request join club!", 1.5);
       message.info(
         "Các request join club sau đó sẽ bị huỷ vì bạn chỉ được đồng ý tham gia 1 club!",
         4
       );
+      setIsRequested(true);
+    },
+  });
+
+  const { isLoading: isLoadingCancel, mutateAsync: mutateCancel } = useMutation({
+    mutationFn: (data) =>
+      requestToken({ method: "POST", url: API_URL.CANCEL_JOIN_CLUB, data: data }),
+    onError(error: any, variables, context) {
+      message.error(error?.response?.data?.message || "Thất bại");
+    },
+    onSuccess(data, variables, context) {
+      handleCloseModalJoin();
+      message.success("Đã huỷ request join trước đó!", 1.5);
+      setIsRequested(false);
     },
   });
 
@@ -69,16 +84,32 @@ export default function CardClub({
     form.resetFields();
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log("Failed:", errorInfo);
+  const onSubmitRequestCancel = (values: any) => {
+    mutateCancel({
+      ...values,
+      club_id: id,
+    });
+    form.resetFields();
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  // const onFinishFailed = (errorInfo: any) => {
+  //   console.log("Failed:", errorInfo);
+  // };
+
+  const handleOpenModalJoin = () => {
+    setIsOpenModal(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseModalJoin = () => {
+    setIsOpenModal(false);
+  };
+
+  const handleOpenModalCancel = () => {
+    setIsOpenModalCancel(true);
+  };
+
+  const handleCloseModalCancel = () => {
+    setIsOpenModalCancel(false);
   };
 
   return (
@@ -98,24 +129,26 @@ export default function CardClub({
             <button
               type="button"
               className="card__menu"
-              onClick={handleOpenModal}
+              onClick={isRequested ? handleOpenModalCancel : handleOpenModalJoin}
             >
-              Join
+              {isRequested ? "Cancel" : "Join"}
             </button>
           </div>
           <div className="card__title">{name}</div>
-          <p className="card__status">
+          <div className="card__status">
             Status:{" "}
             <span className={`status ${status === 1 ? "active" : "off"}`}>
               {status === 1 ? "Active" : "Off"}
             </span>
-          </p>
+          </div>
           <div className="card__status">Teams: {teams_count}</div>
           <div className="card__status">
-            Sports: {options?.map(sport => sport.label).join(', ')}
+            Sports: {options?.map((sport) => sport.label).join(", ")}
           </div>
 
-          {description && <div className="card__subtitle">Description: {description}</div>}
+          {description && (
+            <div className="card__subtitle">Description: {description}</div>
+          )}
           <div className="card__indicator">
             <span className="card__indicator-amount">{members}</span>/
             {number_of_members} Members
@@ -128,11 +161,12 @@ export default function CardClub({
           </div>
         </div>
       </div>
+  
       <Modal
         title={`Join club ${name}`}
         centered
-        open={isModalOpen}
-        onCancel={handleCloseModal}
+        open={isOpenModal}
+        onCancel={handleCloseModalJoin}
         footer={null}
       >
         <SModalJoinClub>
@@ -141,13 +175,13 @@ export default function CardClub({
             layout="vertical"
             name="basic"
             onFinish={onSubmitRequestJoin}
-            onFinishFailed={onFinishFailed}
+            // onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <div className="mb-[16px]">
               <Form.Item
                 label="Bộ môn"
-                name="sports_discipline_ids"
+                name="sports_discipline_id"
                 rules={[
                   {
                     required: true,
@@ -169,10 +203,45 @@ export default function CardClub({
                 type="primary"
                 htmlType="submit"
                 className="btn-create"
-                disabled={isLoading}
+                disabled={isLoadingJoin}
               >
                 Join club
-                {isLoading && (
+                {isLoadingJoin && (
+                  <div className="loader">
+                    <Loading />
+                  </div>
+                )}
+              </Button>
+            </Form.Item>
+          </Form>
+        </SModalJoinClub>
+      </Modal>
+
+      <Modal
+        title={`Cancel join club ${name}`}
+        centered
+        open={isOpenModalCancel}
+        onCancel={handleCloseModalCancel}
+        footer={null}
+      >
+        <SModalJoinClub>
+          <Form
+            form={form}
+            layout="vertical"
+            name="basic"
+            onFinish={onSubmitRequestCancel}
+            // onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                className="btn-create"
+                disabled={isLoadingCancel}
+              >
+                Cancel join club
+                {isLoadingCancel && (
                   <div className="loader">
                     <Loading />
                   </div>

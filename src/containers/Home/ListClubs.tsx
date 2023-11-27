@@ -39,12 +39,12 @@ export default function ListClubs() {
             Danh sách các clubs
           </h3>
 
-          <Row>
+          <Row className="justify-center">
             {listClubs.map((club: any) => (
               <Col
                 key={club.id}
-                xl={3}
-                lg={3}
+                xl={4}
+                lg={4}
                 md={4}
                 sm={12}
                 xs={12}
