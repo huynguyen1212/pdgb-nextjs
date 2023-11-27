@@ -16,7 +16,9 @@ import LogoText from "src/components/Icons/LogoText";
 import LogoTextWhite from "src/components/Icons/LogoTextWhite";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useDetectWindowSize } from "src/hooks/useDetectWindowSize";
-
+import { useQuery } from "react-query";
+import { requestToken } from "src/api/axios";
+import API_URL from "src/api/url";
 interface Props {
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -77,6 +79,15 @@ function Header({ showMenu, setShowMenu }: Props) {
     }
   }, [section]);
 
+  // api
+  const { data: check } = useQuery(["CHECK_IS_IN_CLUB"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
+    });
+    return response?.status === 200 ? true : false;
+  });
+
   return (
     <StylesHeader>
       <div className="wrap_main_header">
@@ -101,7 +112,13 @@ function Header({ showMenu, setShowMenu }: Props) {
             className="wrap_control"
             style={{
               gridTemplateColumns: `${
-                !section ? "1fr" : isMobile ? "4fr 1fr 8fr" : "2fr 2fr 1fr 4fr"
+                !section
+                  ? "1fr"
+                  : !check
+                  ? "2fr 1fr 4fr"
+                  : isMobile
+                  ? "4fr 1fr 8fr"
+                  : "2fr 2fr 1fr 4fr"
               }`,
             }}
           >
@@ -118,14 +135,16 @@ function Header({ showMenu, setShowMenu }: Props) {
                       <Link href="/club">Quản lý Club</Link>
                     </div>
 
-                    <div
-                      className="control_item"
-                      style={{
-                        color: `${!change || showMenu ? "white" : "#223EA1"}`,
-                      }}
-                    >
-                      <Link href="/battels">Chiến thôi</Link>
-                    </div>
+                    {check && (
+                      <div
+                        className="control_item"
+                        style={{
+                          color: `${!change || showMenu ? "white" : "#223EA1"}`,
+                        }}
+                      >
+                        <Link href="/battels">Chiến thôi</Link>
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div

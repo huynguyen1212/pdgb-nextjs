@@ -348,7 +348,6 @@ export default function ChallengeList() {
               allowClear
               style={{ width: "100%" }}
               placeholder="Please select"
-              defaultValue={["a10", "c12"]}
               onChange={handleChangeInModal}
               options={options}
             />

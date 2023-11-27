@@ -75,7 +75,14 @@ export default function App({ Component, pageProps }: AppProps) {
     });
   }, []);
 
-  const [queryClient] = useState(() => new QueryClient());
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
 
   return (
     <>
@@ -104,7 +111,10 @@ export default function App({ Component, pageProps }: AppProps) {
               <Head>
                 <title>BATTELS</title>
                 <meta name="description" content="Chiến cùng BATTELS" />
-                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <meta
+                  name="viewport"
+                  content="width=device-width, initial-scale=1"
+                />
               </Head>
               <main className={myFont.className}>
                 <Layouts>

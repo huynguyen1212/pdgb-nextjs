@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Col,
   Form,
@@ -5,26 +6,67 @@ import {
   Select,
   TimePicker,
   DatePicker,
-  Input,
   InputNumber,
   Button,
+  message,
 } from "antd";
 import type { SelectProps } from "antd";
-import { SCreateRoom } from "./style";
+import type { RangePickerProps } from "antd/es/date-picker";
 import TextArea from "antd/lib/input/TextArea";
+import dayjs from "dayjs";
+import { useMutation, useQuery } from "react-query";
+import { requestToken } from "src/api/axios";
+import API_URL from "src/api/url";
+import { SCreateRoom } from "./style";
+import { formatDate, formatTime } from "src/helpers/date";
 
 export default function CreateRoom() {
   const [antForm] = Form.useForm();
 
-  const onChange = (value: string) => {
-    console.log(`selected ${value}`);
+  // state
+
+  // api
+  const { data: listSports } = useQuery(["getListSports"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.LIST_SPORT,
+    });
+    return response?.data.data;
+  });
+
+  const { data: clubDetail } = useQuery(["CLUBS_DETAIL"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.CLUBS.DETAIL,
+    });
+    return response?.data.data[0];
+  });
+
+  const { data: clubsOther } = useQuery(["CLUBS_OTHER"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.CLUBS.CLUBS_OTHER,
+    });
+    return response?.data.data;
+  });
+
+  const { mutate: createRoom, isLoading } = useMutation({
+    mutationFn: (data) =>
+      requestToken({ method: "POST", url: API_URL.MATCHS.CREATE, data: data }),
+    onError(error: any, variables, context) {
+      message.error(error?.response?.data?.message || "Thất bại");
+    },
+    onSuccess(data, variables, context) {
+      message.success("Tạo phòng thành công!");
+      antForm.resetFields();
+    },
+  });
+
+  // function helper
+  const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+    return current && current < dayjs().endOf("day");
   };
 
-  const onSearch = (value: string) => {
-    console.log("search:", value);
-  };
-
-  // Filter `option.label` match the user type `input`
   const filterOption = (
     input: string,
     option?: { label: string; value: string }
@@ -39,16 +81,20 @@ export default function CreateRoom() {
     });
   }
 
-  const handleChange = (value: string[]) => {
-    console.log(`selected ${value}`);
-  };
-
-  const handleChangeValue = (allvalues: []) => {
-    console.log(allvalues);
-  };
+  // form
+  // const handleChangeValue = (allvalues: any) => {
+  //   console.log(allvalues);
+  //   console.log("date: ", formatDate(allvalues.match_date));
+  //   console.log("time: ", formatTime(allvalues.match_time));
+  // };
 
   const onFinish = (values: any) => {
-    console.log("Success:", values);
+    const data = {
+      ...values,
+      match_date: formatDate(values.match_date),
+      match_time: formatTime(values.match_time),
+    };
+    createRoom(data);
   };
 
   return (
@@ -56,7 +102,7 @@ export default function CreateRoom() {
       <Form
         form={antForm}
         onFinish={onFinish}
-        onValuesChange={(value, allvalues) => handleChangeValue(allvalues)}
+        // onValuesChange={(value, allvalues) => handleChangeValue(allvalues)}
         className="form-create"
       >
         <div className="px-[20px] py-[12px]">
@@ -70,7 +116,7 @@ export default function CreateRoom() {
                       Chọn bộ môn thi đấu <span>*</span>
                     </label>
                     <Form.Item
-                      name="category"
+                      name="sports_discipline_id"
                       rules={[
                         {
                           required: true,
@@ -83,23 +129,17 @@ export default function CreateRoom() {
                         showSearch
                         placeholder="Môn thi đấu"
                         optionFilterProp="children"
-                        onChange={onChange}
-                        onSearch={onSearch}
                         filterOption={filterOption}
-                        options={[
-                          {
-                            value: "jack",
-                            label: "Jack",
-                          },
-                          {
-                            value: "lucy",
-                            label: "Lucy",
-                          },
-                          {
-                            value: "tom",
-                            label: "Tom",
-                          },
-                        ]}
+                        options={
+                          listSports &&
+                          listSports.length > 0 &&
+                          listSports.map((item: any) => {
+                            return {
+                              label: item.name,
+                              value: item.id,
+                            };
+                          })
+                        }
                       />
                     </Form.Item>
                   </div>
@@ -111,7 +151,7 @@ export default function CreateRoom() {
                       Chọn thành viên trong đội <span>*</span>
                     </label>
                     <Form.Item
-                      name="members"
+                      name="member_club_id"
                       rules={[
                         {
                           required: true,
@@ -125,8 +165,12 @@ export default function CreateRoom() {
                         allowClear
                         style={{ width: "100%" }}
                         placeholder="Thành viên trong đội"
-                        onChange={handleChange}
-                        options={options}
+                        options={clubDetail?.members.map((item: any) => {
+                          return {
+                            label: item.name,
+                            value: item.id,
+                          };
+                        })}
                       />
                     </Form.Item>
                   </div>
@@ -138,7 +182,7 @@ export default function CreateRoom() {
                       Chọn ngày thi đấu <span>*</span>
                     </label>
                     <Form.Item
-                      name="date"
+                      name="match_date"
                       rules={[
                         {
                           required: true,
@@ -147,6 +191,7 @@ export default function CreateRoom() {
                       ]}
                     >
                       <DatePicker
+                        disabledDate={disabledDate}
                         className="input_form"
                         placeholder="Ngày thi đấu"
                       />
@@ -157,10 +202,10 @@ export default function CreateRoom() {
                 <Col span={12}>
                   <div className="mb-[30px]">
                     <label className="labe-form">
-                      Chọn giờ bắt đầu thi đấu <span>*</span>
+                      Chọn giờ thi đấu <span>*</span>
                     </label>
                     <Form.Item
-                      name="time_start"
+                      name="match_time"
                       rules={[
                         {
                           required: true,
@@ -169,9 +214,9 @@ export default function CreateRoom() {
                       ]}
                     >
                       <TimePicker
-                        use12Hours
+                        format={"HH:mm"}
                         className="input_form"
-                        placeholder="Giờ bắt đầu"
+                        placeholder="Giờ thi đấu"
                       />
                     </Form.Item>
                   </div>
@@ -180,10 +225,10 @@ export default function CreateRoom() {
                 <Col span={12}>
                   <div className="mb-[30px]">
                     <label className="labe-form">
-                      Chọn giờ kết thúc thi đấu <span>*</span>
+                      Thời gian thi đấu <span>*</span>
                     </label>
                     <Form.Item
-                      name="time_end"
+                      name="duration_minutes"
                       rules={[
                         {
                           required: true,
@@ -191,10 +236,9 @@ export default function CreateRoom() {
                         },
                       ]}
                     >
-                      <TimePicker
-                        use12Hours
+                      <InputNumber
+                        placeholder="Số phút"
                         className="input_form"
-                        placeholder="Giờ kết thúc"
                       />
                     </Form.Item>
                   </div>
@@ -206,7 +250,7 @@ export default function CreateRoom() {
                       Chọn địa điểm <span>*</span>
                     </label>
                     <Form.Item
-                      name="local"
+                      name="venue"
                       rules={[
                         {
                           required: true,
@@ -225,10 +269,10 @@ export default function CreateRoom() {
                 <Col span={12}>
                   <div className="mb-[30px]">
                     <label className="labe-form">
-                      Chọn trạng thái trận đấu <span>*</span>
+                      Chọn trạng thái công khai <span>*</span>
                     </label>
                     <Form.Item
-                      name="status"
+                      name="type"
                       rules={[
                         {
                           required: true,
@@ -239,10 +283,8 @@ export default function CreateRoom() {
                       <Select
                         className="input_form"
                         showSearch
-                        placeholder="Trạng thái"
+                        placeholder="Trạng thái công khai"
                         optionFilterProp="children"
-                        onChange={onChange}
-                        onSearch={onSearch}
                         filterOption={filterOption}
                         options={[
                           {
@@ -267,7 +309,7 @@ export default function CreateRoom() {
 
                     <div className="button_input">
                       <Form.Item
-                        name="amount_coin"
+                        name="coin"
                         rules={[
                           {
                             required: true,
@@ -286,7 +328,7 @@ export default function CreateRoom() {
                         type="primary"
                         onClick={() => {
                           antForm.setFieldsValue({
-                            amount_coin: 20,
+                            coin: 20,
                           });
                         }}
                       >
@@ -301,7 +343,7 @@ export default function CreateRoom() {
                     <label className="labe-form">
                       Đôi lời nhắn gửi đến đối thủ
                     </label>
-                    <Form.Item name="des">
+                    <Form.Item name="description">
                       <TextArea
                         className="input_form input_form_textarea"
                         placeholder="Muốn thua thì tới đây"
@@ -320,7 +362,7 @@ export default function CreateRoom() {
                   Chọn Clubs <span>*</span>
                 </label>
                 <Form.Item
-                  name="clubs"
+                  name="challenge_club"
                   rules={[
                     {
                       required: true,
@@ -334,8 +376,12 @@ export default function CreateRoom() {
                     allowClear
                     style={{ width: "100%" }}
                     placeholder="Clubs"
-                    onChange={handleChange}
-                    options={options}
+                    options={clubsOther?.map((item: any) => {
+                      return {
+                        label: item.name,
+                        value: item.id,
+                      };
+                    })}
                   />
                 </Form.Item>
               </div>
@@ -345,6 +391,7 @@ export default function CreateRoom() {
                   type="primary"
                   htmlType="submit"
                   className="button_submit"
+                  loading={isLoading}
                 >
                   Gửi lời mời
                 </Button>
