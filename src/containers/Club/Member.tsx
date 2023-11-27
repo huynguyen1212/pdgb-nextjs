@@ -17,6 +17,7 @@ export default function Member({ data }: any) {
                 xs={12}
                 col={12}
                 key={member.id}
+                className="item-member"
               >
                 <CardMember
                   avatar=""

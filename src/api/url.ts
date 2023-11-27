@@ -9,13 +9,13 @@ const API_URL = {
   CREATE_CLUB: "/user/request/create",
   LIST_SPORT: "/user/sport-discipline/list",
   LIST_OTHER_CLUBS: "/user/club/list-other",
-  CLUB_DETAIL: "/user/club/detail",
-  LIST_MEMBER: "",
   JOIN_CLUB: "/user/club/request-join",
+  CANCEL_JOIN_CLUB: "/user/request/delete",
   CLUBS: {
     DETAIL: "/user/club/detail",
     CHECK_IS_IN_CLUB: "/user/club/check",
     CLUBS_OTHER: "/user/club/list-other",
+    LIST_REQUESTS: "/user/club/list-member-request"
   },
   MATCHS: {
     CREATE: "/user/match/create",

@@ -5,27 +5,35 @@ import { useSession } from "next-auth/react";
 import ListClubs from "./ListClubs";
 import { useQuery } from "react-query";
 import { requestToken } from "src/api/axios";
+import { useState } from "react";
 import API_URL from "src/api/url";
 
 export default function Home() {
   // api
   const { data: section }: any = useSession();
-
-  const { data: check } = useQuery(["CHECK_IS_IN_CLUB", section], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
-    });
-    return response?.status === 200 ? true : false;
+  const [check, setCheck] = useState<boolean>(false);
+  useQuery({
+    queryKey: ["CHECK_IS_IN_CLUB", section],
+    queryFn: () =>
+      requestToken({
+        method: "GET",
+        url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
+      }),
+    onError() {
+      setCheck(false);
+    },
+    onSuccess(data) {
+      setCheck(true);
+    },
   });
+
+  console.log(check, "Check");
 
   return (
     <SHome>
       <Banner />
 
-      {check !== false ? (
-        <></>
-      ) : (
+      {section && !check && (
         <>
           <FormRequestCreateClub />
 
