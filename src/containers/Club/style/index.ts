@@ -2,6 +2,54 @@ import styled from "styled-components";
 
 const SClub = styled.div`
   min-height: 80vh;
+  padding-top: 15vh;
+  padding-bottom: 60px;
+
+  .club_banner {
+    .wrap_title {
+      position: relative;
+      z-index: 2;
+      margin-bottom: 80px;
+
+      .title_little {
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: #9ea0a6;
+        font-weight: 500;
+        font-style: normal;
+      }
+
+      .title {
+        padding-bottom: 10px;
+
+        .title_black {
+          color: #2b1e31;
+          font-weight: 500;
+          font-style: normal;
+          line-height: 1.1;
+          font-size: 38px;
+        }
+
+        .title_other {
+          font-weight: 500;
+          font-style: italic;
+          color: #223ea1;
+          line-height: 1.1;
+          font-size: 42px;
+        }
+      }
+    }
+  }
+
+  .wrap_battels_main {
+    padding: 0 80px;
+
+    .ant-tabs-nav {
+      margin-bottom: 30px;
+    }
+  }
+
   .club-banner {
     width: 100%;
     position: relative;
@@ -33,34 +81,48 @@ const SClub = styled.div`
       );
     }
   }
-  .item-sport,
-  .item-member {
+
+  .item-sport {
     margin: 15px 0;
   }
+
   .club-tab {
     margin: 30px 0;
   }
+
   .club-info {
-    margin: 30px 0;
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     width: 100%;
-    padding: 48px;
+    padding: 30px;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0px 10px 30px 0px rgba(17, 17, 17, 0.1);
     backdrop-filter: blur(25px);
-  }
-  .heading {
-    color: rgba(45, 101, 200, 0.3);
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 27px;
-    letter-spacing: 0.5px;
+    margin-bottom: 50px;
+
+    .heading {
+      font-size: 16px;
+      color: #2b1e31;
+
+      .info {
+        color: #223ea1;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 27px;
+        letter-spacing: 0.5px;
+        margin-left: 10px;
+      }
+    }
   }
 `;
 
 export default SClub;
+
+export const SMembers = styled.div`
+  .item-member {
+    margin: 15px 0;
+  }
+`;
