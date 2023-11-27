@@ -5,6 +5,7 @@ import Header from "./Header";
 import WrapLayout from "./style";
 import { useRouter } from "next/router";
 import { useDetectWindowSize } from "src/hooks/useDetectWindowSize";
+import { useSession } from "next-auth/react";
 interface Props {
   children: any;
 }
@@ -77,6 +78,16 @@ function Layout({ children }: Props) {
       router.push("/");
     }
   }, [router]);
+
+  // handle login
+  const { data: section }: any = useSession();
+  useEffect(() => {
+    if (section && section.token.access_token) {
+      localStorage.setItem("token", section.token.access_token);
+    } else if (section === null) {
+      localStorage.removeItem("token");
+    }
+  }, [section]);
 
   return (
     // <ErrorBound>

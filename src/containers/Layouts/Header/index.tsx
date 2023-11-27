@@ -80,13 +80,16 @@ function Header({ showMenu, setShowMenu }: Props) {
   }, [section]);
 
   // api
-  const { data: check } = useQuery(["CHECK_IS_IN_CLUB"], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
-    });
-    return response?.status === 200 ? true : false;
-  });
+  const { data: check } = useQuery(
+    ["CHECK_IS_IN_CLUB", section && section.token.access_token],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
+      });
+      return response?.status === 200 ? true : false;
+    }
+  );
 
   return (
     <StylesHeader>
