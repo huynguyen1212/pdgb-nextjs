@@ -109,7 +109,7 @@ export default function App({ Component, pageProps }: AppProps) {
           <GridThemeProvider gridTheme={gridTheme}>
             <ThemeProvider theme={theme}>
               <Head>
-                <title>BATTELS</title>
+                <title>MatchUp</title>
                 <meta name="description" content="Chiến cùng BATTELS" />
                 <meta
                   name="viewport"

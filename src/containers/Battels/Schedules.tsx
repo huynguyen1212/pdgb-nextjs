@@ -139,7 +139,7 @@ export default function Schedules() {
 
       {/* modal accept */}
       <Modal
-        title="Chi tiết Battel"
+        title="Chi tiết Match"
         centered
         open={isModalOpen}
         onCancel={handleCancel}

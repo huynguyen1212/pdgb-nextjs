@@ -21,6 +21,7 @@ const API_URL = {
   MATCHS: {
     CREATE: "/user/match/create",
     LIST_PK: "/user/match/list-pk",
+    LIST_MATCHS: "/user/match/list-match",
   },
   USER_INFO: "/user/user-info"
 };

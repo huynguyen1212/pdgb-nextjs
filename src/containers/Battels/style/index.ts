@@ -53,6 +53,12 @@ const SBattels = styled.div`
 export default SBattels;
 
 export const SCreateRoom = styled.div`
+  .buttons {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
   .title_item {
     font-size: 20px;
     font-weight: 600;
@@ -94,6 +100,125 @@ export const SCreateRoom = styled.div`
 
     .button_submit {
       height: 40px;
+    }
+  }
+
+  .list_pk {
+    .list_main {
+      .list_item {
+        margin-bottom: 60px;
+        padding-bottom: 50px;
+        border-bottom: 1px solid #2f344752;
+
+        display: grid;
+        grid-template-columns: 1fr 5fr 1fr;
+
+        .time_image {
+          .time {
+            text-align: center;
+            color: #0a2664;
+            margin-bottom: 50px;
+
+            .month {
+              font-size: 14px;
+              line-height: 17px;
+              font-weight: 600;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              margin-bottom: 0;
+            }
+
+            .date {
+              font-size: 28px;
+              line-height: 35px;
+              font-weight: 600;
+            }
+          }
+
+          .image {
+            display: flex;
+            justify-content: center;
+          }
+        }
+
+        .content {
+          .content_date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+
+            span {
+              font-size: 14px;
+              line-height: 19px;
+              font-weight: 400;
+              color: #94979f;
+            }
+          }
+
+          .content_name_category {
+            color: #0a2664;
+            font-size: 14px;
+            margin-bottom: 5px;
+
+            span {
+              font-size: 17px;
+              margin-left: 5px;
+              font-weight: 600;
+            }
+
+            .uppercase {
+              text-transform: uppercase;
+            }
+          }
+
+          .content_coin {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #ffc107;
+            margin-bottom: 5px;
+          }
+
+          .content_name_team {
+            color: #0a2664;
+            font-size: 14px;
+
+            span {
+              text-transform: uppercase;
+              font-size: 15px;
+              font-weight: 600;
+              margin-left: 5px;
+            }
+          }
+
+          .content_des {
+            font-size: 17px;
+            line-height: 27px;
+            font-weight: 400;
+            color: #757984;
+            margin: 10px 0;
+          }
+        }
+
+        .status {
+          display: flex;
+          align-items: start;
+          justify-content: flex-end;
+          width: 100%;
+
+          .ant-tag {
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 0 15px;
+          }
+        }
+      }
     }
   }
 `;

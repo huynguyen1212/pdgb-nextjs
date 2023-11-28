@@ -126,8 +126,8 @@ function Header({ showMenu, setShowMenu }: Props) {
                 !(token && section && check)
                   ? "1fr"
                   : isMobile
-                  ? "4fr 1fr 8fr"
-                  : "2fr 2fr 1fr 4fr"
+                  ? "4fr 1fr 4fr"
+                  : "2fr 2fr 1fr 2fr"
               }`,
             }}
           >
@@ -152,7 +152,7 @@ function Header({ showMenu, setShowMenu }: Props) {
                         color: `${!change || showMenu ? "white" : "#223EA1"}`,
                       }}
                     >
-                      <Link href="/battels">Chiến thôi</Link>
+                      <Link href="/matchs">Chiến thôi</Link>
                     </div>
                   </>
                 ) : (
@@ -249,7 +249,7 @@ function Header({ showMenu, setShowMenu }: Props) {
                   className="button_login"
                   onClick={() => signOut({ callbackUrl: "/" })}
                 >
-                  <span>Logout khỏi Google</span>
+                  <span>Logout</span>
                 </button>
               ) : (
                 <button className="button_login" onClick={() => signIn()}>

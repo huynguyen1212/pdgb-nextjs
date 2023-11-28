@@ -30,3 +30,43 @@ export const formatDateTime = (dateTime: any) =>
 export const getYear = (dateTime: any) => new Date(dateTime).getFullYear();
 export const getMonth = (dateTime: any) => new Date(dateTime).getMonth();
 export const getDate = (dateTime: any) => new Date(dateTime).getDate();
+
+export const DAY_OF_WEEK = [
+  "Chủ Nhật",
+  "Thứ Hai",
+  "Thứ Ba",
+  "Thứ Tư",
+  "Thứ Năm",
+  "Thứ Sáu",
+  "Thứ Bảy",
+];
+
+export function convertTo12HourFormat(timeString: any) {
+  const time = new Date("2000-01-01T" + timeString); // Tạo đối tượng Date với ngày tùy ý (ở đây chọn 2000-01-01 để tránh ảnh hưởng đến ngày tháng năm)
+
+  let hours = time.getHours();
+  let minutes = time.getMinutes();
+  let amOrPm = hours >= 12 ? "pm" : "am";
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // 12 giờ trưa và 12 giờ đêm đều là "12"
+
+  const formattedTime =
+    hours.toString().padStart(2, "0") +
+    ":" +
+    minutes.toString().padStart(2, "0") +
+    " " +
+    amOrPm;
+  return formattedTime;
+}
+
+export const convertToVietnameseDate = (originalDate: any) => {
+  const date = new Date(originalDate);
+  const day = date.getDate();
+  const month = date.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0 nên cần cộng thêm 1
+  const year = date.getFullYear();
+
+  const vietnameseDate = `Ngày ${day} Tháng ${month} Năm ${year}`;
+
+  return vietnameseDate;
+};

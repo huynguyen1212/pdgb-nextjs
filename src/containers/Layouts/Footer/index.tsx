@@ -46,7 +46,7 @@ export default function Footer() {
                   <div className="content_item">
                     <span
                       onClick={() => {
-                        router.push("/battels");
+                        router.push("/matchs");
                       }}
                     >
                       Chiến thôi

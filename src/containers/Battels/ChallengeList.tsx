@@ -4,7 +4,6 @@ import {
   DatePickerProps,
   Modal,
   Select,
-  SelectProps,
 } from "antd";
 import Image from "next/image";
 import { FaRegCalendarAlt } from "react-icons/fa";
@@ -12,6 +11,9 @@ import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { SChallengeList, SModalAccept, SModalConfirmMatch } from "./style";
 import bilac from "src/assets/image/bi-lac.jpeg";
 import { useState } from "react";
+import { useQuery } from "react-query";
+import { requestToken } from "src/api/axios";
+import API_URL from "src/api/url";
 
 export default function ChallengeList() {
   const [idPK, setIdPK] = useState();
@@ -19,14 +21,24 @@ export default function ChallengeList() {
   const [isModalOpenConfirm, setIsModalOpenConfirm] = useState(false);
   const [isBattelNow, setIsBattelNow] = useState(false);
 
-  const options: SelectProps["options"] = [];
-
-  for (let i = 10; i < 36; i++) {
-    options.push({
-      label: i.toString(36) + i,
-      value: i.toString(36) + i,
+  // api
+  const { data: listPK } = useQuery(["LIST_PK"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.MATCHS.LIST_PK,
     });
-  }
+    return response?.data.data;
+  });
+
+  // console.log("listPK: ", listPK);
+
+  const { data: clubDetail } = useQuery(["CLUBS_DETAIL"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.CLUBS.DETAIL,
+    });
+    return response?.data.data[0];
+  });
 
   const handleChangeInModal = (value: string[]) => {
     console.log(`selected ${value}`);
@@ -341,15 +353,18 @@ export default function ChallengeList() {
             <label className="labe-form">
               Chọn thành viên trong đội <span>*</span>
             </label>
-
             <Select
               className="input_form"
               mode="multiple"
               allowClear
               style={{ width: "100%" }}
-              placeholder="Please select"
-              onChange={handleChangeInModal}
-              options={options}
+              placeholder="Thành viên trong đội"
+              options={clubDetail?.members.map((item: any) => {
+                return {
+                  label: item.name,
+                  value: item.id,
+                };
+              })}
             />
           </div>
         </SModalAccept>

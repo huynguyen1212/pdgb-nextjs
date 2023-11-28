@@ -33,7 +33,7 @@ export default function Battels() {
         <div className="battels_banner">
           <div className="wrap_title">
             <p className="title_little" data-aos="fade-up">
-              Battels
+              MatchUp
             </p>
 
             <p className="title" data-aos="fade-up">

@@ -9,23 +9,42 @@ import {
   InputNumber,
   Button,
   message,
+  Tag,
 } from "antd";
-import type { SelectProps } from "antd";
 import type { RangePickerProps } from "antd/es/date-picker";
 import TextArea from "antd/lib/input/TextArea";
 import dayjs from "dayjs";
 import { useMutation, useQuery } from "react-query";
+import Image from "next/image";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 import { SCreateRoom } from "./style";
-import { formatDate, formatTime } from "src/helpers/date";
+import {
+  DAY_OF_WEEK,
+  convertTo12HourFormat,
+  convertToVietnameseDate,
+  formatDate,
+  formatTime,
+} from "src/helpers/date";
+
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { IMAGES } from "./data/data";
 
 export default function CreateRoom() {
   const [antForm] = Form.useForm();
 
   // state
+  const [isCreateNewMatch, setIsCreateNewMatch] = useState(false);
 
   // api
+  const { data: listMatchs } = useQuery(["LIST_MATCHS"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.MATCHS.LIST_MATCHS,
+    });
+    return response?.data.data;
+  });
+
   const { data: listSports } = useQuery(["getListSports"], async () => {
     const response = await requestToken({
       method: "GET",
@@ -72,16 +91,8 @@ export default function CreateRoom() {
     option?: { label: string; value: string }
   ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
-  const options: SelectProps["options"] = [];
-
-  for (let i = 10; i < 36; i++) {
-    options.push({
-      label: i.toString(36) + i,
-      value: i.toString(36) + i,
-    });
-  }
-
   // form
+
   // const handleChangeValue = (allvalues: any) => {
   //   console.log(allvalues);
   //   console.log("date: ", formatDate(allvalues.match_date));
@@ -99,217 +110,153 @@ export default function CreateRoom() {
 
   return (
     <SCreateRoom>
-      <Form
-        form={antForm}
-        onFinish={onFinish}
-        // onValuesChange={(value, allvalues) => handleChangeValue(allvalues)}
-        className="form-create"
-      >
-        <div className="px-[20px] py-[12px]">
-          <Row gutter={50}>
-            <Col span={12}>
-              <h3 className="title_item">Thông tin lời khiêu chiến</h3>
-              <Row gutter={16}>
-                <Col span={24}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn bộ môn thi đấu <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="sports_discipline_id"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        className="input_form"
-                        showSearch
-                        placeholder="Môn thi đấu"
-                        optionFilterProp="children"
-                        filterOption={filterOption}
-                        options={
-                          listSports &&
-                          listSports.length > 0 &&
-                          listSports.map((item: any) => {
+      <div className="buttons">
+        {isCreateNewMatch ? (
+          <Button
+            type="primary"
+            danger
+            onClick={() => setIsCreateNewMatch(false)}
+          >
+            Hủy
+          </Button>
+        ) : (
+          <Button type="primary" onClick={() => setIsCreateNewMatch(true)}>
+            Tạo Match
+          </Button>
+        )}
+      </div>
+
+      {isCreateNewMatch && (
+        <Form
+          form={antForm}
+          onFinish={onFinish}
+          // onValuesChange={(value, allvalues) => handleChangeValue(allvalues)}
+          className="form-create"
+        >
+          <div className="px-[20px] py-[12px]">
+            <Row gutter={50}>
+              <Col span={12}>
+                <h3 className="title_item">Thông tin lời khiêu chiến</h3>
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn bộ môn thi đấu <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="sports_discipline_id"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
+                      >
+                        <Select
+                          className="input_form"
+                          showSearch
+                          placeholder="Môn thi đấu"
+                          optionFilterProp="children"
+                          filterOption={filterOption}
+                          options={
+                            listSports &&
+                            listSports.length > 0 &&
+                            listSports.map((item: any) => {
+                              return {
+                                label: item.name,
+                                value: item.id,
+                              };
+                            })
+                          }
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
+
+                  <Col span={24}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn thành viên trong đội <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="member_club_id"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
+                      >
+                        <Select
+                          className="input_form"
+                          mode="multiple"
+                          allowClear
+                          style={{ width: "100%" }}
+                          placeholder="Thành viên trong đội"
+                          options={clubDetail?.members.map((item: any) => {
                             return {
                               label: item.name,
                               value: item.id,
                             };
-                          })
-                        }
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
+                          })}
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
 
-                <Col span={24}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn thành viên trong đội <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="member_club_id"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        className="input_form"
-                        mode="multiple"
-                        allowClear
-                        style={{ width: "100%" }}
-                        placeholder="Thành viên trong đội"
-                        options={clubDetail?.members.map((item: any) => {
-                          return {
-                            label: item.name,
-                            value: item.id,
-                          };
-                        })}
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
-
-                <Col span={24}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn ngày thi đấu <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="match_date"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <DatePicker
-                        disabledDate={disabledDate}
-                        className="input_form"
-                        placeholder="Ngày thi đấu"
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
-
-                <Col span={12}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn giờ thi đấu <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="match_time"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <TimePicker
-                        format={"HH:mm"}
-                        className="input_form"
-                        placeholder="Giờ thi đấu"
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
-
-                <Col span={12}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Thời gian thi đấu <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="duration_minutes"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <InputNumber
-                        placeholder="Số phút"
-                        className="input_form"
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
-
-                <Col span={24}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn địa điểm <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="venue"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <TextArea
-                        className="input_form input_form_textarea"
-                        placeholder="Chọn địa điểm"
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
-
-                <Col span={12}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Chọn trạng thái công khai <span>*</span>
-                    </label>
-                    <Form.Item
-                      name="type"
-                      rules={[
-                        {
-                          required: true,
-                          message: "Vui lòng nhập giá trị !!",
-                        },
-                      ]}
-                    >
-                      <Select
-                        className="input_form"
-                        showSearch
-                        placeholder="Trạng thái công khai"
-                        optionFilterProp="children"
-                        filterOption={filterOption}
-                        options={[
+                  <Col span={24}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn ngày thi đấu <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="match_date"
+                        rules={[
                           {
-                            value: "1",
-                            label: "Công khai",
-                          },
-                          {
-                            value: "2",
-                            label: "Không công khai",
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
                           },
                         ]}
-                      />
-                    </Form.Item>
-                  </div>
-                </Col>
+                      >
+                        <DatePicker
+                          disabledDate={disabledDate}
+                          className="input_form"
+                          placeholder="Ngày thi đấu"
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
 
-                <Col span={12}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Coin cược <span>*</span>
-                    </label>
-
-                    <div className="button_input">
+                  <Col span={12}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn giờ thi đấu <span>*</span>
+                      </label>
                       <Form.Item
-                        name="coin"
+                        name="match_time"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
+                      >
+                        <TimePicker
+                          format={"HH:mm"}
+                          className="input_form"
+                          placeholder="Giờ thi đấu"
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Thời gian thi đấu <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="duration_minutes"
                         rules={[
                           {
                             required: true,
@@ -318,88 +265,253 @@ export default function CreateRoom() {
                         ]}
                       >
                         <InputNumber
+                          placeholder="Số phút"
                           className="input_form"
-                          placeholder="Số coin"
                         />
                       </Form.Item>
+                    </div>
+                  </Col>
 
-                      <Button
-                        className="button_all_in"
-                        type="primary"
-                        onClick={() => {
-                          antForm.setFieldsValue({
-                            coin: 20,
-                          });
-                        }}
+                  <Col span={24}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn địa điểm <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="venue"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
                       >
-                        All in
-                      </Button>
+                        <TextArea
+                          className="input_form input_form_textarea"
+                          placeholder="Chọn địa điểm"
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Chọn trạng thái công khai <span>*</span>
+                      </label>
+                      <Form.Item
+                        name="type"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Vui lòng nhập giá trị !!",
+                          },
+                        ]}
+                      >
+                        <Select
+                          className="input_form"
+                          showSearch
+                          placeholder="Trạng thái công khai"
+                          optionFilterProp="children"
+                          filterOption={filterOption}
+                          options={[
+                            {
+                              value: "1",
+                              label: "Công khai",
+                            },
+                            {
+                              value: "2",
+                              label: "Không công khai",
+                            },
+                          ]}
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
+
+                  <Col span={12}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Coin cược <span>*</span>
+                      </label>
+
+                      <div className="button_input">
+                        <Form.Item
+                          name="coin"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Vui lòng nhập giá trị !!",
+                            },
+                          ]}
+                        >
+                          <InputNumber
+                            className="input_form"
+                            placeholder="Số coin"
+                          />
+                        </Form.Item>
+
+                        <Button
+                          className="button_all_in"
+                          type="primary"
+                          onClick={() => {
+                            antForm.setFieldsValue({
+                              coin: 20,
+                            });
+                          }}
+                        >
+                          All in
+                        </Button>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col span={24}>
+                    <div className="mb-[30px]">
+                      <label className="labe-form">
+                        Đôi lời nhắn gửi đến đối thủ
+                      </label>
+                      <Form.Item name="description">
+                        <TextArea
+                          className="input_form input_form_textarea"
+                          placeholder="Muốn thua thì tới đây"
+                        />
+                      </Form.Item>
+                    </div>
+                  </Col>
+                </Row>
+              </Col>
+
+              <Col span={12}>
+                <h3 className="title_item">Chọn đội gửi lời khiêu chiến</h3>
+
+                <div className="mb-[30px]">
+                  <label className="labe-form">
+                    Chọn Clubs <span>*</span>
+                  </label>
+                  <Form.Item
+                    name="challenge_club"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập giá trị !!",
+                      },
+                    ]}
+                  >
+                    <Select
+                      className="input_form"
+                      mode="multiple"
+                      allowClear
+                      style={{ width: "100%" }}
+                      placeholder="Clubs"
+                      options={clubsOther?.map((item: any) => {
+                        return {
+                          label: item.name,
+                          value: item.id,
+                        };
+                      })}
+                    />
+                  </Form.Item>
+                </div>
+
+                <Form.Item className="wrap_button_submit">
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="button_submit"
+                    loading={isLoading}
+                  >
+                    Gửi lời mời
+                  </Button>
+                </Form.Item>
+              </Col>
+            </Row>
+          </div>
+        </Form>
+      )}
+
+      {listMatchs && listMatchs.length > 0 && (
+        <div className="list_pk">
+          <h3 className="title_item">Match đã tạo</h3>
+
+          <div className="list_main">
+            {listMatchs.map((item: any) => {
+              return (
+                <div className="list_item" key={item.id}>
+                  <div className="time_image">
+                    <div className="time">
+                      <p className="month">
+                        {DAY_OF_WEEK[new Date(item.match_date).getDay()]}
+                      </p>
+                      <p className="date">
+                        {new Date(item.match_date).getDate()}
+                      </p>
+                    </div>
+
+                    <div className="image">
+                      <Image
+                        src={IMAGES[item.sports_discipline.id]}
+                        alt=""
+                        width={100}
+                      />
                     </div>
                   </div>
-                </Col>
 
-                <Col span={24}>
-                  <div className="mb-[30px]">
-                    <label className="labe-form">
-                      Đôi lời nhắn gửi đến đối thủ
-                    </label>
-                    <Form.Item name="description">
-                      <TextArea
-                        className="input_form input_form_textarea"
-                        placeholder="Muốn thua thì tới đây"
-                      />
-                    </Form.Item>
+                  <div className="content">
+                    <p className="content_date">
+                      <FaRegCalendarAlt color="#0a2664" size={17} />
+                      <span>{`${convertToVietnameseDate(
+                        item.match_date
+                      )} | ${convertTo12HourFormat(item.match_time)}`}</span>
+                    </p>
+
+                    <p className="content_name_category">
+                      Bộ Môn:{" "}
+                      <span className="uppercase">
+                        {item.sports_discipline.name}
+                      </span>
+                    </p>
+
+                    <p className="content_name_category">
+                      Đội trưởng:{" "}
+                      <span className="uppercase">
+                        {item.creator_member.name}
+                      </span>
+                    </p>
+
+                    <p className="content_name_category">
+                      Thời gian: <span>{item.duration_minutes} phút</span>
+                    </p>
+
+                    <p className="content_name_category">
+                      Địa điểm: <span>{item.venue} phút</span>
+                    </p>
+
+                    <p className="content_coin">80 coin</p>
+
+                    <p className="content_name_team">
+                      Danh sách Đối thủ:
+                      <span>PDGB</span>
+                    </p>
+
+                    <p className="content_des">{item.description}</p>
                   </div>
-                </Col>
-              </Row>
-            </Col>
 
-            <Col span={12}>
-              <h3 className="title_item">Chọn đội gửi lời khiêu chiến</h3>
-
-              <div className="mb-[30px]">
-                <label className="labe-form">
-                  Chọn Clubs <span>*</span>
-                </label>
-                <Form.Item
-                  name="challenge_club"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Vui lòng nhập giá trị !!",
-                    },
-                  ]}
-                >
-                  <Select
-                    className="input_form"
-                    mode="multiple"
-                    allowClear
-                    style={{ width: "100%" }}
-                    placeholder="Clubs"
-                    options={clubsOther?.map((item: any) => {
-                      return {
-                        label: item.name,
-                        value: item.id,
-                      };
-                    })}
-                  />
-                </Form.Item>
-              </div>
-
-              <Form.Item className="wrap_button_submit">
-                <Button
-                  type="primary"
-                  htmlType="submit"
-                  className="button_submit"
-                  loading={isLoading}
-                >
-                  Gửi lời mời
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
+                  <p className="status">
+                    {item.status === 1 ? (
+                      <Tag color="orange">Mới</Tag>
+                    ) : item.status === 2 ? (
+                      <Tag color="green">Đã Match</Tag>
+                    ) : (
+                      <Tag color="red">Đã Hủy</Tag>
+                    )}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      </Form>
+      )}
     </SCreateRoom>
   );
 }
