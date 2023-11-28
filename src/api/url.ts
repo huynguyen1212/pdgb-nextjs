@@ -16,14 +16,14 @@ const API_URL = {
     CHECK_IS_IN_CLUB: "/user/club/check",
     CLUBS_OTHER: "/user/club/list-other",
     LIST_REQUESTS: "/user/club/list-member-request",
-    REVIEW_REQUEST: "/api/user/club/review-request-join"
+    REVIEW_REQUEST: "/user/club/review-request-join",
   },
   MATCHS: {
     CREATE: "/user/match/create",
     LIST_PK: "/user/match/list-pk",
     LIST_MATCHS: "/user/match/list-match",
   },
-  USER_INFO: "/user/user-info"
+  USER_INFO: "/user/user-info",
 };
 
 export default API_URL;

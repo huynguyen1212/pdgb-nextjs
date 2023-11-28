@@ -156,7 +156,7 @@ export default function FormRequestCreateClub() {
                   style={{ width: "100%", padding: "0 10px" }}
                   size="large"
                   min={1}
-                  max={100}
+                  max={1000}
                 />
               </Form.Item>
             </div>

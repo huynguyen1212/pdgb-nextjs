@@ -62,10 +62,10 @@ export default function CardClub({
     onSuccess(data, variables, context) {
       handleCloseModalJoin();
       message.success("Đã gửi request join club!", 1.5);
-      message.info(
-        "Các request join club sau đó sẽ bị huỷ vì bạn chỉ được đồng ý tham gia 1 club!",
-        4
-      );
+      // message.info(
+      //   "Các request join club sau đó sẽ bị huỷ vì bạn chỉ được đồng ý tham gia 1 club!",
+      //   4
+      // );
       queryClient.invalidateQueries("listOtherClubs");
       setIsRequested(true);
     },
@@ -73,17 +73,16 @@ export default function CardClub({
 
   const { isLoading: isLoadingCancel, mutateAsync: mutateCancel } = useMutation(
     {
-      mutationFn: (data: any) =>
+      mutationFn: () =>
         requestToken({
           method: "POST",
-          url: API_URL.CANCEL_JOIN_CLUB,
-          data: data,
+          url: `${API_URL.CANCEL_JOIN_CLUB}/${request_id}`,
         }),
       onError(error: any, variables, context) {
         message.error(error?.response?.data?.message || "Thất bại");
       },
       onSuccess(data, variables, context) {
-        handleCloseModalJoin();
+        handleCloseModalCancel();
         message.success("Đã huỷ request join trước đó!", 1.5);
         queryClient.invalidateQueries("listOtherClubs");
         setIsRequested(false);
@@ -100,7 +99,7 @@ export default function CardClub({
   };
 
   const onSubmitRequestCancel = () => {
-    mutateCancel({ request_id });
+    mutateCancel();
   };
 
   const handleOpenModalJoin = () => {
@@ -254,7 +253,7 @@ export default function CardClub({
         footer={null}
       >
         <SModalJoinClub>
-          <p className="my-3">Xác nhận huỷ yêu cầuu tham gia</p>
+          <p className="my-3">Xác nhận huỷ yêu cầu tham gia</p>
           <Button
             type="primary"
             onClick={onSubmitRequestCancel}

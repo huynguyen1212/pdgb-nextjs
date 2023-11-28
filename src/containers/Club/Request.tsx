@@ -2,16 +2,17 @@ import Table, { ColumnsType } from "antd/lib/table";
 import { Button, Modal, Space, message } from "antd";
 import { SRequest } from "./style";
 import { useEffect, useState } from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 
 export default function Request({ data }: any) {
-  // const [dataSource, setDataSource] = useState<any>([]);
+  const queryClient = useQueryClient();
+  const [dataSource, setDataSource] = useState<any>([]);
   const [isOpenModalAccept, setIsOpenModalAccept] = useState<boolean>(false);
   const [isOpenModalReject, setIsOpenModalReject] = useState<boolean>(false);
 
-  const { isLoading, mutateAsync } = useMutation({
+  const {  mutateAsync } = useMutation({
     mutationFn: (data: any) =>
       requestToken({
         method: "POST",
@@ -19,7 +20,12 @@ export default function Request({ data }: any) {
         data: data,
       }),
     onError(error: any) {
-      message.error(error?.response?.data?.message || "Thất bại");
+      console.log(error?.response?.data, "error")
+      message.error(error?.response?.data?.error || "Thất bại");
+    },
+    onSuccess() {
+      message.success("Duyệt thành công!", 1.5);
+      queryClient.invalidateQueries("getListRequests");
     },
   });
 
@@ -39,41 +45,27 @@ export default function Request({ data }: any) {
     setIsOpenModalReject(true);
   };
 
-  const handleAccept = (id: any) => {
-    mutateAsync({ request_id: id, status: 1 });
+  const handleAccept = (id: number) => {
+    mutateAsync({ status: 2, request_id: id });
     handleCloseModalAccept();
   };
 
-  const handleReject = (id: any) => {
-    mutateAsync({ request_id: id, status: 2 });
+  const handleReject = (id: number) => {
+    mutateAsync({ status: 3, request_id: id});
     handleCloseModalReject();
   };
 
-  // useEffect(() => {
-  //   const listRequests: any = [];
-  //   if (!(data && data.length === 0)) return;
-  //   data.map((item: any) => {
-  //     listRequests.push({
-  //       key: item.id,
-  //       name: item.name,
-  //       email: item.email,
-  //     });
-  //   });
-  //   setDataSource(listRequests);
-  // }, [data]);
-
-  const dataSource = [
-    {
-      key: "1",
-      name: "Huy",
-      email: "email@gmail.com",
-    },
-    {
-      key: "2",
-      name: "Sơn",
-      email: "email@gmail.com",
-    },
-  ];
+  useEffect(() => {
+    const listRequests: any = [];
+    data.map((item: any) => {
+      listRequests.push({
+        id: item.id,
+        name: item.members.name,
+        email: item.members.email,
+      });
+    });
+    setDataSource(listRequests);
+  }, [data]);
 
   const columns: ColumnsType<any> = [
     {
@@ -94,10 +86,10 @@ export default function Request({ data }: any) {
       title: "Action",
       key: "action",
       fixed: "right",
-      dataIndex: "key",
+      dataIndex: "id",
       render: (_, record) => (
         <>
-          {console.log("111212", record.key)}
+          {console.log("111212", record.id)}
           <Space size="small">
             <Button
               className="capitalize"
@@ -121,24 +113,26 @@ export default function Request({ data }: any) {
             title="Duyệt"
             centered
             open={isOpenModalAccept}
-            onOk={() => handleAccept(record.key)}
+            onOk={() => handleAccept(record.id)}
             onCancel={handleCloseModalAccept}
             okText="Duyệt"
             cancelText="Đóng"
             className="text-center"
           >
-            <p className="">Xác nhận duyệt thành viên vào club</p>
+            <p className="my-3">Xác nhận đồng ý cho thành viên vào club</p>
           </Modal>
           <Modal
             title="Từ chối"
             centered
             open={isOpenModalReject}
-            onOk={() => handleReject(record.key)}
+            onOk={() => handleReject(record.id)}
             onCancel={handleCloseModalReject}
             okText="Từ chối"
             cancelText="Đóng"
             className="text-center"
-          ></Modal>
+          >
+            <p className="my-3">Xác nhận từ chối cho thành viên vào club</p>
+          </Modal>
         </>
       ),
     },

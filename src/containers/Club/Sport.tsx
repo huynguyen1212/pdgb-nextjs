@@ -28,7 +28,7 @@ export default function Sport({ data, number_of_members, isAdmin }: Props) {
                 avatar=""
                 name={sport.name}
                 id={sport.id}
-                members={sport.number_of_participants}
+                members={sport.number_of_members}
                 type={sport.id}
                 number_of_members={number_of_members}
               />
