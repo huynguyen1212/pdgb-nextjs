@@ -2,7 +2,13 @@ import React from "react";
 import { SMembers } from "./style";
 import { Avatar, Button, List, Skeleton } from "antd";
 
-export default function Member({ data }: any) {
+export interface PropsType {
+  data: any;
+  isAdmin: boolean;
+  isRequest: boolean;
+}
+
+export default function Member({ data, isAdmin, isRequest }: PropsType) {
   return (
     <SMembers>
       {data && data.length > 0 && (
