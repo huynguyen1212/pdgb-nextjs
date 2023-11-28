@@ -1,6 +1,10 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
+    nextjs-portal {
+    display: none;
+    }
+
   a {
       text-decoration: none;
       &:hover {

@@ -31,7 +31,7 @@ export default function Footer() {
           {section && (
             <Col xl={3} lg={3} md={3} sm={4} xs={12} col={12}>
               <div className="col_item">
-                <div className="title">Function</div>
+                <div className="title">Chức năng</div>
 
                 <div className="content">
                   <div className="content_item">
@@ -40,7 +40,7 @@ export default function Footer() {
                         router.push("/club");
                       }}
                     >
-                      Quản lý Club
+                      Club của tôi
                     </span>
                   </div>
                   <div className="content_item">

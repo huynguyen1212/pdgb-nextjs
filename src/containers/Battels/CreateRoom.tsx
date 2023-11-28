@@ -37,7 +37,7 @@ export default function CreateRoom() {
   const [isCreateNewMatch, setIsCreateNewMatch] = useState(false);
 
   // api
-  const { data: listMatchs } = useQuery(["LIST_MATCHS"], async () => {
+  const { data: listMatchs, refetch } = useQuery(["LIST_MATCHS"], async () => {
     const response = await requestToken({
       method: "GET",
       url: API_URL.MATCHS.LIST_MATCHS,
@@ -78,6 +78,7 @@ export default function CreateRoom() {
     onSuccess(data, variables, context) {
       message.success("Tạo phòng thành công!");
       antForm.resetFields();
+      refetch();
     },
   });
 
@@ -450,7 +451,7 @@ export default function CreateRoom() {
 
                     <div className="image">
                       <Image
-                        src={IMAGES[item.sports_discipline.id]}
+                        src={IMAGES[Number(item.sports_discipline.id) - 1]}
                         alt=""
                         width={100}
                       />
@@ -473,38 +474,57 @@ export default function CreateRoom() {
                     </p>
 
                     <p className="content_name_category">
-                      Đội trưởng:{" "}
+                      Đội mình:
                       <span className="uppercase">
-                        {item.creator_member.name}
+                        {item.team_ones.map((i: any) => `${i.name}`).join(", ")}
                       </span>
                     </p>
+
+                    {item.team_twos.length > 0 && (
+                      <p className="content_name_category">
+                        Đội bạn:
+                        <span className="uppercase">
+                          {item.team_twos
+                            .map((i: any) => `${i.name}`)
+                            .join(", ")}
+                        </span>
+                      </p>
+                    )}
 
                     <p className="content_name_category">
                       Thời gian: <span>{item.duration_minutes} phút</span>
                     </p>
 
                     <p className="content_name_category">
-                      Địa điểm: <span>{item.venue} phút</span>
+                      Địa điểm: <span>{item.venue}</span>
                     </p>
 
-                    <p className="content_coin">80 coin</p>
+                    <p className="content_coin">{item.coin} coin</p>
 
                     <p className="content_name_team">
-                      Danh sách Đối thủ:
-                      <span>PDGB</span>
+                      Danh sách Club Đối thủ:
+                      <span>
+                        {item.challenge_clubs
+                          .map((i: any) => `${i.name}`)
+                          .join(", ")}
+                      </span>
                     </p>
 
                     <p className="content_des">{item.description}</p>
                   </div>
 
                   <p className="status">
-                    {item.status === 1 ? (
-                      <Tag color="orange">Mới</Tag>
-                    ) : item.status === 2 ? (
-                      <Tag color="green">Đã Match</Tag>
-                    ) : (
-                      <Tag color="red">Đã Hủy</Tag>
-                    )}
+                    <Tag
+                      color={
+                        item.status === 1
+                          ? "orange"
+                          : item.status === 2
+                          ? "green"
+                          : "red"
+                      }
+                    >
+                      {item.status_name}
+                    </Tag>
                   </p>
                 </div>
               );

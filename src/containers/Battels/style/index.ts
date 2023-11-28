@@ -72,7 +72,7 @@ export const SCreateRoom = styled.div`
     min-height: 40px;
 
     .ant-select-selector {
-      height: 40px;
+      min-height: 40px;
     }
     .ant-input-number-input-wrap {
       height: 40px;
@@ -332,26 +332,40 @@ export const SChallengeList = styled.div`
             }
           }
 
-          .content_name_team {
+          .content_name_category {
             color: #0a2664;
             font-size: 14px;
             margin-bottom: 5px;
 
             span {
-              text-transform: uppercase;
-              font-size: 22px;
+              font-size: 17px;
+              margin-left: 5px;
               font-weight: 600;
+            }
+
+            .uppercase {
+              text-transform: uppercase;
             }
           }
 
-          .content_name_category {
+          .content_coin {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #ffc107;
+            margin-bottom: 5px;
+          }
+
+          .content_name_team {
             color: #0a2664;
             font-size: 14px;
-            margin-bottom: 15px;
 
             span {
               text-transform: uppercase;
-              font-size: 22px;
+              font-size: 15px;
+              font-weight: 600;
+              margin-left: 5px;
             }
           }
 
@@ -360,16 +374,24 @@ export const SChallengeList = styled.div`
             line-height: 27px;
             font-weight: 400;
             color: #757984;
-            margin-bottom: 15px;
+            margin: 10px 0;
           }
+        }
 
-          .content_coin {
-            font-size: 14px;
-            line-height: 1.4em;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: #0a2664;
+        .status {
+          display: flex;
+          align-items: start;
+          justify-content: flex-end;
+          width: 100%;
+
+          .ant-tag {
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 30px;
+            padding: 0 15px;
           }
         }
 
@@ -497,7 +519,7 @@ export const SSchedules = styled.div`
       min-height: 40px;
 
       .ant-select-selector {
-        height: 40px;
+        min-height: 40px;
       }
       .ant-input-number-input-wrap {
         height: 40px;
