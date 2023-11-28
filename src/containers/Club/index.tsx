@@ -66,7 +66,7 @@ export default function Club() {
         url: API_URL.CLUBS.LIST_REQUESTS,
       }),
     onSuccess(data) {
-      setInfoUser(data.data.data);
+      setListRequests(data.data.data);  
     },
   });
 
@@ -78,18 +78,26 @@ export default function Club() {
         url: API_URL.USER_INFO,
       }),
     onSuccess(data) {
-      setListRequests(data.data.data);
+      setInfoUser(data.data.data);
     },
   });
+
+  console.log(isAdmin, "isAdmin")
 
   useEffect(() => {
     if (!infoClub) return;
     setListMember(infoClub.members);
     setListTeam(infoClub.teams);
     setListSport(infoClub.sports_disciplines);
-    if (!infoUser) return;
-    setIsAdmin(infoUser.id === infoClub.manager_id);
-  }, [infoClub, infoUser]);
+  }, [infoClub]);
+
+  useEffect(() => {
+    if (infoUser.id === infoClub.manager_id) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+  }, [infoUser, infoClub]);
 
   return (
     <SClub>
@@ -146,7 +154,7 @@ export default function Club() {
         </div>
 
         <Tabs
-          defaultActiveKey="1"
+          defaultActiveKey={isAdmin ? "0" : "1"}
           items={isAdmin ? tabsAdmin : tabsMember}
           indicatorSize={(origin) => origin - 16}
           className="club-tab"
