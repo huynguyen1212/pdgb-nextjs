@@ -5,10 +5,28 @@ import { Avatar, Button, List, Skeleton } from "antd";
 export interface PropsType {
   data: any;
   isAdmin: boolean;
-  isRequest: boolean;
 }
 
-export default function Member({ data, isAdmin, isRequest }: PropsType) {
+export default function Member({ data, isAdmin }: PropsType) {
+  const actionsMember = [
+    <Button key="detail" className="capitalize" type="primary" size="small">
+      Chi tiết
+    </Button>,
+  ];
+
+  const actionsAdmin = [
+    ...actionsMember,
+    <Button
+      key="delete"
+      className="capitalize"
+      type="primary"
+      danger
+      size="small"
+    >
+      Xóa
+    </Button>,
+  ]
+
   return (
     <SMembers>
       {data && data.length > 0 && (
@@ -18,25 +36,11 @@ export default function Member({ data, isAdmin, isRequest }: PropsType) {
           dataSource={data}
           renderItem={(item: any, index) => (
             <List.Item
-              actions={[
-                <Button
-                  key="detail"
-                  className="capitalize"
-                  type="primary"
-                  size="small"
-                >
-                  Chi tiết
-                </Button>,
-                <Button
-                  key="delete"
-                  className="capitalize"
-                  type="primary"
-                  danger
-                  size="small"
-                >
-                  Xóa
-                </Button>,
-              ]}
+              actions={
+                isAdmin
+                  ? actionsAdmin
+                  : actionsMember
+              }
             >
               <Skeleton avatar title={false} loading={false} active>
                 <List.Item.Meta

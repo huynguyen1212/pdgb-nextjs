@@ -21,18 +21,11 @@ export default function Club() {
   const tabsMember: TabsProps["items"] = [
     {
       key: "1",
-      label: "Danh sách request",
-      children: <Request />,
+      label: "Danh sách thành viên",
+      children: <Member data={listMembers} isAdmin={isAdmin} />,
     },
     {
       key: "2",
-      label: "Danh sách thành viên",
-      children: (
-        <Member isRequest={false} data={listMembers} isAdmin={isAdmin} />
-      ),
-    },
-    {
-      key: "3",
       label: "Danh sách bộ môn",
       children: (
         <Sport
@@ -45,14 +38,12 @@ export default function Club() {
   ];
 
   const tabsAdmin: TabsProps["items"] = [
-    ...tabsMember,
     {
-      key: "3",
+      key: "0",
       label: "Danh sách request",
-      children: (
-        <Member isRequest={true} isAdmin={isAdmin} data={listRequests} />
-      ),
+      children: <Request data={listRequests} />,
     },
+    ...tabsMember,
   ];
 
   useQuery({

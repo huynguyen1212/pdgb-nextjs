@@ -87,6 +87,9 @@ export const StylesCard = styled.div`
 
       .wrap__card {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
 
         .card__avatar {
           width: 100%;
@@ -125,7 +128,7 @@ export const StylesCard = styled.div`
         }
 
         .card__indicator {
-          margin-top: 10px;
+          margin-top: auto;
           font-weight: 500;
           font-size: 14px;
           color: rgb(34, 62, 161);
