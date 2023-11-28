@@ -5,9 +5,10 @@ import CardTeam from "src/components/CardTeam";
 export interface Props {
   data: any;
   number_of_members: number;
+  isAdmin: boolean;
 }
 
-export default function Sport({ data, number_of_members }: Props) {
+export default function Sport({ data, number_of_members, isAdmin }: Props) {
   return (
     <SSport>
       {data && data.length > 0 && (

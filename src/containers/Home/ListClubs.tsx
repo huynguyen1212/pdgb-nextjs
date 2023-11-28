@@ -60,6 +60,8 @@ export default function ListClubs() {
                   teams_count={club.teams.length}
                   number_of_members={club.number_of_members}
                   sports_disciplines={club.sports_disciplines}
+                  request_join_status={club.request_join_status}
+                  request_id={club.request_id}
                 />
               </Col>
             ))}

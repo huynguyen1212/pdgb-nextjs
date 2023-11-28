@@ -15,28 +15,35 @@ export default function Club() {
   const [listTeams, setListTeam] = useState<any>([]);
   const [listSports, setListSport] = useState<any>([]);
   const [listRequests, setListRequests] = useState<any>([]);
+  const [infoUser, setInfoUser] = useState<any>({});
+  const [isAdmin, setIsAdmin] = useState<boolean>(true);
 
-  const items: TabsProps["items"] = [
+  const tabsMember: TabsProps["items"] = [
     {
       key: "1",
-      label: "Danh sách request",
-      children: <Request />,
+      label: "Danh sách thành viên",
+      children: <Member data={listMembers} isAdmin={isAdmin} />,
     },
     {
       key: "2",
-      label: "Danh sách thành viên",
-      children: <Member data={listMembers} />,
-    },
-    {
-      key: "3",
       label: "Danh sách bộ môn",
       children: (
         <Sport
           number_of_members={infoClub?.number_of_members}
           data={listSports}
+          isAdmin={isAdmin}
         />
       ),
     },
+  ];
+
+  const tabsAdmin: TabsProps["items"] = [
+    {
+      key: "0",
+      label: "Danh sách request",
+      children: <Request data={listRequests} />,
+    },
+    ...tabsMember,
   ];
 
   useQuery({
@@ -59,6 +66,18 @@ export default function Club() {
         url: API_URL.CLUBS.LIST_REQUESTS,
       }),
     onSuccess(data) {
+      setInfoUser(data.data.data);
+    },
+  });
+
+  useQuery({
+    queryKey: ["getUserInfo"],
+    queryFn: () =>
+      requestToken({
+        method: "GET",
+        url: API_URL.USER_INFO,
+      }),
+    onSuccess(data) {
       setListRequests(data.data.data);
     },
   });
@@ -68,7 +87,9 @@ export default function Club() {
     setListMember(infoClub.members);
     setListTeam(infoClub.teams);
     setListSport(infoClub.sports_disciplines);
-  }, [infoClub]);
+    if (!infoUser) return;
+    setIsAdmin(infoUser.id === infoClub.manager_id);
+  }, [infoClub, infoUser]);
 
   return (
     <SClub>
@@ -124,14 +145,12 @@ export default function Club() {
           </div>
         </div>
 
-        <div className="">
-          <Tabs
-            defaultActiveKey="1"
-            items={items}
-            indicatorSize={(origin) => origin - 16}
-            className="club-tab"
-          />
-        </div>
+        <Tabs
+          defaultActiveKey="1"
+          items={isAdmin ? tabsAdmin : tabsMember}
+          indicatorSize={(origin) => origin - 16}
+          className="club-tab"
+        />
       </Container>
     </SClub>
   );

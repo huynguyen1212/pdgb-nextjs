@@ -22,7 +22,7 @@ export default function Home() {
     onError() {
       setCheck(false);
     },
-    onSuccess(data) {
+    onSuccess() {
       setCheck(true);
     },
   });

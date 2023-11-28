@@ -3,7 +3,7 @@ import Image from "next/image";
 import { SModalJoinClub, StylesCard } from "./style";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Button, Form, Modal, Select, SelectProps, message } from "antd";
 import Loading from "src/components/Loading";
 import IconFirstMember from "../Icons/IconFirstMember";
@@ -19,6 +19,8 @@ export interface Props {
   teams_count: number;
   number_of_members: number;
   sports_disciplines: any;
+  request_join_status: any;
+  request_id: any;
 }
 
 export default function CardClub({
@@ -30,12 +32,15 @@ export default function CardClub({
   teams_count = 0,
   number_of_members = 0,
   sports_disciplines = [],
+  request_join_status,
+  request_id,
 }: Props) {
+  const queryClient = useQueryClient();
   const [form] = Form.useForm();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isOpenModalCancel, setIsOpenModalCancel] = useState<boolean>(false);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
-  const [isRequested, setIsRequested] = useState<boolean>(false);
+  const [isRequested, setIsRequested] = useState<boolean>(request_join_status);
 
   useEffect(() => {
     const optionsSelect: SelectProps["options"] = [];
@@ -61,13 +66,14 @@ export default function CardClub({
         "Các request join club sau đó sẽ bị huỷ vì bạn chỉ được đồng ý tham gia 1 club!",
         4
       );
+      queryClient.invalidateQueries("listOtherClubs");
       setIsRequested(true);
     },
   });
 
   const { isLoading: isLoadingCancel, mutateAsync: mutateCancel } = useMutation(
     {
-      mutationFn: (data) =>
+      mutationFn: (data: any) =>
         requestToken({
           method: "POST",
           url: API_URL.CANCEL_JOIN_CLUB,
@@ -79,6 +85,7 @@ export default function CardClub({
       onSuccess(data, variables, context) {
         handleCloseModalJoin();
         message.success("Đã huỷ request join trước đó!", 1.5);
+        queryClient.invalidateQueries("listOtherClubs");
         setIsRequested(false);
       },
     }
@@ -92,12 +99,8 @@ export default function CardClub({
     form.resetFields();
   };
 
-  const onSubmitRequestCancel = (values: any) => {
-    mutateCancel({
-      ...values,
-      club_id: id,
-    });
-    form.resetFields();
+  const onSubmitRequestCancel = () => {
+    mutateCancel({ request_id });
   };
 
   const handleOpenModalJoin = () => {
@@ -142,7 +145,7 @@ export default function CardClub({
                 isRequested ? handleOpenModalCancel : handleOpenModalJoin
               }
             >
-              {isRequested ? "Cancel" : "Join"}
+              {isRequested ? "Huỷ" : "Tham gia"}
             </Button>
           </div>
 
@@ -190,7 +193,7 @@ export default function CardClub({
 
       {/* modal */}
       <Modal
-        title={`Join club ${name}`}
+        title={`Tham gia club ${name}`}
         centered
         open={isOpenModal}
         onCancel={handleCloseModalJoin}
@@ -202,7 +205,6 @@ export default function CardClub({
             layout="vertical"
             name="basic"
             onFinish={onSubmitRequestJoin}
-            // onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
             <div className="mb-[16px]">
@@ -232,7 +234,7 @@ export default function CardClub({
                 className="btn-create"
                 disabled={isLoadingJoin}
               >
-                Join club
+                Tham gia club
                 {isLoadingJoin && (
                   <div className="loader">
                     <Loading />
@@ -245,37 +247,27 @@ export default function CardClub({
       </Modal>
 
       <Modal
-        title={`Cancel join club ${name}`}
+        title={`Huỷ tham gia club ${name}`}
         centered
         open={isOpenModalCancel}
         onCancel={handleCloseModalCancel}
         footer={null}
       >
         <SModalJoinClub>
-          <Form
-            form={form}
-            layout="vertical"
-            name="basic"
-            onFinish={onSubmitRequestCancel}
-            // onFinishFailed={onFinishFailed}
-            autoComplete="off"
+          <p className="my-3">Xác nhận huỷ yêu cầuu tham gia</p>
+          <Button
+            type="primary"
+            onClick={onSubmitRequestCancel}
+            className="btn-create"
+            disabled={isLoadingJoin}
           >
-            <Form.Item>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className="btn-create"
-                disabled={isLoadingCancel}
-              >
-                Cancel join club
-                {isLoadingCancel && (
-                  <div className="loader">
-                    <Loading />
-                  </div>
-                )}
-              </Button>
-            </Form.Item>
-          </Form>
+            Huỷ
+            {isLoadingJoin && (
+              <div className="loader">
+                <Loading />
+              </div>
+            )}
+          </Button>
         </SModalJoinClub>
       </Modal>
     </StylesCard>
