@@ -69,7 +69,7 @@ export default function Member({ data, isAdmin, manager_id }: PropsType) {
           itemLayout="horizontal"
           dataSource={data}
           renderItem={(item: any, index) => (
-            <List.Item actions={isAdmin || manager_id !== item.id ? actionsAdmin(item.id) : []}>
+            <List.Item actions={isAdmin ? actionsAdmin(item.id) : []}>
               <Skeleton avatar title={false} loading={false} active>
                 <List.Item.Meta
                   avatar={
