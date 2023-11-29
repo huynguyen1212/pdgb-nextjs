@@ -42,7 +42,7 @@ export default function CardClub({
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isOpenModalCancel, setIsOpenModalCancel] = useState<boolean>(false);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
-  const [isRequested, setIsRequested] = useState<boolean>(request_join_status);
+  const [requested, setRequested] = useState<any>(request_join_status);
 
   useEffect(() => {
     const optionsSelect: SelectProps["options"] = [];
@@ -58,32 +58,32 @@ export default function CardClub({
   const { isLoading: isLoadingJoin, mutateAsync } = useMutation({
     mutationFn: (data) =>
       requestToken({ method: "POST", url: API_URL.JOIN_CLUB, data: data }),
-    onError(error: any, variables, context) {
+    onError(error: any) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
-    onSuccess(data, variables, context) {
+    onSuccess() {
       handleCloseModalJoin();
       message.success("Đã gửi request join club!", 1.5);
       queryClient.invalidateQueries("listOtherClubs");
-      setIsRequested(true);
+      setRequested(2);
     },
   });
 
-  const { isLoading: isLoadingCancel, mutateAsync: mutateCancel } = useMutation(
+  const { mutateAsync: mutateCancel } = useMutation(
     {
       mutationFn: () =>
         requestToken({
           method: "POST",
           url: `${API_URL.CANCEL_JOIN_CLUB}/${request_id}`,
         }),
-      onError(error: any, variables, context) {
+      onError(error: any) {
         message.error(error?.response?.data?.message || "Thất bại");
       },
-      onSuccess(data, variables, context) {
+      onSuccess() {
         handleCloseModalCancel();
         message.success("Đã huỷ request join trước đó!", 1.5);
         queryClient.invalidateQueries("listOtherClubs");
-        setIsRequested(false);
+        setRequested(1);
       },
     }
   );
@@ -135,14 +135,14 @@ export default function CardClub({
 
             <Button
               type="primary"
-              danger={isRequested}
+              danger={requested === 1}
               htmlType="button"
               className="card__menu"
               onClick={
-                isRequested ? handleOpenModalCancel : handleOpenModalJoin
+                requested === 1 ? handleOpenModalCancel : handleOpenModalJoin
               }
             >
-              {isRequested ? "Huỷ" : "Tham gia"}
+              {requested === 1 ? "Huỷ" : "Tham gia"}
             </Button>
           </div>
 
