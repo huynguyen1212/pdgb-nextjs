@@ -3,6 +3,7 @@ import styled from "styled-components";
 const SBattels = styled.div`
   padding-top: 15vh;
   padding-bottom: 60px;
+  min-height: 100vh;
 
   .battels_banner {
     .wrap_title {

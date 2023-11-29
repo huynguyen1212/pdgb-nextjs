@@ -39,8 +39,6 @@ export default function Schedules() {
     }
   );
 
-  console.log("detailMatch: ", detailMatch);
-
   const { data: listAllMatchs } = useQuery(["LIST_ALL_MATCH"], async () => {
     const response = await requestToken({
       method: "GET",

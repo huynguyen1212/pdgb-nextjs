@@ -17,7 +17,7 @@ const API_URL = {
     CLUBS_OTHER: "/user/club/list-other",
     LIST_REQUESTS: "/user/club/list-member-request",
     REVIEW_REQUEST: "/user/club/review-request-join",
-    KICK_MEMBER: "/user/club/kick-member"
+    KICK_MEMBER: "/user/club/kick-member",
   },
   MATCHS: {
     CREATE: "/user/match/create",
@@ -28,6 +28,9 @@ const API_URL = {
 
     LIST_ALL_MATCH: "/user/match/list-all-match",
     DETAIL_MATCH: (id: any) => `/user/match/detail/${id}`,
+
+    CONFIRM_MATCH: "/user/match/update-result",
+    REPLY_CONFIRM_MATCH: "/user/match/update-result",
   },
   USER_INFO: "/user/user-info",
 };

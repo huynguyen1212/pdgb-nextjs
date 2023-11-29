@@ -23,6 +23,7 @@ import {
 import { IMAGES } from "./data/data";
 
 export default function ChallengeList() {
+  // state
   const [idPK, setIdPK] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenReject, setIsModalOpenReject] = useState(false);
@@ -47,13 +48,16 @@ export default function ChallengeList() {
     return response?.data.data[0];
   });
 
-  const { data: inDueMatch } = useQuery(["IN_DUE_MATCH"], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.MATCHS.IN_DUE_MATCH,
-    });
-    return response?.data.data[0];
-  });
+  const { data: inDueMatch, refetch: refetchWait } = useQuery(
+    ["IN_DUE_MATCH"],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.MATCHS.IN_DUE_MATCH,
+      });
+      return response?.data.data[0];
+    }
+  );
 
   const { mutate: replyMatch, isLoading } = useMutation({
     mutationFn: (data: any) =>
@@ -75,6 +79,42 @@ export default function ChallengeList() {
       setIsModalOpenReject(false);
     },
   });
+
+  const { mutate: confirmMatch, isLoading: isLoadingConfirmMatch } =
+    useMutation({
+      mutationFn: (data: any) =>
+        requestToken({
+          method: "POST",
+          url: API_URL.MATCHS.CONFIRM_MATCH,
+          data: data,
+        }),
+      onError(error: any, variables, context) {
+        message.error(error?.response?.data?.message || "Thất bại");
+      },
+      onSuccess(data, variables, context) {
+        message.success("Gửi yêu cầu xác nhận thành công");
+        refetchWait();
+        setIsModalOpenConfirm(false);
+      },
+    });
+
+  const { mutate: replyConfirmMatch, isLoading: isLoadingReplyConfirmMatch } =
+    useMutation({
+      mutationFn: (data: any) =>
+        requestToken({
+          method: "POST",
+          url: API_URL.MATCHS.REPLY_CONFIRM_MATCH,
+          data: data,
+        }),
+      onError(error: any, variables, context) {
+        message.error(error?.response?.data?.message || "Thất bại");
+      },
+      onSuccess(data, variables, context) {
+        message.success("Xác nhận thành công");
+        refetchWait();
+        setIsModalOpenConfirm(false);
+      },
+    });
 
   // modal accept
   const showModalAccept = (id: any) => {
@@ -125,6 +165,7 @@ export default function ChallengeList() {
     setIsModalOpenConfirm(false);
   };
 
+  // filter
   const onChangeDate: DatePickerProps["onChange"] = (date, dateString) => {
     console.log(date, dateString);
   };
@@ -134,11 +175,11 @@ export default function ChallengeList() {
       <div className="filter_button">
         {isBattelNow ? (
           <h3 className="title_item" style={{ marginBottom: 0 }}>
-            Trận đấu đang diễn ra
+            Trận đấu chờ cập nhật kết quả
           </h3>
         ) : (
           <div className="filter">
-            <div className="arrow_button">
+            {/* <div className="arrow_button">
               <span className="arrow_left">
                 <MdArrowBackIosNew />
               </span>
@@ -155,7 +196,7 @@ export default function ChallengeList() {
                 className="date_picker"
                 placeholder="Lọc theo ngày"
               />
-            </div>
+            </div> */}
           </div>
         )}
 
@@ -166,7 +207,7 @@ export default function ChallengeList() {
             </Button>
           ) : (
             <Button type="primary" onClick={() => setIsBattelNow(true)}>
-              Trận đang đấu
+              Trận đấu chờ cập nhật kết quả
             </Button>
           )}
         </div>
@@ -452,7 +493,7 @@ export default function ChallengeList() {
         <SModalConfirmMatch>
           <p className="question">
             Trận đấu của bạn đã kết thúc? <br />
-            Ấn <span>OK</span> để nhận coin nào !!!
+            Ấn <span>OK</span> để xác nhận nào !!!
           </p>
         </SModalConfirmMatch>
       </Modal>
