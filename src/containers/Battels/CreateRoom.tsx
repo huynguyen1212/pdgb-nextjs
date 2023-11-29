@@ -13,7 +13,7 @@ import {
 } from "antd";
 import type { RangePickerProps } from "antd/es/date-picker";
 import TextArea from "antd/lib/input/TextArea";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { useMutation, useQuery } from "react-query";
 import Image from "next/image";
 import { requestToken } from "src/api/axios";
@@ -29,6 +29,11 @@ import {
 
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { IMAGES } from "./data/data";
+
+type DisabledTime = (current: Dayjs | undefined) => {
+  disabledHours?: () => number[];
+  disabledMinutes?: (selectedHour: number) => number[];
+};
 
 export default function CreateRoom() {
   const [antForm] = Form.useForm();
@@ -85,7 +90,20 @@ export default function CreateRoom() {
 
   // function helper
   const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-    return current && current < dayjs().endOf("day");
+    return current && current <= dayjs().startOf("day");
+  };
+
+  const disabledTime: DisabledTime = (current) => {
+    return {
+      disabledHours: () => {
+        return Array.from({ length: dayjs().hour() }, (_, i) => i); // Vô hiệu hóa các giờ trong quá khứ
+      },
+      disabledMinutes: (selectedHour) => {
+        return selectedHour === dayjs().hour()
+          ? Array.from({ length: dayjs().minute() }, (_, i) => i) // Vô hiệu hóa các phút trong quá khứ nếu đã chọn giờ hiện tại
+          : [];
+      },
+    };
   };
 
   const filterOption = (
@@ -244,6 +262,7 @@ export default function CreateRoom() {
                         ]}
                       >
                         <TimePicker
+                          disabledTime={disabledTime}
                           format={"HH:mm"}
                           className="input_form"
                           placeholder="Giờ thi đấu"
