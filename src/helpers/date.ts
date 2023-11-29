@@ -70,3 +70,13 @@ export const convertToVietnameseDate = (originalDate: any) => {
 
   return vietnameseDate;
 };
+
+export function gopNgayVaGio(ngay: any, gio: any) {
+  let [nam, thang, ngayThang] = ngay.split("-");
+  let [gio24, phut, giay] = gio.split(":");
+
+  // Tạo đối tượng Date với ngày và thời gian
+  let ngayGio = new Date(nam, thang - 1, ngayThang, gio24, phut, giay);
+
+  return ngayGio;
+}

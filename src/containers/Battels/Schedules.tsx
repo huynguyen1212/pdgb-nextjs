@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Select } from "antd";
 import FullCalendar from "@fullcalendar/react";
 import allLocales from "@fullcalendar/core/locales-all";
@@ -6,56 +6,70 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import Image from "next/image";
 
 import { SSchedules } from "./style";
 import styled from "styled-components";
+import { useQuery } from "react-query";
+import { requestToken } from "src/api/axios";
+import API_URL from "src/api/url";
+import {
+  DAY_OF_WEEK,
+  convertTo12HourFormat,
+  convertToVietnameseDate,
+  gopNgayVaGio,
+} from "src/helpers/date";
+import { FaRegCalendarAlt } from "react-icons/fa";
+import { IMAGES } from "./data/data";
 
 export default function Schedules() {
-  const [events, setEvents] = useState([
-    {
-      title: "Nice event 1",
-      start: new Date().setHours(new Date().getHours() + 1),
-      resourceId: "1",
-      id: "1",
-    },
-    {
-      title: "Nice event 2",
-      start: new Date().setHours(new Date().getHours() + 2),
-      resourceId: "2",
-      id: "2",
-    },
-    {
-      title: "Nice event 3",
-      start: new Date().setHours(new Date().getHours() + 3),
-      resourceId: "3",
-      id: "3",
-    },
-    {
-      title: "Nice event 1",
-      start: new Date().setHours(new Date().getHours() + 4),
-      resourceId: "4",
-      id: "4",
-    },
-    {
-      title: "Nice event 2",
-      start: new Date().setHours(new Date().getHours() + 5),
-      resourceId: "5",
-      id: "5",
-    },
-    {
-      title: "Nice event 3",
-      start: new Date().setHours(new Date().getHours() + 6),
-      resourceId: "6",
-      id: "6",
-    },
-  ]);
+  // state
+  const [events, setEvents] = useState([]);
+  const [idMatch, setIdMatch] = useState<any>(-1);
+
+  // api
+  const { data: detailMatch } = useQuery(
+    ["DETAIL_MATCH", idMatch],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.MATCHS.DETAIL_MATCH(idMatch),
+      });
+      return response?.data.data;
+    }
+  );
+
+  console.log("detailMatch: ", detailMatch);
+
+  const { data: listAllMatchs } = useQuery(["LIST_ALL_MATCH"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.MATCHS.LIST_ALL_MATCH,
+    });
+    return response?.data.data;
+  });
+
+  useEffect(() => {
+    if (listAllMatchs && listAllMatchs.length > 0) {
+      const data = listAllMatchs.map((item: any) => {
+        return {
+          title: item.sports_discipline.name,
+          start: new Date(gopNgayVaGio(item.match_date, item.match_time)),
+          resourceId: item.id,
+          id: item.id,
+        };
+      });
+
+      setEvents(data);
+    }
+  }, [listAllMatchs]);
 
   // modal event
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = (arg: any) => {
     setIsModalOpen(true);
-    console.log("arg: ", arg.event.id);
+    setIdMatch(arg.event.id);
   };
 
   const handleCancel = () => {
@@ -98,11 +112,7 @@ export default function Schedules() {
               },
               {
                 value: "2",
-                label: "Người khác 1",
-              },
-              {
-                value: "3",
-                label: "Người khác 2",
+                label: "Tất cả",
               },
             ]}
           />
@@ -143,11 +153,196 @@ export default function Schedules() {
         centered
         open={isModalOpen}
         onCancel={handleCancel}
+        width={1000}
+        footer={null}
       >
-        <SModalEvent>Hi</SModalEvent>
+        <SModalEvent>
+          {detailMatch && (
+            <div className="list_item">
+              <div className="time_image">
+                <div className="time">
+                  <p className="month">
+                    {DAY_OF_WEEK[new Date(detailMatch.match_date).getDay()]}
+                  </p>
+                  <p className="date">
+                    {new Date(detailMatch.match_date).getDate()}
+                  </p>
+                </div>
+
+                <div className="image">
+                  <Image
+                    src={IMAGES[Number(detailMatch.sports_discipline.id) - 1]}
+                    alt=""
+                    width={100}
+                  />
+                </div>
+              </div>
+
+              <div className="content">
+                <p className="content_date">
+                  <FaRegCalendarAlt color="#0a2664" size={17} />
+                  <span>{`${convertToVietnameseDate(
+                    detailMatch.match_date
+                  )} | ${convertTo12HourFormat(detailMatch.match_time)}`}</span>
+                </p>
+
+                <p className="content_name_category">
+                  Bộ Môn:
+                  <span className="uppercase">
+                    {detailMatch.sports_discipline.name}
+                  </span>
+                </p>
+
+                <p className="content_name_category">
+                  Đội 1:
+                  <span className="uppercase">
+                    {detailMatch.team_ones
+                      .map((i: any) => `${i.name}`)
+                      .join(", ")}
+                  </span>
+                </p>
+
+                {detailMatch.team_twos.length > 0 && (
+                  <p className="content_name_category">
+                    Đội 2:
+                    <span className="uppercase">
+                      {detailMatch.team_twos
+                        .map((i: any) => `${i.name}`)
+                        .join(", ")}
+                    </span>
+                  </p>
+                )}
+
+                <p className="content_name_category">
+                  Thời gian: <span>{detailMatch.duration_minutes} phút</span>
+                </p>
+
+                <p className="content_name_category">
+                  Địa điểm: <span>{detailMatch.venue}</span>
+                </p>
+
+                <p className="content_coin">{detailMatch.coin} coin</p>
+
+                <p className="content_des">{detailMatch.description}</p>
+              </div>
+            </div>
+          )}
+        </SModalEvent>
       </Modal>
     </SSchedules>
   );
 }
 
-const SModalEvent = styled.div``;
+const SModalEvent = styled.div`
+  .list_item {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+
+    .time_image {
+      .time {
+        text-align: center;
+        color: #0a2664;
+        margin-bottom: 50px;
+
+        .month {
+          font-size: 14px;
+          line-height: 17px;
+          font-weight: 600;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          margin-bottom: 0;
+        }
+
+        .date {
+          font-size: 28px;
+          line-height: 35px;
+          font-weight: 600;
+        }
+      }
+
+      .image {
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .content {
+      .content_date {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+
+        span {
+          font-size: 14px;
+          line-height: 19px;
+          font-weight: 400;
+          color: #94979f;
+        }
+      }
+
+      .content_name_category {
+        color: #0a2664;
+        font-size: 14px;
+        margin-bottom: 5px;
+
+        span {
+          font-size: 17px;
+          margin-left: 5px;
+          font-weight: 600;
+        }
+
+        .uppercase {
+          text-transform: uppercase;
+        }
+      }
+
+      .content_coin {
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        color: #ffc107;
+        margin-bottom: 5px;
+      }
+
+      .content_name_team {
+        color: #0a2664;
+        font-size: 14px;
+
+        span {
+          text-transform: uppercase;
+          font-size: 15px;
+          font-weight: 600;
+          margin-left: 5px;
+        }
+      }
+
+      .content_des {
+        font-size: 17px;
+        line-height: 27px;
+        font-weight: 400;
+        color: #757984;
+        margin: 10px 0;
+      }
+    }
+
+    .status {
+      display: flex;
+      align-items: start;
+      justify-content: flex-end;
+      width: 100%;
+
+      .ant-tag {
+        font-size: 13px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 30px;
+        padding: 0 15px;
+      }
+    }
+  }
+`;

@@ -25,6 +25,9 @@ const API_URL = {
     LIST_MATCHS: "/user/match/list-match",
     IN_DUE_MATCH: "/user/match/in-due",
     REPLY_PK: (id: any) => `/user/match/reply-pk/${id}`,
+
+    LIST_ALL_MATCH: "/user/match/list-all-match",
+    DETAIL_MATCH: (id: any) => `/user/match/detail/${id}`,
   },
   USER_INFO: "/user/user-info",
 };
