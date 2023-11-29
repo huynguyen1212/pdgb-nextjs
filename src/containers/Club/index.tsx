@@ -22,7 +22,13 @@ export default function Club() {
     {
       key: "1",
       label: "Danh sách thành viên",
-      children: <Member data={listMembers} isAdmin={isAdmin} />,
+      children: (
+        <Member
+          data={listMembers}
+          isAdmin={isAdmin}
+          manager_id={infoClub.manager_id}
+        />
+      ),
     },
     {
       key: "2",
@@ -66,7 +72,7 @@ export default function Club() {
         url: API_URL.CLUBS.LIST_REQUESTS,
       }),
     onSuccess(data) {
-      setListRequests(data.data.data);  
+      setListRequests(data.data.data);
     },
   });
 
@@ -134,7 +140,11 @@ export default function Club() {
           <div className="item-info">
             <p className="heading">
               Thành viên:
-              <span className="info">{Number(infoClub?.members?.length) + 1}</span>
+              <span className="info">
+                {infoClub.members && infoClub.members.length
+                  ? Number(infoClub.members.length) + 1
+                  : 1}
+              </span>
             </p>
           </div>
 

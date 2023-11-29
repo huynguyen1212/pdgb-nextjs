@@ -51,7 +51,7 @@ export default function CardTeam({
                 </>
               ) : (
                 <>
-                  <div className="card__score">+{members}</div>
+                  <div className="card__score">+{Number(members - 2)}</div>
                   <div className="card__acounts">
                     <IconFirstMember />
                   </div>
