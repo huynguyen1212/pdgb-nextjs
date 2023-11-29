@@ -6,13 +6,13 @@ import { useMutation, useQueryClient } from "react-query";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
 
-export default function Request({ data }: any) {
+export default function Request({ data, setTrigger, trigger }: any) {
   const queryClient = useQueryClient();
   const [dataSource, setDataSource] = useState<any>([]);
   const [isOpenModalAccept, setIsOpenModalAccept] = useState<boolean>(false);
   const [isOpenModalReject, setIsOpenModalReject] = useState<boolean>(false);
 
-  const {  mutateAsync } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: (data: any) =>
       requestToken({
         method: "POST",
@@ -25,6 +25,7 @@ export default function Request({ data }: any) {
     onSuccess() {
       message.success("Duyệt thành công!", 1.5);
       queryClient.invalidateQueries("getListRequests");
+      setTrigger(!trigger);
     },
   });
 
@@ -50,7 +51,7 @@ export default function Request({ data }: any) {
   };
 
   const handleReject = (id: number) => {
-    mutateAsync({ status: 3, request_id: id});
+    mutateAsync({ status: 3, request_id: id });
     handleCloseModalReject();
   };
 

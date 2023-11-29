@@ -48,7 +48,7 @@ export default function Home() {
 
       {section && !check && (
         <>
-          {infoUser.request_club ? (
+          {infoUser && infoUser?.request_club ? (
             <>
               <SFormRequestCreateClub>
                 <Container>

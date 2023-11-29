@@ -10,13 +10,26 @@ import Sport from "./Sport";
 import Request from "./Request";
 
 export default function Club() {
-  const [infoClub, setInfoClub] = useState<any>({});
   const [listMembers, setListMember] = useState<any>([]);
   const [listTeams, setListTeam] = useState<any>([]);
   const [listSports, setListSport] = useState<any>([]);
   const [listRequests, setListRequests] = useState<any>([]);
   const [infoUser, setInfoUser] = useState<any>({});
   const [isAdmin, setIsAdmin] = useState<boolean>(true);
+  const [trigger, setTrigger] = useState(false);
+
+  const { data: infoClub, refetch } = useQuery(["getListClubs"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.CLUBS.DETAIL,
+    });
+    return response?.data.data[0];
+  });
+
+  useEffect(() => {
+    refetch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trigger]);
 
   const tabsMember: TabsProps["items"] = [
     {
@@ -26,7 +39,7 @@ export default function Club() {
         <Member
           data={listMembers}
           isAdmin={isAdmin}
-          manager_id={infoClub.manager_id}
+          manager_id={infoClub?.manager_id}
         />
       ),
     },
@@ -47,22 +60,16 @@ export default function Club() {
     {
       key: "0",
       label: "Danh sách request",
-      children: <Request data={listRequests} />,
+      children: (
+        <Request
+          data={listRequests}
+          setTrigger={setTrigger}
+          trigger={trigger}
+        />
+      ),
     },
     ...tabsMember,
   ];
-
-  useQuery({
-    queryKey: ["getListClubs"],
-    queryFn: () =>
-      requestToken({
-        method: "GET",
-        url: API_URL.CLUBS.DETAIL,
-      }),
-    onSuccess(data) {
-      setInfoClub(data.data.data[0]);
-    },
-  });
 
   useQuery({
     queryKey: ["getListRequests"],
@@ -90,13 +97,13 @@ export default function Club() {
 
   useEffect(() => {
     if (!infoClub) return;
-    setListMember(infoClub.members);
-    setListTeam(infoClub.teams);
-    setListSport(infoClub.sports_disciplines);
+    setListMember(infoClub?.members);
+    setListTeam(infoClub?.teams);
+    setListSport(infoClub?.sports_disciplines);
   }, [infoClub]);
 
   useEffect(() => {
-    if (infoUser.id === infoClub.manager_id) {
+    if (infoUser.id === infoClub?.manager_id) {
       setIsAdmin(true);
     } else {
       setIsAdmin(false);
@@ -141,8 +148,8 @@ export default function Club() {
             <p className="heading">
               Thành viên:
               <span className="info">
-                {infoClub.members && infoClub.members.length
-                  ? Number(infoClub.members.length) + 1
+                {infoClub?.members && infoClub?.members.length
+                  ? Number(infoClub?.members.length) + 1
                   : 1}
               </span>
             </p>
@@ -153,7 +160,7 @@ export default function Club() {
               Bộ môn:
               <span className="info">
                 {infoClub?.sports_disciplines &&
-                  infoClub.sports_disciplines
+                  infoClub?.sports_disciplines
                     .map((sport: any) => sport.name)
                     .join(", ")}
               </span>
