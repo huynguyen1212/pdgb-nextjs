@@ -62,6 +62,7 @@ export default function ListClubs() {
                   sports_disciplines={club.sports_disciplines}
                   request_join_status={club.request_join_status}
                   request_id={club.request_id}
+                  manager={club.manager}
                 />
               </Col>
             ))}

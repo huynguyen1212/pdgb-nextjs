@@ -8,9 +8,10 @@ import API_URL from "src/api/url";
 export interface PropsType {
   data: any;
   isAdmin: boolean;
+  manager_id: number;
 }
 
-export default function Member({ data, isAdmin }: PropsType) {
+export default function Member({ data, isAdmin, manager_id }: PropsType) {
   const queryClient = useQueryClient();
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const [idMember, setIdMember] = useState<any>();
@@ -68,7 +69,7 @@ export default function Member({ data, isAdmin }: PropsType) {
           itemLayout="horizontal"
           dataSource={data}
           renderItem={(item: any, index) => (
-            <List.Item actions={isAdmin ? actionsAdmin(item.id) : []}>
+            <List.Item actions={isAdmin || manager_id !== item.id ? actionsAdmin(item.id) : []}>
               <Skeleton avatar title={false} loading={false} active>
                 <List.Item.Meta
                   avatar={

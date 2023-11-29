@@ -21,6 +21,7 @@ export interface Props {
   sports_disciplines: any;
   request_join_status: any;
   request_id: any;
+  manager: string;
 }
 
 export default function CardClub({
@@ -34,6 +35,7 @@ export default function CardClub({
   sports_disciplines = [],
   request_join_status,
   request_id,
+  manager,
 }: Props) {
   const queryClient = useQueryClient();
   const [form] = Form.useForm();
@@ -159,6 +161,10 @@ export default function CardClub({
             </div> */}
 
             {/* <div className="card__status">Teams: {teams_count}</div> */}
+            <div className="card__status card__info">
+              Admin:
+              <span>{manager}</span>
+            </div>
 
             <div className="card__status card__info">
               Bộ môn thi đấu:
