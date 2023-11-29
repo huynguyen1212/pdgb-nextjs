@@ -151,12 +151,12 @@ export default function CardClub({
 
             <div className="card__title">{name}</div>
 
-            <div className="card__status card__info">
+            {/* <div className="card__status card__info">
               Trạng thái:
               <span className={`status ${status === 1 ? "active" : "off"}`}>
                 {status === 1 ? "Đang hoạt động" : "Ngừng hoạt động"}
               </span>
-            </div>
+            </div> */}
 
             {/* <div className="card__status">Teams: {teams_count}</div> */}
 
@@ -167,7 +167,7 @@ export default function CardClub({
 
             {description && (
               <div className="card__subtitle card__info">
-                Tiểu sử: <span>{description}</span>
+                Slogan: <span>{description}</span>
               </div>
             )}
 

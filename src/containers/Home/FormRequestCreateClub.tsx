@@ -55,11 +55,13 @@ export default function FormRequestCreateClub() {
     onSuccess() {
       message.success("Đã gửi request tạo club!", 1.5);
       queryClient.invalidateQueries("listOtherClubs");
+      queryClient.invalidateQueries("getUserInfo");
     },
   });
 
   const onSubmitRequestForm = (values: any) => {
     mutateAsync(values);
+    handleCloseModal();
     form.resetFields();
   };
 
