@@ -11,7 +11,6 @@ import Image from "next/image";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 import { SChallengeList, SModalAccept, SModalConfirmMatch } from "./style";
-import bilac from "src/assets/image/bi-lac.jpeg";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { requestToken } from "src/api/axios";
@@ -44,6 +43,14 @@ export default function ChallengeList() {
     const response = await requestToken({
       method: "GET",
       url: API_URL.CLUBS.DETAIL,
+    });
+    return response?.data.data[0];
+  });
+
+  const { data: inDueMatch } = useQuery(["IN_DUE_MATCH"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.MATCHS.IN_DUE_MATCH,
     });
     return response?.data.data[0];
   });
@@ -168,55 +175,109 @@ export default function ChallengeList() {
       {isBattelNow ? (
         <div className="list_pk">
           <div className="list_main">
-            <div className="list_item">
-              <div className="time_image">
-                <div className="time">
-                  <p className="month">Fri</p>
-                  <p className="date">24</p>
-                </div>
+            {inDueMatch &&
+              inDueMatch.length > 0 &&
+              inDueMatch.map((item: any) => {
+                return (
+                  <div className="list_item" key={item.id}>
+                    <div className="time_image">
+                      <div className="time">
+                        <p className="month">
+                          {DAY_OF_WEEK[new Date(item.match_date).getDay()]}
+                        </p>
+                        <p className="date">
+                          {new Date(item.match_date).getDate()}
+                        </p>
+                      </div>
 
-                <div className="image">
-                  <Image src={bilac} alt="" width={100} />
-                </div>
-              </div>
+                      <div className="image">
+                        <Image
+                          src={IMAGES[Number(item.sports_discipline.id) - 1]}
+                          alt=""
+                          width={100}
+                        />
+                      </div>
+                    </div>
 
-              <div className="content">
-                <p className="content_date">
-                  <FaRegCalendarAlt color="#0a2664" size={17} />
-                  <span>Jul 10, 2023 @ 10:30 am</span>
-                </p>
+                    <div className="content">
+                      <p className="content_date">
+                        <FaRegCalendarAlt color="#0a2664" size={17} />
+                        <span>{`${convertToVietnameseDate(
+                          item.match_date
+                        )} | ${convertTo12HourFormat(item.match_time)}`}</span>
+                      </p>
 
-                <p className="content_name_team">
-                  Đối thủ: <span>PDGB</span>
-                </p>
+                      <p className="content_name_category">
+                        Bộ Môn:
+                        <span className="uppercase">
+                          {item.sports_discipline.name}
+                        </span>
+                      </p>
 
-                <p className="content_name_category">
-                  Bộ Môn: <span>Bilac</span>
-                </p>
+                      <p className="content_name_category">
+                        Đội bạn:
+                        <span className="uppercase">
+                          {item.team_ones
+                            .map((i: any) => `${i.name}`)
+                            .join(", ")}
+                        </span>
+                      </p>
 
-                <p className="content_des">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea
-                  repellendus error dignissimos minima praesentium, eveniet, rem
-                  quas molestias repudiandae expedita assumenda voluptatibus
-                  numquam pariatur fugiat quis, facere itaque! Ipsum, fugiat.
-                </p>
+                      {item.team_twos.length > 0 && (
+                        <p className="content_name_category">
+                          Đội mình:
+                          <span className="uppercase">
+                            {item.team_twos
+                              .map((i: any) => `${i.name}`)
+                              .join(", ")}
+                          </span>
+                        </p>
+                      )}
 
-                <p className="content_coin">80 coin</p>
-              </div>
+                      <p className="content_name_category">
+                        Thời gian: <span>{item.duration_minutes} phút</span>
+                      </p>
 
-              <div className="wrap_buttons">
-                <div className="buttons">
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setIsModalOpenConfirm(true);
-                    }}
-                  >
-                    Cập nhật trạng thái
-                  </Button>
-                </div>
-              </div>
-            </div>
+                      <p className="content_name_category">
+                        Địa điểm: <span>{item.venue}</span>
+                      </p>
+
+                      <p className="content_coin">{item.coin} coin</p>
+
+                      <p className="content_des">
+                        Đối thủ nói là: {item.description}
+                      </p>
+                    </div>
+
+                    {item.status === 1 ? (
+                      <div className="wrap_buttons">
+                        <div className="buttons">
+                          <Button
+                            type="primary"
+                            onClick={() => showModalAccept(item.id)}
+                          >
+                            Chiến luôn
+                          </Button>
+
+                          <Button
+                            type="primary"
+                            onClick={() => showModalReject(item.id)}
+                            danger
+                          >
+                            Chơi bời gì
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="status">
+                        <Tag color={item.status === 2 ? "green" : "red"}>
+                          {item.status_name}
+                        </Tag>
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
           </div>
         </div>
       ) : (

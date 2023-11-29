@@ -78,6 +78,7 @@ export default function CreateRoom() {
     onSuccess(data, variables, context) {
       message.success("Tạo phòng thành công!");
       antForm.resetFields();
+      setIsCreateNewMatch(false);
       refetch();
     },
   });
@@ -118,7 +119,7 @@ export default function CreateRoom() {
             danger
             onClick={() => setIsCreateNewMatch(false)}
           >
-            Hủy
+            Hủy tạo Match
           </Button>
         ) : (
           <Button type="primary" onClick={() => setIsCreateNewMatch(true)}>
