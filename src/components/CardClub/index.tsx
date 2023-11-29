@@ -62,10 +62,6 @@ export default function CardClub({
     onSuccess(data, variables, context) {
       handleCloseModalJoin();
       message.success("Đã gửi request join club!", 1.5);
-      // message.info(
-      //   "Các request join club sau đó sẽ bị huỷ vì bạn chỉ được đồng ý tham gia 1 club!",
-      //   4
-      // );
       queryClient.invalidateQueries("listOtherClubs");
       setIsRequested(true);
     },

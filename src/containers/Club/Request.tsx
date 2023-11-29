@@ -20,7 +20,6 @@ export default function Request({ data }: any) {
         data: data,
       }),
     onError(error: any) {
-      console.log(error?.response?.data, "error")
       message.error(error?.response?.data?.error || "Thất bại");
     },
     onSuccess() {
@@ -89,7 +88,6 @@ export default function Request({ data }: any) {
       dataIndex: "id",
       render: (_, record) => (
         <>
-          {console.log("111212", record.id)}
           <Space size="small">
             <Button
               className="capitalize"

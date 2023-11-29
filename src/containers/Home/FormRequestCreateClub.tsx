@@ -7,13 +7,13 @@ import {
   InputNumber,
   Select,
   SelectProps,
+  Modal,
 } from "antd";
 import { Container } from "styled-bootstrap-grid";
 import { SFormRequestCreateClub } from "./style";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
-import { useMutation, useQuery } from "react-query";
-import Loading from "src/components/Loading";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const { TextArea } = Input;
 
@@ -32,6 +32,7 @@ type ListSportType = {
 };
 
 export default function FormRequestCreateClub() {
+  const queryClient = useQueryClient();
   const [form] = Form.useForm();
   useQuery({
     queryKey: ["getListSports"],
@@ -45,18 +46,15 @@ export default function FormRequestCreateClub() {
     },
   });
 
-  const { isLoading, mutateAsync } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: (data) =>
       requestToken({ method: "POST", url: API_URL.CREATE_CLUB, data: data }),
-    onError(error: any, variables, context) {
+    onError(error: any) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
-    onSuccess(data, variables, context) {
+    onSuccess() {
       message.success("Đã gửi request tạo club!", 1.5);
-      message.info(
-        "Các request join club trước đó sẽ bị huỷ khi bạn tạo club!",
-        4
-      );
+      queryClient.invalidateQueries("listOtherClubs");
     },
   });
 
@@ -71,6 +69,11 @@ export default function FormRequestCreateClub() {
 
   const [listSports, setListSports] = useState<ListSportType[]>([]);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
+  const handleOpenModal = () => setIsOpenModal(true);
+
+  const handleCloseModal = () => setIsOpenModal(false);
 
   useEffect(() => {
     const optionsSelect: SelectProps["options"] = [];
@@ -184,20 +187,27 @@ export default function FormRequestCreateClub() {
             <Form.Item>
               <Button
                 type="primary"
-                htmlType="submit"
                 className="btn-create"
-                disabled={isLoading}
+                onClick={handleOpenModal}
               >
                 Gửi
-                {isLoading && (
-                  <div className="loader">
-                    <Loading />
-                  </div>
-                )}
               </Button>
             </Form.Item>
           </Form>
         </div>
+        <Modal
+          title="Xác nhận tạo club"
+          centered
+          open={isOpenModal}
+          onCancel={handleCloseModal}
+          okText="Tạo"
+          cancelText="Đóng"
+          onOk={form.submit}
+        >
+          <p className="my-3">
+            Các request join club trước đó sẽ bị huỷ khi bạn tạo club!
+          </p>
+        </Modal>
       </Container>
     </SFormRequestCreateClub>
   );
