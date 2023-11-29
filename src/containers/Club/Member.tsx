@@ -13,18 +13,25 @@ export interface PropsType {
 export default function Member({ data, isAdmin }: PropsType) {
   const queryClient = useQueryClient();
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
+  const [idMember, setIdMember] = useState<any>();
+  console.log(idMember);
 
   const handleCloseModalDelete = () => {
     setIsOpenModalDelete(false);
   };
 
-  const handleOpenModalDelete = () => {
+  const handleOpenModalDelete = (id: any) => {
     setIsOpenModalDelete(true);
+    setIdMember(id);
   };
 
   const { isLoading, mutateAsync } = useMutation({
     mutationFn: (data: any) =>
-      requestToken({ method: "POST", url: API_URL.CLUBS.KICK_MEMBER, data: data }),
+      requestToken({
+        method: "POST",
+        url: API_URL.CLUBS.KICK_MEMBER,
+        data: data,
+      }),
     onError(error: any) {
       message.error(error?.response?.data?.message || "Thất bại");
     },
@@ -39,19 +46,20 @@ export default function Member({ data, isAdmin }: PropsType) {
     mutateAsync({ member_id: id });
   };
 
-  const actionsAdmin = [
-    <Button
-      key="delete"
-      className="capitalize"
-      type="primary"
-      danger
-      size="small"
-      onClick={handleOpenModalDelete}
-    >
-      Xóa
-    </Button>,
-  ];
-
+  const actionsAdmin = (id: any) => {
+    return [
+      <Button
+        key="delete"
+        className="capitalize"
+        type="primary"
+        danger
+        size="small"
+        onClick={() => handleOpenModalDelete(id)}
+      >
+        Xóa
+      </Button>,
+    ];
+  };
   return (
     <SMembers>
       {data && data.length > 0 && (
@@ -60,7 +68,7 @@ export default function Member({ data, isAdmin }: PropsType) {
           itemLayout="horizontal"
           dataSource={data}
           renderItem={(item: any, index) => (
-            <List.Item actions={isAdmin ? actionsAdmin : []}>
+            <List.Item actions={isAdmin ? actionsAdmin(item.id) : []}>
               <Skeleton avatar title={false} loading={false} active>
                 <List.Item.Meta
                   avatar={
@@ -70,22 +78,23 @@ export default function Member({ data, isAdmin }: PropsType) {
                   description={item.email}
                 />
               </Skeleton>
-              <Modal
-                title="Xoá thành viên"
-                centered
-                open={isOpenModalDelete}
-                onOk={() => handleDeleteMember(item.id)}
-                onCancel={handleCloseModalDelete}
-                okText="Xoá"
-                cancelText="Đóng"
-                className="text-center"
-              >
-                <p className="my-3">Xác nhận xoá thành viên ra khỏi club</p>
-              </Modal>
             </List.Item>
           )}
         />
       )}
+
+      <Modal
+        title="Xoá thành viên"
+        centered
+        open={isOpenModalDelete}
+        onOk={() => handleDeleteMember(idMember)}
+        onCancel={handleCloseModalDelete}
+        okText="Xoá"
+        cancelText="Đóng"
+        className="text-center"
+      >
+        <p className="my-3">Xác nhận xoá thành viên ra khỏi club</p>
+      </Modal>
     </SMembers>
   );
 }
