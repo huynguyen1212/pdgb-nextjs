@@ -82,8 +82,6 @@ export default function Club() {
     },
   });
 
-  console.log(isAdmin, "isAdmin")
-
   useEffect(() => {
     if (!infoClub) return;
     setListMember(infoClub.members);
@@ -136,7 +134,7 @@ export default function Club() {
           <div className="item-info">
             <p className="heading">
               Thành viên:
-              <span className="info">{infoClub?.members?.length}</span>
+              <span className="info">{Number(infoClub?.members?.length) + 1}</span>
             </p>
           </div>
 

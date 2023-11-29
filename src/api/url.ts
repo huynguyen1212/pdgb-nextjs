@@ -17,6 +17,7 @@ const API_URL = {
     CLUBS_OTHER: "/user/club/list-other",
     LIST_REQUESTS: "/user/club/list-member-request",
     REVIEW_REQUEST: "/user/club/review-request-join",
+    KICK_MEMBER: "/user/club/kick-member"
   },
   MATCHS: {
     CREATE: "/user/match/create",

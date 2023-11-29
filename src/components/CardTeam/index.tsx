@@ -31,15 +31,36 @@ export default function CardTeam({
         <div className="card__inner">
           <div className="card__wrapper">
             <div className="card___wrapper-acounts">
-              <div className="card__score">+{members}</div>
+              {members < 3 ? (
+                <>
+                  {members === 1 ? (
+                    <div className="card__acounts">
+                      <IconFirstMember />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="card__acounts">
+                        <IconFirstMember />
+                      </div>
 
-              <div className="card__acounts">
-                <IconFirstMember />
-              </div>
+                      <div className="card__acounts">
+                        <IconSecondMember />
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="card__score">+{members}</div>
+                  <div className="card__acounts">
+                    <IconFirstMember />
+                  </div>
 
-              <div className="card__acounts">
-                <IconSecondMember />
-              </div>
+                  <div className="card__acounts">
+                    <IconSecondMember />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
