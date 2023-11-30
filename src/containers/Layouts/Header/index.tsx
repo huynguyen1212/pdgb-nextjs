@@ -19,6 +19,7 @@ import { useDetectWindowSize } from "src/hooks/useDetectWindowSize";
 import { useQuery } from "react-query";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
+import Image from "next/image";
 interface Props {
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -250,6 +251,9 @@ function Header({ showMenu, setShowMenu }: Props) {
                   onClick={() => signOut({ callbackUrl: "/" })}
                 >
                   <span>Logout</span>
+                  <span className="email">
+                    {section && section.token.email}
+                  </span>
                 </button>
               ) : (
                 <button className="button_login" onClick={() => signIn()}>

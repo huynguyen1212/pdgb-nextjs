@@ -297,10 +297,28 @@ export const StylesHeader = styled.div`
             color: #223ea1;
             border-radius: 2px;
             transition: all 0.2s;
+            position: relative;
+            z-index: 1;
+
+            .email {
+              position: absolute;
+              top: 34px;
+              right: 0;
+              z-index: 2;
+              padding: 5px 10px;
+              background: white;
+              border-radius: 3px;
+              display: none;
+            }
 
             &:hover {
               background-color: #223ea1;
               color: #ffc107 !important;
+
+              .email {
+                display: block;
+                color: #223ea1;
+              }
             }
           }
         }

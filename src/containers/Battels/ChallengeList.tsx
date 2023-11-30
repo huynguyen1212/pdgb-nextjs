@@ -21,7 +21,7 @@ import {
   convertTo12HourFormat,
   convertToVietnameseDate,
 } from "src/helpers/date";
-import { IMAGES } from "./data/data";
+import { IMAGES, challenge_status } from "./data/data";
 
 export default function ChallengeList() {
   // state
@@ -72,6 +72,14 @@ export default function ChallengeList() {
       return response?.data.data;
     }
   );
+
+  const { data: userInfo } = useQuery(["USER_INFO"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.USER_INFO,
+    });
+    return response?.data.data;
+  });
 
   const { mutate: replyMatch, isLoading } = useMutation({
     mutationFn: (data: any) =>
@@ -200,9 +208,7 @@ export default function ChallengeList() {
   // modal confirm match
   const showModalReplyConfirm = (id: any) => {
     setIdPKConfirm(id);
-    setIsModalOpenConfirm(true);
-    setResultText("");
-    setWinLose(undefined);
+    setIsModalOpenReplyConfirm(true);
   };
 
   const handleOkReplyConfirm = () => {
@@ -336,52 +342,52 @@ export default function ChallengeList() {
                       </p>
                     </div>
 
-                    {item.status === 1 ? (
-                      <div className="wrap_buttons">
-                        <div className="buttons">
-                          <Button
-                            type="primary"
-                            onClick={() => showModalAccept(item.id)}
-                          >
-                            Chiến luôn
-                          </Button>
+                    <div className="wrap_buttons">
+                      <div className="buttons">
+                        {item.result ? (
+                          <div>
+                            {item.team_ones.some(
+                              (i: any) => i.id === item.result.creator_id
+                            ) &&
+                            item.team_twos.some(
+                              (i: any) => i.id === userInfo.id
+                            ) ? (
+                              <Button
+                                type="primary"
+                                onClick={() => showModalReplyConfirm(item.id)}
+                              >
+                                Xác nhận kết quả lần 2
+                              </Button>
+                            ) : (
+                              <></>
+                            )}
 
+                            {item.team_twos.some(
+                              (i: any) => i.id === item.result.creator_id
+                            ) &&
+                            item.team_ones.some(
+                              (i: any) => i.id === userInfo.id
+                            ) ? (
+                              <Button
+                                type="primary"
+                                onClick={() => showModalReplyConfirm(item.id)}
+                              >
+                                Xác nhận kết quả lần 2
+                              </Button>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                        ) : (
                           <Button
                             type="primary"
-                            onClick={() => showModalReject(item.id)}
-                            danger
+                            onClick={() => showModalConfirm(item.id)}
                           >
-                            Chơi bời gì
+                            Xác nhận kết quả lần 1
                           </Button>
-                        </div>
+                        )}
                       </div>
-                    ) : item.status === 4 ? (
-                      <div className="wrap_buttons">
-                        <div className="buttons">
-                          {item.result ? (
-                            <Button
-                              type="primary"
-                              onClick={() => showModalReplyConfirm(item.id)}
-                            >
-                              Xác nhận kết quả lần 2
-                            </Button>
-                          ) : (
-                            <Button
-                              type="primary"
-                              onClick={() => showModalConfirm(item.id)}
-                            >
-                              Xác nhận kết quả lần 1
-                            </Button>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <p className="status">
-                        <Tag color={item.status === 2 ? "green" : "red"}>
-                          {item.status_name}
-                        </Tag>
-                      </p>
-                    )}
+                    </div>
                   </div>
                 );
               })}
@@ -466,7 +472,7 @@ export default function ChallengeList() {
                       </p>
                     </div>
 
-                    {item.status === 1 ? (
+                    {item.challenge_status === 1 ? (
                       <div className="wrap_buttons">
                         <div className="buttons">
                           <Button
@@ -490,8 +496,10 @@ export default function ChallengeList() {
                       </div>
                     ) : (
                       <p className="status">
-                        <Tag color={item.status === 2 ? "green" : "red"}>
-                          {item.status_name}
+                        <Tag
+                          color={item.challenge_status === 2 ? "green" : "red"}
+                        >
+                          {challenge_status[Number(item.challenge_status) - 1]}
                         </Tag>
                       </p>
                     )}

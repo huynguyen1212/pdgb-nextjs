@@ -93,7 +93,7 @@ export default function Schedules() {
     <SSchedules>
       <div className="filter">
         <div className="mb-[30px]">
-          <label className="labe-form">Lịch thi đấu của:</label>
+          {/* <label className="labe-form">Lịch thi đấu của:</label>
 
           <Select
             className="input_form"
@@ -113,7 +113,7 @@ export default function Schedules() {
                 label: "Tất cả",
               },
             ]}
-          />
+          /> */}
         </div>
       </div>
 
