@@ -40,6 +40,7 @@ export default function CreateRoom() {
 
   // state
   const [isCreateNewMatch, setIsCreateNewMatch] = useState(false);
+  const [sportId, setSportId] = useState<any>();
 
   // api
   const { data: listMatchs, refetch } = useQuery(["LIST_MATCHS"], async () => {
@@ -58,14 +59,6 @@ export default function CreateRoom() {
     return response?.data.data;
   });
 
-  const { data: clubDetail } = useQuery(["CLUBS_DETAIL"], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.CLUBS.DETAIL,
-    });
-    return response?.data.data[0];
-  });
-
   const { data: clubsOther } = useQuery(["CLUBS_OTHER"], async () => {
     const response = await requestToken({
       method: "GET",
@@ -73,6 +66,25 @@ export default function CreateRoom() {
     });
     return response?.data.data;
   });
+
+  const { data: userInfo } = useQuery(["getUserInfo"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.USER_INFO,
+    });
+    return response?.data.data;
+  });
+
+  const { data: listMemberWithSport } = useQuery(
+    ["LIST_MEMBER_WITH_SPORT", sportId],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.CLUBS.LIST_MEMBER_WITH_SPORT(sportId),
+      });
+      return response?.data.data;
+    }
+  );
 
   const { mutate: createRoom, isLoading } = useMutation({
     mutationFn: (data) =>
@@ -94,16 +106,22 @@ export default function CreateRoom() {
   };
 
   const disabledTime: DisabledTime = (current) => {
-    return {
-      disabledHours: () => {
-        return Array.from({ length: dayjs().hour() }, (_, i) => i); // Vô hiệu hóa các giờ trong quá khứ
-      },
-      disabledMinutes: (selectedHour) => {
-        return selectedHour === dayjs().hour()
-          ? Array.from({ length: dayjs().minute() }, (_, i) => i) // Vô hiệu hóa các phút trong quá khứ nếu đã chọn giờ hiện tại
-          : [];
-      },
-    };
+    if (
+      new Date(antForm.getFieldsValue().match_date).getDate() ===
+      new Date().getDate()
+    ) {
+      return {
+        disabledHours: () => {
+          return Array.from({ length: dayjs().hour() }, (_, i) => i); // Vô hiệu hóa các giờ trong quá khứ
+        },
+        disabledMinutes: (selectedHour) => {
+          return selectedHour === dayjs().hour()
+            ? Array.from({ length: dayjs().minute() }, (_, i) => i) // Vô hiệu hóa các phút trong quá khứ nếu đã chọn giờ hiện tại
+            : [];
+        },
+      };
+    }
+    return {};
   };
 
   const filterOption = (
@@ -177,6 +195,7 @@ export default function CreateRoom() {
                           showSearch
                           placeholder="Môn thi đấu"
                           optionFilterProp="children"
+                          onChange={(value) => setSportId(value)}
                           filterOption={filterOption}
                           options={
                             listSports &&
@@ -213,12 +232,16 @@ export default function CreateRoom() {
                           allowClear
                           style={{ width: "100%" }}
                           placeholder="Thành viên trong đội"
-                          options={clubDetail?.members.map((item: any) => {
-                            return {
-                              label: item.name,
-                              value: item.id,
-                            };
-                          })}
+                          options={
+                            listMemberWithSport &&
+                            listMemberWithSport.length > 0 &&
+                            listMemberWithSport?.map((item: any) => {
+                              return {
+                                label: item.members.name,
+                                value: item.members.id,
+                              };
+                            })
+                          }
                         />
                       </Form.Item>
                     </div>
@@ -242,6 +265,11 @@ export default function CreateRoom() {
                           disabledDate={disabledDate}
                           className="input_form"
                           placeholder="Ngày thi đấu"
+                          onChange={() =>
+                            antForm.setFieldsValue({
+                              match_time: undefined,
+                            })
+                          }
                         />
                       </Form.Item>
                     </div>
@@ -377,7 +405,7 @@ export default function CreateRoom() {
                           type="primary"
                           onClick={() => {
                             antForm.setFieldsValue({
-                              coin: 20,
+                              coin: userInfo?.coin,
                             });
                           }}
                         >

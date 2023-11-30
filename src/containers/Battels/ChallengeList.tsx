@@ -2,6 +2,7 @@ import {
   Button,
   DatePicker,
   DatePickerProps,
+  Input,
   Modal,
   Select,
   Tag,
@@ -25,11 +26,21 @@ import { IMAGES } from "./data/data";
 export default function ChallengeList() {
   // state
   const [idPK, setIdPK] = useState();
+  const [idPKConfirm, setIdPKConfirm] = useState();
+  const [winLose, setWinLose] = useState();
+  const [resultText, setResultText] = useState<any>();
+  const [sportId, setSportId] = useState<any>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenReject, setIsModalOpenReject] = useState(false);
   const [isModalOpenConfirm, setIsModalOpenConfirm] = useState(false);
+  const [isModalOpenReplyConfirm, setIsModalOpenReplyConfirm] = useState(false);
   const [isBattelNow, setIsBattelNow] = useState(false);
   const [memberList, setMemberList] = useState<string[]>([]);
+
+  const filterOption = (
+    input: string,
+    option?: { label: string; value: string }
+  ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   // api
   const { data: listPK, refetch } = useQuery(["LIST_PK"], async () => {
@@ -40,22 +51,25 @@ export default function ChallengeList() {
     return response?.data.data;
   });
 
-  const { data: clubDetail } = useQuery(["CLUBS_DETAIL"], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.CLUBS.DETAIL,
-    });
-    return response?.data.data[0];
-  });
-
-  const { data: inDueMatch, refetch: refetchWait } = useQuery(
-    ["IN_DUE_MATCH"],
+  const { data: listMemberWithSport } = useQuery(
+    ["LIST_MEMBER_WITH_SPORT", sportId],
     async () => {
       const response = await requestToken({
         method: "GET",
-        url: API_URL.MATCHS.IN_DUE_MATCH,
+        url: API_URL.CLUBS.LIST_MEMBER_WITH_SPORT(sportId),
       });
-      return response?.data.data[0];
+      return response?.data.data;
+    }
+  );
+
+  const { data: waitForResult, refetch: refetchWait } = useQuery(
+    ["WAIT_FOR_RESULT"],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.MATCHS.WAIT_FOR_RESULT,
+      });
+      return response?.data.data;
     }
   );
 
@@ -89,7 +103,8 @@ export default function ChallengeList() {
           data: data,
         }),
       onError(error: any, variables, context) {
-        message.error(error?.response?.data?.message || "Thất bại");
+        console.log("error: ", error?.response);
+        message.error(error?.response?.data?.error || "Thất bại");
       },
       onSuccess(data, variables, context) {
         message.success("Gửi yêu cầu xác nhận thành công");
@@ -103,11 +118,11 @@ export default function ChallengeList() {
       mutationFn: (data: any) =>
         requestToken({
           method: "POST",
-          url: API_URL.MATCHS.REPLY_CONFIRM_MATCH,
+          url: API_URL.MATCHS.REPLY_CONFIRM_MATCH(idPKConfirm),
           data: data,
         }),
       onError(error: any, variables, context) {
-        message.error(error?.response?.data?.message || "Thất bại");
+        message.error(error?.response?.data?.error || "Thất bại");
       },
       onSuccess(data, variables, context) {
         message.success("Xác nhận thành công");
@@ -161,8 +176,39 @@ export default function ChallengeList() {
   };
 
   // modal confirm match
+  const showModalConfirm = (id: any) => {
+    setIdPKConfirm(id);
+    setIsModalOpenConfirm(true);
+    setResultText("");
+    setWinLose(undefined);
+  };
+
   const handleOkConfirmMatch = () => {
-    setIsModalOpenConfirm(false);
+    if (idPKConfirm && winLose && resultText) {
+      const data = {
+        match_id: idPKConfirm,
+        win_or_lose: winLose,
+        result: resultText,
+      };
+
+      confirmMatch(data);
+    } else {
+      message.error("Vui lòng nhập đủ kết quả");
+    }
+  };
+
+  // modal confirm match
+  const showModalReplyConfirm = (id: any) => {
+    setIdPKConfirm(id);
+    setIsModalOpenConfirm(true);
+    setResultText("");
+    setWinLose(undefined);
+  };
+
+  const handleOkReplyConfirm = () => {
+    const data = {};
+
+    replyConfirmMatch(data);
   };
 
   // filter
@@ -216,9 +262,9 @@ export default function ChallengeList() {
       {isBattelNow ? (
         <div className="list_pk">
           <div className="list_main">
-            {inDueMatch &&
-              inDueMatch.length > 0 &&
-              inDueMatch.map((item: any) => {
+            {waitForResult &&
+              waitForResult.length > 0 &&
+              waitForResult.map((item: any) => {
                 return (
                   <div className="list_item" key={item.id}>
                     <div className="time_image">
@@ -307,6 +353,26 @@ export default function ChallengeList() {
                           >
                             Chơi bời gì
                           </Button>
+                        </div>
+                      </div>
+                    ) : item.status === 4 ? (
+                      <div className="wrap_buttons">
+                        <div className="buttons">
+                          {item.result ? (
+                            <Button
+                              type="primary"
+                              onClick={() => showModalReplyConfirm(item.id)}
+                            >
+                              Xác nhận kết quả lần 2
+                            </Button>
+                          ) : (
+                            <Button
+                              type="primary"
+                              onClick={() => showModalConfirm(item.id)}
+                            >
+                              Xác nhận kết quả lần 1
+                            </Button>
+                          )}
                         </div>
                       </div>
                     ) : (
@@ -405,7 +471,10 @@ export default function ChallengeList() {
                         <div className="buttons">
                           <Button
                             type="primary"
-                            onClick={() => showModalAccept(item.id)}
+                            onClick={() => {
+                              showModalAccept(item.id);
+                              setSportId(item.sports_discipline_id);
+                            }}
                           >
                             Chiến luôn
                           </Button>
@@ -456,12 +525,16 @@ export default function ChallengeList() {
               onChange={handleChangeSelect}
               style={{ width: "100%" }}
               placeholder="Thành viên trong đội"
-              options={clubDetail?.members.map((item: any) => {
-                return {
-                  label: item.name,
-                  value: item.id,
-                };
-              })}
+              options={
+                listMemberWithSport &&
+                listMemberWithSport.length > 0 &&
+                listMemberWithSport?.map((item: any) => {
+                  return {
+                    label: item.members.name,
+                    value: item.members.id,
+                  };
+                })
+              }
             />
           </div>
         </SModalAccept>
@@ -482,19 +555,82 @@ export default function ChallengeList() {
 
       {/* modal confirm match */}
       <Modal
-        title="Xác nhận trận đấu"
+        title="Xác nhận lần 1"
         centered
         open={isModalOpenConfirm}
         onOk={handleOkConfirmMatch}
         onCancel={() => {
           setIsModalOpenConfirm(false);
+          setResultText("");
+          setWinLose(undefined);
         }}
+        confirmLoading={isLoadingConfirmMatch}
       >
         <SModalConfirmMatch>
-          <p className="question">
-            Trận đấu của bạn đã kết thúc? <br />
-            Ấn <span>OK</span> để xác nhận nào !!!
-          </p>
+          <p className="question mb-[30px]">Cập nhật trận đấu</p>
+
+          <div className="mb-[30px]">
+            <label className="labe-form" style={{ marginBottom: 10 }}>
+              Thắng thua rõ ràng <span>*</span>
+            </label>
+
+            <div>
+              <Select
+                className="input_form"
+                style={{ width: "100%" }}
+                showSearch
+                placeholder="Thắng thua rõ ràng"
+                optionFilterProp="children"
+                filterOption={filterOption}
+                onChange={(value) => {
+                  setWinLose(value);
+                }}
+                value={winLose}
+                options={[
+                  {
+                    value: "1",
+                    label: "Thắng",
+                  },
+                  {
+                    value: "2",
+                    label: "Thua",
+                  },
+                ]}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="labe-form" style={{ marginBottom: 10 }}>
+              Tỷ số <span>*</span>
+            </label>
+
+            <div>
+              <Input
+                style={{ height: 38 }}
+                className="input_form"
+                placeholder="Tỷ số"
+                value={resultText}
+                onChange={(value) => setResultText(value.target.value)}
+              />
+            </div>
+          </div>
+        </SModalConfirmMatch>
+      </Modal>
+
+      {/* modal confirm kết quả */}
+      <Modal
+        title="Xác nhận lần 2"
+        centered
+        open={isModalOpenReplyConfirm}
+        onOk={handleOkReplyConfirm}
+        onCancel={() => {
+          setIsModalOpenReplyConfirm(false);
+        }}
+        confirmLoading={isLoadingReplyConfirmMatch}
+      >
+        <SModalConfirmMatch>
+          <p className="question">Xác nhận với đội bạn !!!</p>
         </SModalConfirmMatch>
       </Modal>
     </SChallengeList>

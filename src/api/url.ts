@@ -18,19 +18,21 @@ const API_URL = {
     LIST_REQUESTS: "/user/club/list-member-request",
     REVIEW_REQUEST: "/user/club/review-request-join",
     KICK_MEMBER: "/user/club/kick-member",
+    LIST_MEMBER_WITH_SPORT: (id: any) => `/user/club/list-member-with-sport?sports_discipline_id=${id}`,
   },
   MATCHS: {
     CREATE: "/user/match/create",
     LIST_PK: "/user/match/list-pk",
     LIST_MATCHS: "/user/match/list-match",
     IN_DUE_MATCH: "/user/match/in-due",
+    WAIT_FOR_RESULT: "/user/match/wait-for-result",
     REPLY_PK: (id: any) => `/user/match/reply-pk/${id}`,
 
     LIST_ALL_MATCH: "/user/match/list-all-match",
     DETAIL_MATCH: (id: any) => `/user/match/detail/${id}`,
-
+    
     CONFIRM_MATCH: "/user/match/update-result",
-    REPLY_CONFIRM_MATCH: "/user/match/update-result",
+    REPLY_CONFIRM_MATCH: (id: any) => `/user/match/accept-result/${id}`,
   },
   USER_INFO: "/user/user-info",
 };
