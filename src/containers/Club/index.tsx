@@ -40,6 +40,8 @@ export default function Club() {
           data={listMembers}
           isAdmin={isAdmin}
           manager_id={infoClub?.manager_id}
+          setTrigger={setTrigger}
+          trigger={trigger}
         />
       ),
     },

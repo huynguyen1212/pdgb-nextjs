@@ -9,9 +9,17 @@ export interface PropsType {
   data: any;
   isAdmin: boolean;
   manager_id: number;
+  setTrigger: any;
+  trigger: any;
 }
 
-export default function Member({ data, isAdmin, manager_id }: PropsType) {
+export default function Member({
+  data,
+  isAdmin,
+  manager_id,
+  setTrigger,
+  trigger,
+}: PropsType) {
   const queryClient = useQueryClient();
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false);
   const [idMember, setIdMember] = useState<any>();
