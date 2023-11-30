@@ -350,7 +350,7 @@ export default function ChallengeList() {
                               (i: any) => i.id === item.result.creator_id
                             ) &&
                             item.team_twos.some(
-                              (i: any) => i.id === userInfo.id
+                              (i: any) => i.id === userInfo?.id
                             ) ? (
                               <Button
                                 type="primary"
@@ -366,7 +366,7 @@ export default function ChallengeList() {
                               (i: any) => i.id === item.result.creator_id
                             ) &&
                             item.team_ones.some(
-                              (i: any) => i.id === userInfo.id
+                              (i: any) => i.id === userInfo?.id
                             ) ? (
                               <Button
                                 type="primary"
