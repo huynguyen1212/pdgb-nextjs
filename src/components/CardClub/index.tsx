@@ -42,7 +42,7 @@ export default function CardClub({
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
   const [isOpenModalCancel, setIsOpenModalCancel] = useState<boolean>(false);
   const [options, setOptions] = useState<SelectProps["options"]>([]);
-  const [requested, setRequested] = useState<any>(request_join_status);
+  // const [requested, setRequested] = useState<any>(request_join_status);
 
   useEffect(() => {
     const optionsSelect: SelectProps["options"] = [];
@@ -65,28 +65,28 @@ export default function CardClub({
       handleCloseModalJoin();
       message.success("Đã gửi request join club!", 1.5);
       queryClient.invalidateQueries("listOtherClubs");
-      setRequested(2);
+      queryClient.invalidateQueries("getUserInfo");
+      // setRequested(1);
     },
   });
 
-  const { mutateAsync: mutateCancel } = useMutation(
-    {
-      mutationFn: () =>
-        requestToken({
-          method: "POST",
-          url: `${API_URL.CANCEL_JOIN_CLUB}/${request_id}`,
-        }),
-      onError(error: any) {
-        message.error(error?.response?.data?.message || "Thất bại");
-      },
-      onSuccess() {
-        handleCloseModalCancel();
-        message.success("Đã huỷ request join trước đó!", 1.5);
-        queryClient.invalidateQueries("listOtherClubs");
-        setRequested(1);
-      },
-    }
-  );
+  const { mutateAsync: mutateCancel } = useMutation({
+    mutationFn: () =>
+      requestToken({
+        method: "POST",
+        url: `${API_URL.CANCEL_JOIN_CLUB}/${request_id}`,
+      }),
+    onError(error: any) {
+      message.error(error?.response?.data?.message || "Thất bại");
+    },
+    onSuccess() {
+      handleCloseModalCancel();
+      message.success("Đã huỷ request join trước đó!", 1.5);
+      queryClient.invalidateQueries("listOtherClubs");
+      queryClient.invalidateQueries("getUserInfo");
+      // setRequested(2);
+    },
+  });
 
   const onSubmitRequestJoin = (values: any) => {
     mutateAsync({
@@ -122,27 +122,48 @@ export default function CardClub({
         <div className="card__inner">
           <div className="card__wrapper">
             <div className="card___wrapper-acounts">
-              <div className="card__score">+{members}</div>
+              {members < 3 ? (
+                <>
+                  {members === 1 ? (
+                    <div className="card__acounts">
+                      <IconFirstMember />
+                    </div>
+                  ) : (
+                    <>
+                      <div className="card__acounts">
+                        <IconFirstMember />
+                      </div>
 
-              <div className="card__acounts">
-                <IconFirstMember />
-              </div>
+                      <div className="card__acounts">
+                        <IconSecondMember />
+                      </div>
+                    </>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="card__score">+{Number(members - 2)}</div>
+                  <div className="card__acounts">
+                    <IconFirstMember />
+                  </div>
 
-              <div className="card__acounts">
-                <IconSecondMember />
-              </div>
+                  <div className="card__acounts">
+                    <IconSecondMember />
+                  </div>
+                </>
+              )}
             </div>
 
             <Button
               type="primary"
-              danger={requested === 1}
+              danger={request_join_status === 1}
               htmlType="button"
               className="card__menu"
               onClick={
-                requested === 1 ? handleOpenModalCancel : handleOpenModalJoin
+                request_join_status === 1 ? handleOpenModalCancel : handleOpenModalJoin
               }
             >
-              {requested === 1 ? "Huỷ" : "Tham gia"}
+              {request_join_status === 1 ? "Huỷ" : "Tham gia"}
             </Button>
           </div>
 
