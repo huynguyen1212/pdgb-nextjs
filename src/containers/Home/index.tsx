@@ -53,7 +53,7 @@ export default function Home() {
               <SFormRequestCreateClub>
                 <Container>
                   <div className="form_request_create_club text-center">
-                    Đã gửi yêu cầu tạo club!
+                    Đã gửi yêu cầu, vui lòng chờ phản hồi!
                   </div>
                 </Container>
               </SFormRequestCreateClub>
