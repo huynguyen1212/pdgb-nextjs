@@ -343,7 +343,9 @@ export default function ChallengeList() {
                       </p>
                     </div>
 
-                    {item.result.creator_id && item.result.acceptor_id ? (
+                    {item?.result &&
+                    item?.result?.creator_id &&
+                    item.result?.acceptor_id ? (
                       <p className="status">
                         <Tag
                           color={
@@ -361,7 +363,7 @@ export default function ChallengeList() {
                           {item.result ? (
                             <div>
                               {item.team_ones.some(
-                                (i: any) => i.id === item.result.creator_id
+                                (i: any) => i.id === item.result?.creator_id
                               ) &&
                               item.team_twos.some(
                                 (i: any) => i.id === userInfo?.id
@@ -369,7 +371,7 @@ export default function ChallengeList() {
                                 <Button
                                   type="primary"
                                   onClick={() =>
-                                    showModalReplyConfirm(item.result.id)
+                                    showModalReplyConfirm(item.result?.id)
                                   }
                                 >
                                   Xác nhận kết quả lần 2
@@ -379,7 +381,7 @@ export default function ChallengeList() {
                               )}
 
                               {item.team_twos.some(
-                                (i: any) => i.id === item.result.creator_id
+                                (i: any) => i.id === item.result?.creator_id
                               ) &&
                               item.team_ones.some(
                                 (i: any) => i.id === userInfo?.id
@@ -387,7 +389,7 @@ export default function ChallengeList() {
                                 <Button
                                   type="primary"
                                   onClick={() =>
-                                    showModalReplyConfirm(item.result.id)
+                                    showModalReplyConfirm(item.result?.id)
                                   }
                                 >
                                   Xác nhận kết quả lần 2

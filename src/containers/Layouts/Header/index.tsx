@@ -70,14 +70,6 @@ function Header({ showMenu, setShowMenu }: Props) {
     };
   }, []);
 
-  const { data: userInfo } = useQuery(["USER_INFO"], async () => {
-    const response = await requestToken({
-      method: "GET",
-      url: API_URL.USER_INFO,
-    });
-    return response?.data.data;
-  });
-
   const handleMenuScroll = () => {
     if (window !== undefined) {
       let windowHeight = window.scrollY;
@@ -113,6 +105,17 @@ function Header({ showMenu, setShowMenu }: Props) {
         url: API_URL.CLUBS.CHECK_IS_IN_CLUB,
       });
       return response?.status === 200 ? true : false;
+    }
+  );
+
+  const { data: userInfo } = useQuery(
+    ["USER_INFO", section && section.token.access_token],
+    async () => {
+      const response = await requestToken({
+        method: "GET",
+        url: API_URL.USER_INFO,
+      });
+      return response?.data.data;
     }
   );
 
