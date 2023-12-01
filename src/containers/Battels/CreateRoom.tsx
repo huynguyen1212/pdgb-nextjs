@@ -83,6 +83,9 @@ export default function CreateRoom() {
         url: API_URL.CLUBS.LIST_MEMBER_WITH_SPORT(sportId),
       });
       return response?.data.data;
+    },
+    {
+      enabled: !!sportId,
     }
   );
 

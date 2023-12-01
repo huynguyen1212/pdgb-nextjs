@@ -27,6 +27,7 @@ export default function ChallengeList() {
   // state
   const [idPK, setIdPK] = useState();
   const [idPKConfirm, setIdPKConfirm] = useState();
+  const [idResult, setIdResult] = useState();
   const [winLose, setWinLose] = useState();
   const [resultText, setResultText] = useState<any>();
   const [sportId, setSportId] = useState<any>();
@@ -59,6 +60,9 @@ export default function ChallengeList() {
         url: API_URL.CLUBS.LIST_MEMBER_WITH_SPORT(sportId),
       });
       return response?.data.data;
+    },
+    {
+      enabled: !!sportId,
     }
   );
 
@@ -123,11 +127,10 @@ export default function ChallengeList() {
 
   const { mutate: replyConfirmMatch, isLoading: isLoadingReplyConfirmMatch } =
     useMutation({
-      mutationFn: (data: any) =>
+      mutationFn: () =>
         requestToken({
           method: "POST",
-          url: API_URL.MATCHS.REPLY_CONFIRM_MATCH(idPKConfirm),
-          data: data,
+          url: API_URL.MATCHS.REPLY_CONFIRM_MATCH(idResult),
         }),
       onError(error: any, variables, context) {
         message.error(error?.response?.data?.error || "Thất bại");
@@ -135,7 +138,7 @@ export default function ChallengeList() {
       onSuccess(data, variables, context) {
         message.success("Xác nhận thành công");
         refetchWait();
-        setIsModalOpenConfirm(false);
+        setIsModalOpenReplyConfirm(false);
       },
     });
 
@@ -207,14 +210,12 @@ export default function ChallengeList() {
 
   // modal confirm match
   const showModalReplyConfirm = (id: any) => {
-    setIdPKConfirm(id);
+    setIdResult(id);
     setIsModalOpenReplyConfirm(true);
   };
 
   const handleOkReplyConfirm = () => {
-    const data = {};
-
-    replyConfirmMatch(data);
+    replyConfirmMatch();
   };
 
   // filter
@@ -342,52 +343,70 @@ export default function ChallengeList() {
                       </p>
                     </div>
 
-                    <div className="wrap_buttons">
-                      <div className="buttons">
-                        {item.result ? (
-                          <div>
-                            {item.team_ones.some(
-                              (i: any) => i.id === item.result.creator_id
-                            ) &&
-                            item.team_twos.some(
-                              (i: any) => i.id === userInfo?.id
-                            ) ? (
-                              <Button
-                                type="primary"
-                                onClick={() => showModalReplyConfirm(item.id)}
-                              >
-                                Xác nhận kết quả lần 2
-                              </Button>
-                            ) : (
-                              <></>
-                            )}
+                    {item.creator_member_id && item.recipient_member_id ? (
+                      <p className="status">
+                        <Tag
+                          color={
+                            item.status === 2 || item.status === 5
+                              ? "green"
+                              : "red"
+                          }
+                        >
+                          {item.status_name}
+                        </Tag>
+                      </p>
+                    ) : (
+                      <div className="wrap_buttons">
+                        <div className="buttons">
+                          {item.result ? (
+                            <div>
+                              {item.team_ones.some(
+                                (i: any) => i.id === item.result.creator_id
+                              ) &&
+                              item.team_twos.some(
+                                (i: any) => i.id === userInfo?.id
+                              ) ? (
+                                <Button
+                                  type="primary"
+                                  onClick={() =>
+                                    showModalReplyConfirm(item.result.id)
+                                  }
+                                >
+                                  Xác nhận kết quả lần 2
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
 
-                            {item.team_twos.some(
-                              (i: any) => i.id === item.result.creator_id
-                            ) &&
-                            item.team_ones.some(
-                              (i: any) => i.id === userInfo?.id
-                            ) ? (
-                              <Button
-                                type="primary"
-                                onClick={() => showModalReplyConfirm(item.id)}
-                              >
-                                Xác nhận kết quả lần 2
-                              </Button>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                        ) : (
-                          <Button
-                            type="primary"
-                            onClick={() => showModalConfirm(item.id)}
-                          >
-                            Xác nhận kết quả lần 1
-                          </Button>
-                        )}
+                              {item.team_twos.some(
+                                (i: any) => i.id === item.result.creator_id
+                              ) &&
+                              item.team_ones.some(
+                                (i: any) => i.id === userInfo?.id
+                              ) ? (
+                                <Button
+                                  type="primary"
+                                  onClick={() =>
+                                    showModalReplyConfirm(item.result.id)
+                                  }
+                                >
+                                  Xác nhận kết quả lần 2
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          ) : (
+                            <Button
+                              type="primary"
+                              onClick={() => showModalConfirm(item.id)}
+                            >
+                              Xác nhận kết quả lần 1
+                            </Button>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 );
               })}
