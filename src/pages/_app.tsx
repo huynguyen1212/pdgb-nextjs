@@ -110,7 +110,7 @@ export default function App({ Component, pageProps }: AppProps) {
             <ThemeProvider theme={theme}>
               <Head>
                 <title>MatchUp</title>
-                <meta name="description" content="Chiến cùng BATTELS" />
+                <meta name="description" content="Chiến cùng MatchUp" />
                 <meta
                   name="viewport"
                   content="width=device-width, initial-scale=1"
