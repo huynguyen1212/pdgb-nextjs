@@ -22,6 +22,7 @@ import API_URL from "src/api/url";
 import { Dropdown, MenuProps } from "antd";
 import IconUser from "src/components/Icons/IconUser";
 import IconLogOut from "src/components/Icons/IconLogOut";
+import IconCoin from "src/components/Icons/IconCoint";
 
 interface Props {
   showMenu: boolean;
@@ -35,6 +36,7 @@ function Header({ showMenu, setShowMenu }: Props) {
 
   const [change, setChange] = useState(false);
   const [token, setToken] = useState<any>();
+  const [avatar, setAvatar] = useState("");
 
   const handleScroll = () => {
     if (window.scrollY > window.innerHeight) {
@@ -68,6 +70,14 @@ function Header({ showMenu, setShowMenu }: Props) {
     };
   }, []);
 
+  const { data: userInfo } = useQuery(["USER_INFO"], async () => {
+    const response = await requestToken({
+      method: "GET",
+      url: API_URL.USER_INFO,
+    });
+    return response?.data.data;
+  });
+
   const handleMenuScroll = () => {
     if (window !== undefined) {
       let windowHeight = window.scrollY;
@@ -89,6 +99,9 @@ function Header({ showMenu, setShowMenu }: Props) {
     setToken(
       localStorage.getItem("token") ? localStorage.getItem("token") : undefined
     );
+    if (section && section.token) {
+      setAvatar(section.token.picture);
+    }
   }, [section]);
 
   // api
@@ -107,7 +120,16 @@ function Header({ showMenu, setShowMenu }: Props) {
     {
       key: "1",
       label: (
-        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            gap: "8px",
+            fontWeight: "bold",
+            color: "rgb(34,62,161)",
+          }}
+        >
           <IconUser />
           {section && section.token.name}
         </div>
@@ -116,9 +138,34 @@ function Header({ showMenu, setShowMenu }: Props) {
     {
       key: "2",
       label: (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            gap: "8px",
+            fontWeight: "bold",
+            color: "rgb(34,62,161)",
+          }}
+        >
+          <IconCoin />
+          {userInfo?.coin} coin
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: (
         <button
           className="button_login"
-          style={{ display: "flex", justifyContent: "center", gap: "8px" }}
+          style={{
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            gap: "8px",
+            fontWeight: "bold",
+            color: "rgb(34,62,161)",
+          }}
           onClick={() => signOut({ callbackUrl: "/" })}
         >
           <IconLogOut />
@@ -274,29 +321,19 @@ function Header({ showMenu, setShowMenu }: Props) {
 
             <div className="wrap_button_login">
               {section && token ? (
-                <>
-                  <Dropdown menu={{ items }} placement="bottom">
-                    {section && section.token && (
-                      <img
-                        src={section.token.picture || ""}
-                        width={40}
-                        height={40}
-                        alt="avatar"
-                        style={{ borderRadius: "50%", objectFit: "cover" }}
-                      />
-                    )}
-                  </Dropdown>
-
-                  {/* <button
-                    className="button_login"
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                  >
-                    <span>Logout</span>
-                    <span className="email">
-                      {section && section.token.email}
-                    </span>
-                  </button> */}
-                </>
+                <Dropdown menu={{ items }} placement="bottom">
+                  <img
+                    src={decodeURIComponent(avatar) || ""}
+                    width={40}
+                    height={40}
+                    alt="avatar"
+                    style={{
+                      borderRadius: "50%",
+                      objectFit: "cover",
+                      cursor: "pointer",
+                    }}
+                  />
+                </Dropdown>
               ) : (
                 <button className="button_login" onClick={() => signIn()}>
                   <span>Login với Google</span>
