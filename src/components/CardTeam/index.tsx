@@ -1,7 +1,5 @@
 import React from "react";
 import { StylesCard } from "./style";
-import Avatar from "../Icons/Avatar";
-import Image from "next/image";
 import IconFirstMember from "../Icons/IconFirstMember";
 import IconSecondMember from "../Icons/IconSecondMember";
 import { SPORT_TYPE } from "src/constants/sport";

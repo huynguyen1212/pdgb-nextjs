@@ -1,6 +1,6 @@
 import React from "react";
 import { StylesCard } from "./style";
-import Avatar from "../Icons/Avatar";
+import IconAvatar from "../Icons/IconAvatar";
 import Image from "next/image";
 import IconView from "../Icons/IconView";
 import IconDelete from "../Icons/IconDelete";
@@ -53,7 +53,7 @@ export default function CardMember({
         <div className="card-border-top"></div>
 
         <div className="img">
-          {avatar ? <Image src={avatar} fill alt="avatar" /> : <Avatar />}
+          {avatar ? <Image src={avatar} fill alt="avatar" /> : <IconAvatar />}
         </div>
 
         <span> {name}</span>

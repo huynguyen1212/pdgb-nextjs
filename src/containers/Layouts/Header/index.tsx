@@ -19,7 +19,10 @@ import { useDetectWindowSize } from "src/hooks/useDetectWindowSize";
 import { useQuery } from "react-query";
 import { requestToken } from "src/api/axios";
 import API_URL from "src/api/url";
-import Image from "next/image";
+import { Dropdown, MenuProps } from "antd";
+import IconUser from "src/components/Icons/IconUser";
+import IconLogOut from "src/components/Icons/IconLogOut";
+
 interface Props {
   showMenu: boolean;
   setShowMenu: Dispatch<SetStateAction<boolean>>;
@@ -99,6 +102,31 @@ function Header({ showMenu, setShowMenu }: Props) {
       return response?.status === 200 ? true : false;
     }
   );
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <div style={{ display: "flex", justifyContent: "center", gap: "8px" }}>
+          <IconUser />
+          {section && section.token.name}
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <button
+          className="button_login"
+          style={{ display: "flex", justifyContent: "center", gap: "8px" }}
+          onClick={() => signOut({ callbackUrl: "/" })}
+        >
+          <IconLogOut />
+          <span>Logout</span>
+        </button>
+      ),
+    },
+  ];
 
   return (
     <StylesHeader>
@@ -246,15 +274,29 @@ function Header({ showMenu, setShowMenu }: Props) {
 
             <div className="wrap_button_login">
               {section && token ? (
-                <button
-                  className="button_login"
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  <span>Logout</span>
-                  <span className="email">
-                    {section && section.token.email}
-                  </span>
-                </button>
+                <>
+                  <Dropdown menu={{ items }} placement="bottom">
+                    {section && section.token && (
+                      <img
+                        src={section.token.picture || ""}
+                        width={40}
+                        height={40}
+                        alt="avatar"
+                        style={{ borderRadius: "50%", objectFit: "cover" }}
+                      />
+                    )}
+                  </Dropdown>
+
+                  {/* <button
+                    className="button_login"
+                    onClick={() => signOut({ callbackUrl: "/" })}
+                  >
+                    <span>Logout</span>
+                    <span className="email">
+                      {section && section.token.email}
+                    </span>
+                  </button> */}
+                </>
               ) : (
                 <button className="button_login" onClick={() => signIn()}>
                   <span>Login với Google</span>
