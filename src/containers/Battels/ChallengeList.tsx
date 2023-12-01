@@ -36,7 +36,7 @@ export default function ChallengeList() {
   const [isModalOpenConfirm, setIsModalOpenConfirm] = useState(false);
   const [isModalOpenReplyConfirm, setIsModalOpenReplyConfirm] = useState(false);
   const [isBattelNow, setIsBattelNow] = useState(false);
-  const [memberList, setMemberList] = useState<string[]>([]);
+  const [memberList, setMemberList] = useState<any>([]);
 
   const filterOption = (
     input: string,
@@ -160,7 +160,7 @@ export default function ChallengeList() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
-    setMemberList([]);
+    setMemberList(undefined);
   };
 
   const handleChangeSelect = (value: string[]) => {
@@ -343,7 +343,7 @@ export default function ChallengeList() {
                       </p>
                     </div>
 
-                    {item.creator_member_id && item.recipient_member_id ? (
+                    {item.result.creator_id && item.result.acceptor_id ? (
                       <p className="status">
                         <Tag
                           color={
@@ -499,6 +499,7 @@ export default function ChallengeList() {
                             onClick={() => {
                               showModalAccept(item.id);
                               setSportId(item.sports_discipline_id);
+                              setMemberList(undefined);
                             }}
                           >
                             Chiến luôn
@@ -552,6 +553,7 @@ export default function ChallengeList() {
               onChange={handleChangeSelect}
               style={{ width: "100%" }}
               placeholder="Thành viên trong đội"
+              value={memberList}
               options={
                 listMemberWithSport &&
                 listMemberWithSport.length > 0 &&

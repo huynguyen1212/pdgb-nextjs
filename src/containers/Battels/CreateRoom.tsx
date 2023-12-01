@@ -484,7 +484,7 @@ export default function CreateRoom() {
 
       {listMatchs && listMatchs.length > 0 && (
         <div className="list_pk">
-          <h3 className="title_item">Match đã tạo</h3>
+          <h3 className="title_item">Match của tôi</h3>
 
           <div className="list_main">
             {listMatchs.map((item: any) => {
@@ -569,7 +569,7 @@ export default function CreateRoom() {
                       color={
                         item.status === 1
                           ? "orange"
-                          : item.status === 2
+                          : item.status === 2 || item.status === 5
                           ? "green"
                           : "red"
                       }
