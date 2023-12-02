@@ -341,6 +341,50 @@ export default function ChallengeList() {
                       <p className="content_des">
                         Đối thủ nói là: {item.description}
                       </p>
+
+                      {item?.result &&
+                        item?.result?.lose_team_id &&
+                        item.result?.win_team_id && (
+                          <>
+                            {(item.result?.win_team_id === 1 &&
+                              item.team_ones.some(
+                                (i: any) => i.id === userInfo?.id
+                              ) &&
+                              item.result?.win_team_id === 1 &&
+                              !item.team_twos.some(
+                                (i: any) => i.id === userInfo?.id
+                              )) ||
+                            (item.result?.win_team_id === 2 &&
+                              item.team_twos.some(
+                                (i: any) => i.id === userInfo?.id
+                              ) &&
+                              item.result?.win_team_id === 2 &&
+                              !item.team_ones.some(
+                                (i: any) => i.id === userInfo?.id
+                              )) ? (
+                              <p className="content_name_category">
+                                <span>Thắng</span>
+                              </p>
+                            ) : (
+                              <p className="content_name_category">
+                                <span>Thua</span>
+                              </p>
+                            )}
+
+                            {/* {item.result?.win_team_id === 2 &&
+                            item.team_twos.some(
+                              (i: any) => i.id === userInfo?.id
+                            ) ? (
+                              <p className="content_name_category">
+                                <span>Thắng</span>
+                              </p>
+                            ) : (
+                              <p className="content_name_category">
+                                <span>Thua</span>
+                              </p>
+                            )} */}
+                          </>
+                        )}
                     </div>
 
                     {item?.result &&
